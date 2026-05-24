@@ -1,0 +1,96 @@
+{
+  "nav": {
+    "home": "Home",
+    "collection": "Collection",
+    "categories": "Categories",
+    "about": "Our Story",
+    "tibetanHistory": "Tibetan History",
+    "buddhism": "Buddhism",
+    "contact": "Contact"
+  },
+  "footer": {
+    "navigation": "Navigation",
+    "followUs": "Contact Us",
+    "copyright": "Tibetan Thangka. All Rights Reserved."
+  },
+  "home": {
+    "heroTitle": "Tibetan Thangkas",
+    "heroSubtext": "Sacred Art. Timeless Heritage.\nConnecting Wisdom with the World.",
+    "exploreCollection": "Explore The Collection →",
+    "learnMore": "Learn More →",
+    "categoriesTitle": "Thangka Categories",
+    "categoriesDesc": "Rich in themes and diverse in style, thangkas reflect the vast and profound culture of Tibetan Buddhism.",
+    "noCms": "Categories will appear here once the CMS is connected.",
+    "historyFallback": "Thangka art flourished over a thousand years ago in Tibet, influenced by Indian, Nepalese, and Chinese culture. It has become a unique spiritual art form of Tibetan Buddhism.",
+    "deitiesFallback": "Each thangka features a principal deity — Buddha, Bodhisattva, Deity, or Protector — representing profound spiritual meanings and guiding practitioners on the path to enlightenment.",
+    "storyFallback": "We are devoted to preserving and sharing the sacred art of thangka, collaborating with master artists to bring the beauty of Tibetan culture to the world."
+  },
+  "collection": {
+    "breadcrumb": "Collection",
+    "eyebrow": "Collection",
+    "pageTitle": "The Collection",
+    "category": "Category",
+    "noSubcategories": "No subcategories found.",
+    "noItems": "No items found.",
+    "explore": "Explore →"
+  },
+  "thangka": {
+    "era": "Era",
+    "size": "Size",
+    "category": "Category",
+    "subject": "Sub Category",
+    "identify": "Identify",
+    "backToCollection": "← Back to Collection"
+  },
+  "contact": {
+    "title": "Get in Touch",
+    "email": "Email",
+    "mailingAddress": "Mailing Address",
+    "phone": "Phone",
+    "inquiryType": "Inquiry Type",
+    "firstName": "First Name",
+    "firstNamePlaceholder": "Enter your first name",
+    "lastName": "Last Name",
+    "lastNamePlaceholder": "Enter your last name",
+    "emailAddress": "Email Address",
+    "emailPlaceholder": "your.email@example.com",
+    "artworkName": "Artwork Name",
+    "artworkNamePlaceholder": "e.g. Shakyamuni Buddha",
+    "referenceNo": "Reference No.",
+    "referenceNoPlaceholder": "e.g. FT1001",
+    "message": "Your Message",
+    "messagePlaceholder": "How can we assist you today?",
+    "disclaimer": "All inquiries are confidential and will be handled with care.",
+    "submit": "Send Inquiry →",
+    "successTitle": "Thank you for reaching out.",
+    "successMessage": "We will respond to your inquiry within 1–2 business days.",
+    "inquiryTypes": [
+      "Artwork Inquiry",
+      "Custom Order",
+      "Wholesale",
+      "Private Viewing",
+      "General Question"
+    ]
+  },
+  "about": {
+    "eyebrow": "About",
+    "title": "About Us",
+    "comingSoon": "This page will be implemented soon."
+  },
+  "buddhism": {
+    "eyebrow": "Buddhism",
+    "title": "Tibetan Buddhism",
+    "comingSoon": "This page will be implemented soon."
+  },
+  "carousel": {
+    "previous": "Previous",
+    "next": "Next",
+    "explore": "Explore →"
+  },
+  "history": {
+    "intro": "Introduction",
+    "keyThemes": "Key Themes",
+    "sectionFallback": "Section",
+    "titleFallback": "A Brief Overview of Tibetan History"
+  }
+}
