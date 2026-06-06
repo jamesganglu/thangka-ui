@@ -1,11 +1,53 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { getCategoriesByParentId, getTangkasByCategory, getLevel1Categories, imgUrl, toPlainText, slugify, CategoryItem, ThangkaItem } from "@/lib/api";
+import { siteUrl } from "@/lib/site";
 import { notFound } from "next/navigation";
 
 interface Props {
   params: Promise<{ locale: string; slug: string; subslug: string }>;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale, slug, subslug } = await params;
+
+  let level1: CategoryItem | null = null;
+  let level2: CategoryItem | null = null;
+
+  try {
+    const all = await getLevel1Categories();
+    level1 = all.find((c) => slugify(c.name_en) === slug) ?? null;
+  } catch { /* ignore */ }
+
+  if (level1) {
+    try {
+      const level2cats = await getCategoriesByParentId(String(level1.id));
+      level2 = level2cats.find((c) => slugify(c.name_en) === subslug) ?? null;
+    } catch { /* ignore */ }
+  }
+
+  const name = level2 ? (locale === "zh" ? level2.name_zh || level2.name_en : level2.name_en) || subslug : subslug;
+  const description = level2 ? toPlainText(locale === "zh" ? level2.description_zh || level2.description_en : level2.description_en).slice(0, 160) : "";
+  const img = level2?.image?.[0];
+  const ogImage = img ? imgUrl(img.formats?.medium?.url ?? img.url) : undefined;
+
+  return {
+    title: name,
+    description: description || `Explore ${name} thangka paintings.`,
+    alternates: {
+      canonical: `${siteUrl}/${locale}/collection/${slug}/${subslug}`,
+      languages: { en: `${siteUrl}/en/collection/${slug}/${subslug}`, zh: `${siteUrl}/zh/collection/${slug}/${subslug}`, "x-default": `${siteUrl}/en/collection/${slug}/${subslug}` },
+    },
+    openGraph: {
+      title: name,
+      description: description || `Explore ${name} thangka paintings.`,
+      url: `${siteUrl}/${locale}/collection/${slug}/${subslug}`,
+      locale: locale === "zh" ? "zh_CN" : "en_US",
+      ...(ogImage ? { images: [{ url: ogImage, alt: name }] } : {}),
+    },
+  };
 }
 
 export default async function CollectionLevel3Page({ params }: Props) {

@@ -1,8 +1,10 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { notFound } from "next/navigation";
 import { getThangkaBySlug, getCategoryWithAncestors, getTangkasByCategory, imgUrl, toPlainText, slugify, CategoryItem, ThangkaItem } from "@/lib/api";
+import { siteUrl } from "@/lib/site";
 
 interface Props {
   params: Promise<{ locale: string; name: string }>;
@@ -34,6 +36,37 @@ function buildAncestorChain(cat: CategoryItem): CategoryItem[] {
 function categoryUrl(chain: CategoryItem[], index: number): string {
   if (index === 0) return `/collection/${slugify(chain[0].name_en)}`;
   return `/collection/${slugify(chain[0].name_en)}/${slugify(chain[1].name_en)}`;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale, name } = await params;
+
+  let thangka;
+  try { thangka = await getThangkaBySlug(name); } catch { return {}; }
+  if (!thangka) return {};
+
+  const displayName = (locale === "zh" ? thangka.name_zh || thangka.name_en : thangka.name_en) || "";
+  const title = [thangka.identify, displayName].filter(Boolean).join(" · ");
+  const description = (toPlainText(locale === "zh" ? thangka.description_zh || thangka.description_en : thangka.description_en).slice(0, 160)) || `${title} — authentic Tibetan thangka painting.`;
+  const ogImage = imgUrl(thangka.image?.formats?.large?.url ?? thangka.image?.formats?.medium?.url ?? thangka.image?.url ?? "");
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: `${siteUrl}/${locale}/thangka/${name}`,
+      languages: { en: `${siteUrl}/en/thangka/${name}`, zh: `${siteUrl}/zh/thangka/${name}`, "x-default": `${siteUrl}/en/thangka/${name}` },
+    },
+    openGraph: {
+      title,
+      description,
+      url: `${siteUrl}/${locale}/thangka/${name}`,
+      type: "article",
+      locale: locale === "zh" ? "zh_CN" : "en_US",
+      alternateLocale: locale === "zh" ? "en_US" : "zh_CN",
+      ...(ogImage ? { images: [{ url: ogImage, alt: displayName }] } : {}),
+    },
+  };
 }
 
 export default async function ThangkaDetailPage({ params }: Props) {

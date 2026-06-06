@@ -3,13 +3,25 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
+import { siteUrl } from "@/lib/site";
 import "../globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "Tibetan Thangka | 唐卡艺术",
-  description: "Sacred Art. Timeless Heritage. Connecting Wisdom with the World.",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "Tibetan Thangka | Sacred Art",
+    template: "%s | Tibetan Thangka",
+  },
+  description: "Sacred Art. Timeless Heritage. Connecting Wisdom with the World. Explore authentic Tibetan thangka paintings.",
+  openGraph: {
+    siteName: "Tibetan Thangka",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
 };
 
 export function generateStaticParams() {

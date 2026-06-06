@@ -1,11 +1,46 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { getCategoriesByParentId, getLevel1Categories, imgUrl, toPlainText, slugify, CategoryItem } from "@/lib/api";
+import { siteUrl } from "@/lib/site";
 import { notFound } from "next/navigation";
 
 interface Props {
   params: Promise<{ locale: string; slug: string }>;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale, slug } = await params;
+
+  let parentCategory: CategoryItem | null = null;
+  try {
+    const all = await getLevel1Categories();
+    parentCategory = all.find((c) => slugify(c.name_en) === slug) ?? null;
+  } catch { /* ignore */ }
+
+  if (!parentCategory) return {};
+
+  const name = (locale === "zh" ? parentCategory.name_zh || parentCategory.name_en : parentCategory.name_en) || slug;
+  const description = toPlainText(locale === "zh" ? parentCategory.description_zh || parentCategory.description_en : parentCategory.description_en).slice(0, 160) || `Explore ${name} thangka paintings in our collection.`;
+  const img = parentCategory.image?.[0];
+  const ogImage = img ? imgUrl(img.formats?.medium?.url ?? img.url) : undefined;
+
+  return {
+    title: name,
+    description,
+    alternates: {
+      canonical: `${siteUrl}/${locale}/collection/${slug}`,
+      languages: { en: `${siteUrl}/en/collection/${slug}`, zh: `${siteUrl}/zh/collection/${slug}`, "x-default": `${siteUrl}/en/collection/${slug}` },
+    },
+    openGraph: {
+      title: name,
+      description,
+      url: `${siteUrl}/${locale}/collection/${slug}`,
+      locale: locale === "zh" ? "zh_CN" : "en_US",
+      ...(ogImage ? { images: [{ url: ogImage, alt: name }] } : {}),
+    },
+  };
 }
 
 export default async function CollectionCategoryPage({ params }: Props) {

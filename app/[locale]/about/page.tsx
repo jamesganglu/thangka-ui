@@ -1,8 +1,41 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import { getAbout, imgUrl } from "@/lib/api";
+import { siteUrl } from "@/lib/site";
 import RichText from "@/components/RichText";
 
-export default async function AboutPage() {
+interface Props {
+  params: Promise<{ locale: string }>;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+
+  let item: Record<string, unknown> = {};
+  try { item = await getAbout(); } catch { /* ignore */ }
+
+  const title = (item.title as string) || "Our Story";
+  const img = item.image as { url?: string; formats?: { large?: { url?: string }; medium?: { url?: string } } } | null;
+  const ogImage = imgUrl(img?.formats?.large?.url ?? img?.formats?.medium?.url ?? img?.url ?? "");
+
+  return {
+    title,
+    description: "Learn about our mission to share authentic Tibetan thangka art and sacred Buddhist painting traditions with the world.",
+    alternates: {
+      canonical: `${siteUrl}/${locale}/about`,
+      languages: { en: `${siteUrl}/en/about`, zh: `${siteUrl}/zh/about`, "x-default": `${siteUrl}/en/about` },
+    },
+    openGraph: {
+      title,
+      url: `${siteUrl}/${locale}/about`,
+      locale: locale === "zh" ? "zh_CN" : "en_US",
+      ...(ogImage ? { images: [{ url: ogImage, alt: title }] } : {}),
+    },
+  };
+}
+
+export default async function AboutPage({ params }: Props) {
+  await params;
   let item: Record<string, unknown> = {};
   try { item = await getAbout(); } catch { /* CMS not connected */ }
 

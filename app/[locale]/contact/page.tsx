@@ -1,7 +1,31 @@
+import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { getContact, toPlainText } from "@/lib/api";
+import { siteUrl } from "@/lib/site";
 
-export default async function ContactPage() {
+interface Props {
+  params: Promise<{ locale: string }>;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  return {
+    title: "Contact",
+    description: "Get in touch with us to inquire about Tibetan thangka paintings, commissions, or general questions.",
+    alternates: {
+      canonical: `${siteUrl}/${locale}/contact`,
+      languages: { en: `${siteUrl}/en/contact`, zh: `${siteUrl}/zh/contact`, "x-default": `${siteUrl}/en/contact` },
+    },
+    openGraph: {
+      title: "Contact",
+      url: `${siteUrl}/${locale}/contact`,
+      locale: locale === "zh" ? "zh_CN" : "en_US",
+    },
+  };
+}
+
+export default async function ContactPage({ params }: Props) {
+  await params;
   const t = await getTranslations("contact");
 
   let item: Record<string, unknown> = {};

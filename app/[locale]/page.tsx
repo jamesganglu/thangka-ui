@@ -1,12 +1,47 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { getHomepage, getLevel1Categories, imgUrl, CategoryItem } from "@/lib/api";
+import { siteUrl } from "@/lib/site";
 import RichText from "@/components/RichText";
 import CategoryCarousel from "@/components/CategoryCarousel";
 
 interface Props {
   params: Promise<{ locale: string }>;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+
+  let item: Record<string, unknown> = {};
+  try { item = await getHomepage(); } catch { /* ignore */ }
+
+  type Block = { type: string; children: { text: string }[] };
+  const heroKey = locale === "zh" ? "heroText_zh" : "heroText";
+  const heroBlocks = Array.isArray(item[heroKey] ?? item.heroText) ? (item[heroKey] ?? item.heroText) as Block[] : [];
+  const title = heroBlocks.find((b) => b.type === "heading")?.children.map((c) => c.text).join("") || (locale === "zh" ? "藏传唐卡艺术" : "Tibetan Thangka Art");
+  const description = (heroBlocks.filter((b) => b.type === "paragraph").map((b) => b.children.map((c) => c.text).join("")).join(" ") || "Sacred Art. Timeless Heritage. Connecting Wisdom with the World.").slice(0, 160);
+
+  const imgs = item.carouselImages as { formats?: { large?: { url?: string } }; url?: string }[] | undefined;
+  const ogImage = imgs?.length ? imgUrl(imgs[0]?.formats?.large?.url ?? imgs[0]?.url ?? "") : undefined;
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: `${siteUrl}/${locale}`,
+      languages: { en: `${siteUrl}/en`, zh: `${siteUrl}/zh`, "x-default": `${siteUrl}/en` },
+    },
+    openGraph: {
+      title,
+      description,
+      url: `${siteUrl}/${locale}`,
+      locale: locale === "zh" ? "zh_CN" : "en_US",
+      alternateLocale: locale === "zh" ? "en_US" : "zh_CN",
+      ...(ogImage ? { images: [{ url: ogImage, width: 1200, height: 630, alt: title }] } : {}),
+    },
+  };
 }
 
 export default async function HomePage({ params }: Props) {

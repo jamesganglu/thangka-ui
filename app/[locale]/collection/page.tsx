@@ -1,11 +1,38 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { getCollection, getLevel1Categories, imgUrl, toPlainText, slugify, CategoryItem } from "@/lib/api";
+import { siteUrl } from "@/lib/site";
 import RichText from "@/components/RichText";
 
 interface Props {
   params: Promise<{ locale: string }>;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+
+  let collection: Record<string, unknown> = {};
+  try { collection = await getCollection(); } catch { /* ignore */ }
+
+  const title = (collection.title as string) || "Collection";
+  const description = (toPlainText(collection.content).slice(0, 160)) || "Browse our curated collection of authentic Tibetan thangka paintings.";
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: `${siteUrl}/${locale}/collection`,
+      languages: { en: `${siteUrl}/en/collection`, zh: `${siteUrl}/zh/collection`, "x-default": `${siteUrl}/en/collection` },
+    },
+    openGraph: {
+      title,
+      description,
+      url: `${siteUrl}/${locale}/collection`,
+      locale: locale === "zh" ? "zh_CN" : "en_US",
+    },
+  };
 }
 
 export default async function CollectionPage({ params }: Props) {
