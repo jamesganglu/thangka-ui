@@ -1,6 +1,5 @@
-const BASE = "http://localhost:1337";
-const TOKEN =
-  "48bf80b06c230b29819d6f1d91360250d06218c519e746d778174b5e28b06ce64f8204706f14d87d15b9a26b6a245761afcde0bb4e0cb5d44160406bcdfb49139378a9bcee3760ad53cc8ceab6f379a3467a014c3624c31412dbb1b57bff4ecda2706f685fbbd066bf5f12e1f2d99033c18076dbfcb59b9fed0881868bc928bb";
+const BASE = process.env.STRAPI_URL ?? "http://localhost:1337";
+const TOKEN = process.env.STRAPI_TOKEN ?? "";
 
 export function imgUrl(path?: string | null): string {
   if (!path) return "";
