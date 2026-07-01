@@ -115,8 +115,8 @@ export default async function HomePage({ params }: Props) {
                 {t("learnMore")}
               </Link>
             </div>
-            <div style={{ position: "relative", aspectRatio: "4/3", overflow: "hidden", background: "#F5F3EF" }}>
-              {historyImageUrl ? <Image src={historyImageUrl} alt="Tibetan History" fill style={{ objectFit: "cover" }} sizes="(max-width: 640px) 100vw, 60vw" /> : <div style={{ width: "100%", height: "100%", background: "#ECDFD0" }} />}
+            <div style={{ position: "relative", width: "100%", height: "100%", aspectRatio: "4/3", overflow: "hidden" }}>
+              {historyImageUrl ? <Image src={historyImageUrl} alt="Tibetan History" fill style={{ objectFit: "contain" }} sizes="(max-width: 640px) 100vw, 60vw" /> : <div style={{ width: "100%", height: "100%", background: "#ECDFD0" }} />}
             </div>
           </div>
         </div>
