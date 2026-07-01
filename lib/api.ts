@@ -43,7 +43,7 @@ export async function getAbout() {
 
 export async function getLevel1Categories() {
   const { data } = await apiFetch(
-    "api/categories/?fields[0]=name_en&fields[1]=description_en&fields[2]=name_zh&fields[3]=description_zh&fields[4]=order&filters[level][$eq]=1&populate=image"
+    "api/categories/?fields[0]=name_en&fields[1]=description_en&fields[2]=name_zh&fields[3]=description_zh&fields[4]=order&fields[5]=short_desc_en&fields[6]=short_desc_zh&filters[level][$eq]=1&populate=image"
   );
   return data as CategoryItem[];
 }
@@ -55,7 +55,7 @@ export async function getCollection() {
 
 export async function getCategoriesByParentId(parentId: string) {
   const { data } = await apiFetch(
-    `api/categories?filters[category][id][$eq]=${parentId}&fields[0]=name_en&fields[1]=description_en&fields[2]=name_zh&fields[3]=description_zh&populate[0]=image&populate[1]=categories`
+    `api/categories?filters[category][id][$eq]=${parentId}&populate=*`
   );
   return data as CategoryItem[];
 }
@@ -107,6 +107,8 @@ export interface CategoryItem {
   level?: number;
   description_en: unknown;
   description_zh: unknown;
+  short_desc_en?: string | null;
+  short_desc_zh?: string | null;
   image?: {
     url: string;
     formats?: {

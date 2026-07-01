@@ -52,7 +52,7 @@ export default async function CollectionPage({ params }: Props) {
     return (locale === "zh" ? cat.name_zh || cat.name_en : cat.name_en) || "";
   }
   function catDesc(cat: CategoryItem) {
-    return toPlainText(locale === "zh" ? cat.description_zh || cat.description_en : cat.description_en);
+    return (locale === "zh" ? cat.short_desc_zh || cat.short_desc_en : cat.short_desc_en) || "";
   }
 
   return (

@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useRef } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { CategoryItem, imgUrl, toPlainText } from "@/lib/api";
+import { CategoryItem, imgUrl } from "@/lib/api";
 
 export default function CategoryCarousel({
   categories,
@@ -40,7 +40,7 @@ export default function CategoryCarousel({
             const img = cat.image?.[0];
             const imgSrc = img?.formats?.small?.url || img?.url || "";
             const name = (locale === "zh" ? cat.name_zh || cat.name_en : cat.name_en) || "";
-            const fullDesc = toPlainText(locale === "zh" ? cat.description_zh || cat.description_en : cat.description_en);
+            const fullDesc = locale === "zh" ? cat.short_desc_zh || cat.short_desc_en || "" : cat.short_desc_en || "";
             const descText = fullDesc.length > 50 ? fullDesc.slice(0, 50).trimEnd() + "…" : fullDesc;
 
             return (
