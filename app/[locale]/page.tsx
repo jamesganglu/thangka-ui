@@ -82,11 +82,11 @@ export default async function HomePage({ params }: Props) {
   return (
     <main>
       {/* Hero */}
-      <section id="hero" style={{ position: "relative", width: "100vw", overflow: "hidden", background: "#1a1208" }}>
+      <section id="hero" style={{ position: "relative", width: "100vw", overflow: "hidden" }}>
         {heroImageUrl && (
-          <Image id="hero-image" src={heroImageUrl} alt="Tibetan Thangka" fill priority style={{ objectFit: "cover", opacity: 0.7, filter: "brightness(1.3)" }} sizes="100vw" />
+          <Image id="hero-image" src={heroImageUrl} alt="Tibetan Thangka" fill priority style={{ objectFit: "cover" }} sizes="100vw" />
         )}
-        <div id="hero-text" style={{ position: "relative", zIndex: 2, textAlign: "center", padding: "72px 72px", maxWidth: "680px", margin: "0 auto", textShadow: "0 0 2vw #fff, 0 0 4vw #fff, 0 0 8vw #fff, 0 0 8vw #fff, 0 0 16vw #fff, 0 0 25vw #fff, 0 0 35vw #fff, 0 0 50vw #fff" }}>
+        <div id="hero-text" style={{ position: "relative", zIndex: 2, textAlign: "center", width: "100%", padding: "72px 20%", margin: "0 auto", background: "linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,1), rgba(255,255,255,0))", textShadow: "0 0 2vw #fff, 0 0 4vw #fff, 0 0 8vw #fff, 0 0 8vw #fff, 0 0 16vw #fff, 0 0 25vw #fff, 0 0 35vw #fff, 0 0 50vw #fff" }}>
           <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(52px, 9vw, 96px)", fontWeight: 400, letterSpacing: "0.07em", textTransform: "uppercase", color: "#2B2520", lineHeight: 0.95, marginBottom: "24px" }}>
             {heroTitle}
           </h1>
