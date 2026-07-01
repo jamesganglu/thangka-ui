@@ -85,11 +85,6 @@ export default async function CollectionPage({ params }: Props) {
                   {imgSrc ? <Image src={imgSrc} alt={catName(cat)} fill style={{ objectFit: "cover" }} sizes="160px" /> : <div style={{ width: "100%", height: "100%", background: "#ECDFD0" }} />}
                 </div>
                 <div style={{ flex: 1 }}>
-                  {cat.order !== undefined && (
-                    <span style={{ fontFamily: "'Cinzel', serif", fontSize: "clamp(18px, 2vw, 24px)", letterSpacing: "0.1em", color: "#A87533", display: "block", marginBottom: "6px" }}>
-                      {String(cat.order).padStart(2, "0")}
-                    </span>
-                  )}
                   <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(18px, 2vw, 24px)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em", color: "#2B2520", margin: "0 0 10px" }}>
                     {catName(cat)}
                   </h3>

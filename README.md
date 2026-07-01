@@ -71,3 +71,14 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
   }
 
   Make sure your EC2 security group allows inbound traffic on port 80/443 (and 3000 if you skip Nginx).
+
+后台
+http://54.227.210.105:1337/
+thangkastibet@gmail.com
+B2Gqp32xaHgxJ3Q
+
+前端
+http://54.227.210.105/en
+
+
+www.thangkastibet.com

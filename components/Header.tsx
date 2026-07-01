@@ -3,6 +3,7 @@
 import { useTranslations, useLocale } from "next-intl";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { useState } from "react";
+import Image from "next/image";
 
 const navItems = [
   { path: "/collection", key: "collection" },
@@ -31,7 +32,8 @@ export default function Header() {
     <header style={{ background: "#ffffff", borderBottom: "1px solid #E8E3DC", position: "sticky", top: 0, zIndex: 100 }}>
       <div className="container" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: "80px" }}>
         {/* Logo */}
-        <Link href="/" style={{ textDecoration: "none" }}>
+        <Link href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: "10px" }}>
+          <Image src="/assets/thangkas_logo.png" alt="" width={60} height={60} style={{ objectFit: "contain" }} />
           <div style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 600, fontSize: "18px", letterSpacing: "0.1em", textTransform: "uppercase", lineHeight: 1.2, color: "#2B2520" }}>
             TIBETAN<br />THANGKAS
           </div>
@@ -45,7 +47,7 @@ export default function Header() {
               href={item.path}
               style={{
                 fontFamily: "'Cinzel', serif",
-                fontSize: "12px",
+                fontSize: "14px",
                 letterSpacing: "0.1em",
                 textTransform: "uppercase",
                 color: isActive(item.path) ? "#A87533" : "#2B2520",
@@ -106,7 +108,7 @@ export default function Header() {
               style={{
                 display: "block",
                 fontFamily: "'Cinzel', serif",
-                fontSize: "12px",
+                fontSize: "14px",
                 letterSpacing: "0.1em",
                 textTransform: "uppercase",
                 color: isActive(item.path) ? "#A87533" : "#2B2520",
@@ -127,7 +129,7 @@ export default function Header() {
       )}
 
       <style>{`
-        @media (max-width: 800px) {
+        @media (max-width: 1024px) {
           .desktop-nav { display: none !important; }
           .mobile-menu-btn { display: flex !important; }
         }

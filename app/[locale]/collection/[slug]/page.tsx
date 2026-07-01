@@ -87,7 +87,7 @@ export default async function CollectionCategoryPage({ params }: Props) {
       <div style={{ padding: "32px 0 36px" }}>
         <div className="container">
           <div style={{ display: "flex", gap: "48px", alignItems: "flex-start" }} className="cat-hero">
-            <div style={{ flex: "0 0 50%", paddingTop: "8px" }}>
+            <div style={{ flex: "1 1 0", paddingTop: "8px" }}>
               <span className="eyebrow">{t("category")}</span>
               <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(36px, 5vw, 60px)", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.04em", color: "#2B2520", margin: "8px 0 12px" }}>
                 {catName(parentCategory)}
@@ -95,7 +95,7 @@ export default async function CollectionCategoryPage({ params }: Props) {
               <div style={{ width: "70px", height: "2px", background: "var(--color-accent)", marginBottom: "16px" }} />
               {desc && <p style={{ color: "#6F6A63", fontSize: "15px", lineHeight: 1.75, margin: 0 }}>{desc}</p>}
             </div>
-            <div style={{ position: "relative", flex: "0 0 50%", aspectRatio: "3/4", background: "#F5F3EF", overflow: "hidden" }}>
+            <div style={{ position: "relative", flex: "1 1 0", aspectRatio: "3/4", background: "#F5F3EF", overflow: "hidden" }}>
               {parentImgSrc ? <Image src={parentImgSrc} alt={catName(parentCategory)} fill style={{ objectFit: "cover" }} sizes="50vw" /> : <div style={{ width: "100%", height: "100%", background: "#ECDFD0" }} />}
             </div>
           </div>
