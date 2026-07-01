@@ -82,15 +82,15 @@ export default async function HomePage({ params }: Props) {
   return (
     <main>
       {/* Hero */}
-      <section style={{ position: "relative", width: "100vw", overflow: "hidden", background: "#1a1208" }}>
+      <section id="hero" style={{ position: "relative", width: "100vw", overflow: "hidden", background: "#1a1208" }}>
         {heroImageUrl && (
-          <Image src={heroImageUrl} alt="Tibetan Thangka" fill priority style={{ objectFit: "cover", opacity: 0.7 }} sizes="100vw" />
+          <Image id="hero-image" src={heroImageUrl} alt="Tibetan Thangka" fill priority style={{ objectFit: "cover", opacity: 0.7, filter: "brightness(1.3)" }} sizes="100vw" />
         )}
-        <div id="hero-text" style={{ position: "relative", zIndex: 2, textAlign: "center", padding: "72px 72px", maxWidth: "680px", margin: "0 auto" }}>
-          <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(52px, 9vw, 96px)", fontWeight: 400, letterSpacing: "0.07em", textTransform: "uppercase", color: "#2B2520", lineHeight: 0.95, marginBottom: "24px", textShadow: "0 0 20px #fff, 0 0 60px #fff, 0 0 120px #fff, 0 0 200px rgba(255,255,255,0.8)" }}>
+        <div id="hero-text" style={{ position: "relative", zIndex: 2, textAlign: "center", padding: "72px 72px", maxWidth: "680px", margin: "0 auto", textShadow: "0 0 2vw #fff, 0 0 4vw #fff, 0 0 8vw #fff, 0 0 8vw #fff, 0 0 16vw #fff, 0 0 25vw #fff, 0 0 35vw #fff, 0 0 50vw #fff" }}>
+          <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(52px, 9vw, 96px)", fontWeight: 400, letterSpacing: "0.07em", textTransform: "uppercase", color: "#2B2520", lineHeight: 0.95, marginBottom: "24px" }}>
             {heroTitle}
           </h1>
-          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(17px, 2.2vw, 24px)", fontWeight: 400, color: "#2B2520", letterSpacing: "0.01em", lineHeight: 1.5, marginBottom: "40px", textShadow: "0 0 16px #fff, 0 0 48px #fff, 0 0 96px #fff, 0 0 160px rgba(255,255,255,0.7)" }}>
+          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(17px, 2.2vw, 24px)", fontWeight: 400, color: "#2B2520", letterSpacing: "0.01em", lineHeight: 1.5, marginBottom: "40px" }}>
             {heroSubtext}
           </p>
           <Link href="/collection" className="btn-primary" style={{ background: "#ffffff", color: "#2B2520", border: "none" }}>
