@@ -152,7 +152,7 @@ export default async function ThangkaDetailPage({ params }: Props) {
 
             <div className="thangka-detail-info" style={{ flex: 1, paddingTop: "8px" }}>
               {thangka.identify && <span className="eyebrow" style={{ fontSize: "clamp(28px, 3vw, 38px)", marginBottom: "16px" }}>{thangka.identify}</span>}
-              <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.04em", color: "#2B2520", margin: "8px 0 24px", lineHeight: 1.1 }}>
+              <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(28px, 4vw, 44px)", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.04em", color: "#2B2520", margin: "8px 0 12px" }}>
                 {displayName}
               </h1>
 

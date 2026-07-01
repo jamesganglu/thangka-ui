@@ -60,7 +60,7 @@ export default async function CollectionPage({ params }: Props) {
       <div style={{ padding: "48px 0 36px" }}>
         <div className="container">
           <span className="eyebrow">{t("eyebrow")}</span>
-          <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(36px, 5vw, 60px)", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.04em", color: "#2B2520", margin: "8px 0 12px" }}>
+          <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(28px, 4vw, 44px)", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.04em", color: "#2B2520", margin: "8px 0 12px" }}>
             {title}
           </h1>
           <div style={{ width: "70px", height: "2px", background: "var(--color-accent)", marginBottom: "16px" }} />

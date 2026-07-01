@@ -111,7 +111,7 @@ export default async function CollectionLevel3Page({ params }: Props) {
           <div style={{ display: "flex", gap: "48px", alignItems: "flex-start" }} className="cat-hero">
             <div style={{ flex: "1 1 0", paddingTop: "8px" }}>
               <span className="eyebrow">{t("category")}</span>
-              <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(36px, 5vw, 60px)", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.04em", color: "#2B2520", margin: "8px 0 12px" }}>
+              <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(28px, 4vw, 44px)", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.04em", color: "#2B2520", margin: "8px 0 12px" }}>
                 {catName(level2)}
               </h1>
               <div style={{ width: "70px", height: "2px", background: "var(--color-accent)", marginBottom: "16px" }} />

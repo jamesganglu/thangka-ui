@@ -39,7 +39,7 @@ export default async function BuddhismPage() {
             {/* Intro */}
             {(!!item.content || !item.title) && (
               <div id="intro" style={{ marginBottom: "60px" }}>
-                <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(36px, 5vw, 60px)", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.04em", color: "#2B2520", marginBottom: "12px" }}>
+                <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(28px, 4vw, 44px)", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.04em", color: "#2B2520", margin: "8px 0 12px" }}>
                   {(item.title as string) || t("titleFallback")}
                 </h1>
                 <div style={{ width: "70px", height: "2px", background: "var(--color-accent)", marginBottom: "24px" }} />

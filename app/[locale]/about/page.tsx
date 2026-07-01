@@ -48,7 +48,7 @@ export default async function AboutPage({ params }: Props) {
     <main style={{ background: "#ffffff", minHeight: "60vh" }}>
       {/* Content */}
       <div className="container section">
-        <h1 style={{ margin: "0 0 40px" }}>{title}</h1>
+        <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(28px, 4vw, 44px)", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.04em", color: "#2B2520", margin: "8px 0 12px" }}>{title}</h1>
         <div style={{ display: "grid", gridTemplateColumns: "3fr 2fr", gap: "80px", alignItems: "flex-start" }} className="about-grid">
           {/* Text */}
           <div>
