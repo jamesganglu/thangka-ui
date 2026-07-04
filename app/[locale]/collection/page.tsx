@@ -73,7 +73,7 @@ export default async function CollectionPage({ params }: Props) {
       </div>
 
       <div className="container section" style={{ paddingTop: 0 }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }} className="cat-grid">
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px" }} className="cat-grid">
           {[...categories].sort((a, b) => (a.order ?? 0) - (b.order ?? 0)).map((cat) => {
             const img = cat.image?.[0];
             const imgSrc = imgUrl(img?.formats?.medium?.url ?? img?.url ?? "");
