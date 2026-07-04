@@ -115,7 +115,7 @@ export default async function CollectionCategoryPage({ params }: Props) {
 
               return (
                 <Link key={cat.id} href={`/collection/${slug}/${slugify(cat.name_en)}`} className="cat-card" style={{ border: "1px solid var(--color-accent)", background: "var(--color-surface)", display: "flex", flexDirection: "column", textDecoration: "none" }}>
-                  <div style={{ position: "relative", width: "100%", paddingBottom: "133%", overflow: "hidden", background: "#F5F3EF", flexShrink: 0 }}>
+                  <div style={{ position: "relative", width: "100%", paddingBottom: "100%", overflow: "hidden", background: "#F5F3EF", flexShrink: 0 }}>
                     {imgSrc ? <Image src={imgSrc} alt={catName(cat)} fill style={{ objectFit: "cover" }} sizes="(max-width: 900px) 50vw, 25vw" /> : <div style={{ width: "100%", height: "100%", background: "#ECDFD0" }} />}
                   </div>
                   <div style={{ padding: "12px 16px 16px", textAlign: "center", flex: 1, display: "flex", flexDirection: "column" }}>

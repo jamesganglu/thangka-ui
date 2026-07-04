@@ -81,7 +81,7 @@ export default async function CollectionPage({ params }: Props) {
 
             return (
               <Link key={cat.documentId ?? cat.id} href={`/collection/${slugify(cat.name_en)}`} style={{ display: "flex", textDecoration: "none", border: "1px solid var(--color-accent)", gap: "24px", alignItems: "stretch", padding: "10px" }}>
-                <div style={{ position: "relative", width: "40%", flexShrink: 0, overflow: "hidden", background: "#F5F3EF" }}>
+                <div style={{ position: "relative", width: "40%", aspectRatio: "1/1", flexShrink: 0, overflow: "hidden", background: "#F5F3EF" }}>
                   {imgSrc ? <Image src={imgSrc} alt={catName(cat)} fill style={{ objectFit: "cover" }} sizes="160px" /> : <div style={{ width: "100%", height: "100%", background: "#ECDFD0" }} />}
                 </div>
                 <div style={{ flex: 1 }}>

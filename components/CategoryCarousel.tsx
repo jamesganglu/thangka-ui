@@ -51,7 +51,7 @@ export default function CategoryCarousel({
                 style={{ display: "flex", flexDirection: "column", textDecoration: "none", cursor: "pointer", border: "none", flex: "0 0 calc(20% - 20px)", scrollSnapAlign: "start", minWidth: "180px" }}
               >
                 <div className="cat-card" style={{ border: "1px solid var(--color-accent)", background: "var(--color-surface)", display: "flex", flexDirection: "column", height: "100%" }}>
-                  <div style={{ position: "relative", width: "100%", paddingBottom: "133%", overflow: "hidden", background: "#F5F3EF", flexShrink: 0 }}>
+                  <div style={{ position: "relative", width: "100%", paddingBottom: "100%", overflow: "hidden", background: "#F5F3EF", flexShrink: 0 }}>
                     {imgSrc ? (
                       <Image src={imgUrl(imgSrc)} alt={name} fill style={{ objectFit: "cover" }} sizes="(max-width: 640px) 50vw, (max-width: 900px) 33vw, 20vw" />
                     ) : (
