@@ -27,7 +27,7 @@ export default async function TibetanHistoryPage() {
     const label = extractH2(text) || `${t("sectionFallback")} ${i}`;
     sections.push({ id: `section-${i}`, label });
   }
-  if (item.Overall) sections.push({ id: "overall", label: t("keyThemes") });
+  if (item.Overall) sections.push({ id: "overall", label: extractH2(item.Overall) || t("keyThemes") });
 
   return (
     <main style={{ background: "#ffffff" }}>
