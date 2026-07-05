@@ -70,7 +70,7 @@ export default async function TibetanHistoryPage() {
             })}
 
             {!!item.Overall && (
-              <div id="overall" style={{ marginTop: "48px", padding: "40px", background: "var(--color-surface)", border: "1px solid var(--color-accent)", textAlign: "center" }}>
+              <div id="overall" style={{ marginTop: "48px", padding: "40px", background: "var(--color-surface)", border: "1px solid var(--color-accent)", textAlign: "left" }}>
                 <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(18px, 2.5vw, 26px)", fontWeight: 400, color: "#2B2520", lineHeight: 1.5 }}>
                   <RichText content={item.Overall} />
                 </div>
