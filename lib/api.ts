@@ -111,6 +111,8 @@ export interface CategoryItem {
   short_desc_zh?: string | null;
   image?: {
     url: string;
+    width?: number;
+    height?: number;
     formats?: {
       small?: { url: string };
       medium?: { url: string };
