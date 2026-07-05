@@ -68,7 +68,7 @@ export default async function CollectionCategoryPage({ params }: Props) {
     return (locale === "zh" ? cat.short_desc_zh || cat.short_desc_en : cat.short_desc_en) || "";
   }
 
-  const desc = catDesc(parentCategory);
+  const desc = toPlainText(locale === "zh" ? parentCategory.description_zh || parentCategory.description_en : parentCategory.description_en);
   const parentImg = parentCategory.image?.[0];
   const parentImgSrc = imgUrl(parentImg?.formats?.medium?.url ?? parentImg?.url ?? "");
 
@@ -86,7 +86,7 @@ export default async function CollectionCategoryPage({ params }: Props) {
 
       <div style={{ padding: "32px 0 36px" }}>
         <div className="container">
-          <div style={{ display: "flex", gap: "48px", alignItems: "flex-start" }} className="cat-hero">
+          <div style={{ display: "flex", gap: "48px", alignItems: "stretch" }} className="cat-hero">
             <div style={{ flex: "1 1 0", paddingTop: "8px" }}>
               <span className="eyebrow">{t("category")}</span>
               <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(28px, 4vw, 44px)", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.04em", color: "#2B2520", margin: "8px 0 12px" }}>
@@ -95,8 +95,8 @@ export default async function CollectionCategoryPage({ params }: Props) {
               <div style={{ width: "70px", height: "2px", background: "var(--color-accent)", marginBottom: "16px" }} />
               {desc && <p style={{ color: "#6F6A63", fontSize: "15px", lineHeight: 1.75, margin: 0 }}>{desc}</p>}
             </div>
-            <div style={{ position: "relative", flex: "1 1 0", aspectRatio: "3/4", background: "#F5F3EF", overflow: "hidden" }}>
-              {parentImgSrc ? <Image src={parentImgSrc} alt={catName(parentCategory)} fill style={{ objectFit: "cover" }} sizes="50vw" /> : <div style={{ width: "100%", height: "100%", background: "#ECDFD0" }} />}
+            <div style={{ position: "relative", flex: "1 1 0", overflow: "hidden" }}>
+              {parentImgSrc ? <Image src={parentImgSrc} alt={catName(parentCategory)} fill style={{ objectFit: "contain" }} sizes="50vw" /> : <div style={{ width: "100%", height: "100%", background: "#ECDFD0" }} />}
             </div>
           </div>
         </div>
