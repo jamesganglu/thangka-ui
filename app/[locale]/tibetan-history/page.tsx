@@ -54,7 +54,7 @@ export default async function TibetanHistoryPage() {
               const isEven = i % 2 === 0;
               return (
                 <div key={i} style={{ marginBottom: "60px" }}>
-                  <div id={`section-${i}`} style={{ display: "grid", gridTemplateColumns: "2fr auto 3fr", gap: "48px", alignItems: "stretch", direction: isEven ? "rtl" : "ltr" }} className="history-section-grid">
+                  <div id={`section-${i}`} style={{ display: "grid", gridTemplateColumns: "1fr auto 40%", gap: "48px", alignItems: "stretch", direction: isEven ? "rtl" : "ltr" }} className="history-section-grid">
                     <div style={{ direction: "ltr" }}><RichText content={text} /></div>
                     <div style={{ direction: "ltr" }}><SectionDivider /></div>
                     {imgSrc ? (
