@@ -89,6 +89,8 @@
   },
   "history": {
     "intro": "Introduction",
+    "historyGroup": "Brief History",
+    "eventGroup": "Important Events",
     "keyThemes": "Key Themes",
     "sectionFallback": "Section",
     "titleFallback": "A Brief Overview of Tibetan History"

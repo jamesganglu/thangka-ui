@@ -89,6 +89,8 @@
   },
   "history": {
     "intro": "简介",
+    "historyGroup": "西藏历史简要概述",
+    "eventGroup": "重要历史事件",
     "keyThemes": "主要主题",
     "sectionFallback": "章节",
     "titleFallback": "西藏历史简述"

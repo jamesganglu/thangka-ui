@@ -22,7 +22,7 @@ export async function getHomepage() {
 }
 
 export async function getHistory() {
-  const { data } = await apiFetch("api/history?populate=*");
+  const { data } = await apiFetch("api/history?populate[event][populate]=*&populate[history][populate]=*");
   return data;
 }
 

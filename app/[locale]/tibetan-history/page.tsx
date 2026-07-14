@@ -14,18 +14,44 @@ function SectionDivider() {
   );
 }
 
+interface HistoryBlock {
+  id: number;
+  text: unknown;
+  image?: { url: string; formats?: { medium?: { url: string }; large?: { url: string } } };
+}
+
 export default async function TibetanHistoryPage() {
   const t = await getTranslations("history");
   let item: Record<string, unknown> = {};
   try { item = await getHistory(); } catch { /* CMS not connected */ }
 
-  const sections: { id: string; label: string }[] = [];
+  const historyBlocks = (item.history as HistoryBlock[] | undefined) ?? [];
+  const eventBlocks = (item.event as HistoryBlock[] | undefined) ?? [];
+  const blocks = [
+    ...historyBlocks.map((b, idx) => ({ key: `history-${idx + 1}`, text: b.text, imgSrc: imgUrl(b.image?.formats?.medium?.url ?? b.image?.formats?.large?.url ?? b.image?.url ?? "") })),
+    ...eventBlocks.map((b, idx) => ({ key: `event-${idx + 1}`, text: b.text, imgSrc: imgUrl(b.image?.formats?.medium?.url ?? b.image?.formats?.large?.url ?? b.image?.url ?? "") })),
+  ];
+
+  interface SidebarSection { id?: string; label: string; children?: SidebarSection[] }
+  const sections: SidebarSection[] = [];
   if (item.brief || item.title) sections.push({ id: "intro", label: t("intro") });
-  for (let i = 1; i <= 8; i++) {
-    const text = item[`text${i}`];
-    if (!text) continue;
-    const label = extractH2(text) || `${t("sectionFallback")} ${i}`;
-    sections.push({ id: `section-${i}`, label });
+  if (historyBlocks.length > 0) {
+    sections.push({
+      label: t("historyGroup"),
+      children: historyBlocks.map((b, idx) => ({
+        id: `history-${idx + 1}`,
+        label: extractH2(b.text) || `${t("sectionFallback")} ${idx + 1}`,
+      })),
+    });
+  }
+  if (eventBlocks.length > 0) {
+    sections.push({
+      label: t("eventGroup"),
+      children: eventBlocks.map((b, idx) => ({
+        id: `event-${idx + 1}`,
+        label: extractH2(b.text) || `${t("sectionFallback")} ${idx + 1}`,
+      })),
+    });
   }
   if (item.Overall) sections.push({ id: "overall", label: extractH2(item.Overall) || t("keyThemes") });
 
@@ -46,20 +72,16 @@ export default async function TibetanHistoryPage() {
               </div>
             )}
 
-            {Array.from({ length: 8 }, (_, idx) => idx + 1).map((i) => {
-              const text = item[`text${i}`];
-              const imgData = item[`image${i}`] as { url?: string; formats?: { medium?: { url?: string }; large?: { url?: string } } } | undefined;
-              if (!text) return null;
-              const imgSrc = imgUrl(imgData?.formats?.medium?.url ?? imgData?.formats?.large?.url ?? imgData?.url ?? "");
-              const isEven = i % 2 === 0;
+            {blocks.map((block, idx) => {
+              const isEven = idx % 2 === 1;
               return (
-                <div key={i} style={{ marginBottom: "60px" }}>
-                  <div id={`section-${i}`} style={{ display: "grid", gridTemplateColumns: "1fr auto 40%", gap: "48px", alignItems: "stretch", direction: isEven ? "rtl" : "ltr" }} className="history-section-grid">
-                    <div style={{ direction: "ltr" }}><RichText content={text} /></div>
+                <div key={block.key} style={{ marginBottom: "60px" }}>
+                  <div id={block.key} style={{ display: "grid", gridTemplateColumns: "1fr auto 40%", gap: "48px", alignItems: "stretch", direction: isEven ? "rtl" : "ltr" }} className="history-section-grid">
+                    <div style={{ direction: "ltr" }}><RichText content={block.text} /></div>
                     <div style={{ direction: "ltr" }}><SectionDivider /></div>
-                    {imgSrc ? (
+                    {block.imgSrc ? (
                       <div style={{ position: "relative", overflow: "hidden", background: "#F5F3EF", direction: "ltr", minHeight: "300px" }}>
-                        <Image src={imgSrc} alt="" fill style={{ objectFit: "cover" }} sizes="(max-width: 900px) 100vw, 50vw" />
+                        <Image src={block.imgSrc} alt="" fill style={{ objectFit: "cover" }} sizes="(max-width: 900px) 100vw, 50vw" />
                       </div>
                     ) : (
                       <div style={{ background: "#ECDFD0", direction: "ltr", height: "100%" }} />
