@@ -4,6 +4,15 @@ import { getBuddhism, imgUrl, extractH2 } from "@/lib/api";
 import RichText from "@/components/RichText";
 import ScrollSpySidebar from "@/components/ScrollSpySidebar";
 
+function SectionDivider() {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", height: "100%", padding: "10px 0" }}>
+      <div style={{ flex: 1, width: "1px", background: "var(--color-light)" }} />
+      <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: "var(--color-text)", margin: "3px 0", flexShrink: 0, outline: "1px solid var(--color-light)", outlineOffset: "3px" }} />
+      <div style={{ flex: 1, width: "1px", background: "var(--color-light)" }} />
+    </div>
+  );
+}
 
 function resolveImgSrc(imgData: unknown): string {
   if (!imgData) return "";
@@ -48,20 +57,22 @@ export default async function BuddhismPage() {
             )}
 
             {/* Text/Image sections */}
-            {Array.from({ length: 7 }, (_, idx) => idx + 1).map((i) => {
+            {Array.from({ length: 7 }, (_, idx) => idx + 1).map((i, idx) => {
               const text = item[`text${i}`];
               const imgSrc = resolveImgSrc(item[`image${i}`]);
               if (!text) return null;
+              const isEven = idx % 2 === 1;
               return (
                 <div key={i} style={{ marginBottom: "60px" }}>
-                  <div id={`section-${i}`} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "48px", alignItems: "start" }} className="history-section-grid">
-                    <div><RichText content={text} /></div>
+                  <div id={`section-${i}`} style={{ display: "grid", gridTemplateColumns: "1fr auto 40%", gap: "48px", alignItems: "stretch", direction: isEven ? "rtl" : "ltr" }} className="history-section-grid">
+                    <div style={{ direction: "ltr" }}><RichText content={text} /></div>
+                    <div style={{ direction: "ltr" }}><SectionDivider /></div>
                     {imgSrc ? (
-                      <div style={{ position: "relative", overflow: "hidden", background: "#F5F3EF", minHeight: "300px" }}>
+                      <div style={{ position: "relative", overflow: "hidden", background: "#F5F3EF", direction: "ltr", minHeight: "300px" }}>
                         <Image src={imgSrc} alt="" fill style={{ objectFit: "cover" }} sizes="(max-width: 900px) 100vw, 50vw" />
                       </div>
                     ) : (
-                      <div style={{ background: "#ECDFD0", minHeight: "300px" }} />
+                      <div style={{ background: "#ECDFD0", direction: "ltr", height: "100%" }} />
                     )}
                   </div>
                 </div>
@@ -70,7 +81,7 @@ export default async function BuddhismPage() {
 
             {/* Overall */}
             {!!item.overall && (
-              <div id="overall" style={{ marginTop: "48px", padding: "40px", background: "var(--color-surface)", border: "1px solid var(--color-accent)", textAlign: "center" }}>
+              <div id="overall" style={{ marginTop: "48px", padding: "40px", background: "var(--color-surface)", border: "1px solid var(--color-accent)", textAlign: "left" }}>
                 <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(18px, 2.5vw, 26px)", fontWeight: 400, color: "#2B2520", lineHeight: 1.5 }}>
                   <RichText content={item.overall} />
                 </div>
