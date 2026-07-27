@@ -32,12 +32,12 @@ export async function getContact() {
 }
 
 export async function getBuddhism() {
-  const { data } = await apiFetch("api/buddhism?populate=*");
+  const { data } = await apiFetch("api/buddhism?populate[detail][populate]=*");
   return data;
 }
 
 export async function getAbout() {
-  const { data } = await apiFetch("api/about?populate=*");
+  const { data } = await apiFetch("api/about?populate[detail][populate]=*");
   return data;
 }
 

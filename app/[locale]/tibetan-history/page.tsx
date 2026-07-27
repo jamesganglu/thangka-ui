@@ -27,14 +27,11 @@ export default async function TibetanHistoryPage() {
 
   const historyBlocks = (item.history as HistoryBlock[] | undefined) ?? [];
   const eventBlocks = (item.event as HistoryBlock[] | undefined) ?? [];
-  const blocks = [
-    ...historyBlocks.map((b, idx) => ({ key: `history-${idx + 1}`, text: b.text, imgSrc: imgUrl(b.image?.formats?.medium?.url ?? b.image?.formats?.large?.url ?? b.image?.url ?? "") })),
-    ...eventBlocks.map((b, idx) => ({ key: `event-${idx + 1}`, text: b.text, imgSrc: imgUrl(b.image?.formats?.medium?.url ?? b.image?.formats?.large?.url ?? b.image?.url ?? "") })),
-  ];
+  const historyMapped = historyBlocks.map((b, idx) => ({ key: `history-${idx + 1}`, text: b.text, imgSrc: imgUrl(b.image?.formats?.medium?.url ?? b.image?.formats?.large?.url ?? b.image?.url ?? "") }));
+  const eventMapped = eventBlocks.map((b, idx) => ({ key: `event-${idx + 1}`, text: b.text, imgSrc: imgUrl(b.image?.formats?.medium?.url ?? b.image?.formats?.large?.url ?? b.image?.url ?? "") }));
 
   interface SidebarSection { id?: string; label: string; children?: SidebarSection[] }
   const sections: SidebarSection[] = [];
-  if (item.brief || item.title) sections.push({ id: "intro", label: t("intro") });
   if (historyBlocks.length > 0) {
     sections.push({
       label: t("historyGroup"),
@@ -72,8 +69,37 @@ export default async function TibetanHistoryPage() {
               </div>
             )}
 
-            {blocks.map((block, idx) => {
+            {historyMapped.map((block, idx) => {
               const isEven = idx % 2 === 1;
+              return (
+                <div key={block.key} style={{ marginBottom: "60px" }}>
+                  <div id={block.key} style={{ display: "grid", gridTemplateColumns: "1fr auto 40%", gap: "48px", alignItems: "stretch", direction: isEven ? "rtl" : "ltr" }} className="history-section-grid">
+                    <div style={{ direction: "ltr" }}><RichText content={block.text} /></div>
+                    <div style={{ direction: "ltr" }}><SectionDivider /></div>
+                    {block.imgSrc ? (
+                      <div style={{ position: "relative", overflow: "hidden", background: "#F5F3EF", direction: "ltr", minHeight: "300px" }}>
+                        <Image src={block.imgSrc} alt="" fill style={{ objectFit: "cover" }} sizes="(max-width: 900px) 100vw, 50vw" />
+                      </div>
+                    ) : (
+                      <div style={{ background: "#ECDFD0", direction: "ltr", height: "100%" }} />
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+
+            {!!item.eventsBrief && (
+              <div style={{ marginBottom: "60px" }}>
+                {typeof item.eventsBrief === "string" ? (
+                  <p style={{ color: "#6F6A63", fontSize: "15px", lineHeight: 1.75 }}>{item.eventsBrief}</p>
+                ) : (
+                  <RichText content={item.eventsBrief} />
+                )}
+              </div>
+            )}
+
+            {eventMapped.map((block, idx) => {
+              const isEven = (historyMapped.length + idx) % 2 === 1;
               return (
                 <div key={block.key} style={{ marginBottom: "60px" }}>
                   <div id={block.key} style={{ display: "grid", gridTemplateColumns: "1fr auto 40%", gap: "48px", alignItems: "stretch", direction: isEven ? "rtl" : "ltr" }} className="history-section-grid">

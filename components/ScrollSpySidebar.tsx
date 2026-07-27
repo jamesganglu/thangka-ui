@@ -60,7 +60,6 @@ export default function ScrollSpySidebar({
                   fontFamily: "'Cormorant Garamond', serif",
                   fontSize: "13px",
                   fontWeight: 600,
-                  textTransform: "uppercase",
                   letterSpacing: "0.04em",
                   color: "#2B2520",
                   paddingLeft: "12px",

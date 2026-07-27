@@ -14,13 +14,10 @@ function SectionDivider() {
   );
 }
 
-function resolveImgSrc(imgData: unknown): string {
-  if (!imgData) return "";
-  const img = (Array.isArray(imgData) ? imgData[0] : imgData) as {
-    url?: string;
-    formats?: { medium?: { url?: string }; large?: { url?: string } };
-  } | undefined;
-  return imgUrl(img?.formats?.medium?.url ?? img?.formats?.large?.url ?? img?.url ?? "");
+interface DetailBlock {
+  id: number;
+  text: unknown;
+  image?: { url: string; formats?: { medium?: { url: string }; large?: { url: string } } };
 }
 
 export default async function BuddhismPage() {
@@ -28,14 +25,14 @@ export default async function BuddhismPage() {
   let item: Record<string, unknown> = {};
   try { item = await getBuddhism(); } catch { /* CMS not connected */ }
 
+  const detailBlocks = (item.detail as DetailBlock[] | undefined) ?? [];
+  const blocks = detailBlocks.map((b, idx) => ({ key: `section-${idx + 1}`, text: b.text, imgSrc: imgUrl(b.image?.formats?.medium?.url ?? b.image?.formats?.large?.url ?? b.image?.url ?? "") }));
+
   const sections: { id: string; label: string }[] = [];
   if (item.content || item.title) sections.push({ id: "intro", label: t("intro") });
-  for (let i = 1; i <= 7; i++) {
-    const text = item[`text${i}`];
-    if (!text) continue;
-    const label = extractH2(text) || `${t("sectionFallback")} ${i}`;
-    sections.push({ id: `section-${i}`, label });
-  }
+  blocks.forEach((block, idx) => {
+    sections.push({ id: block.key, label: extractH2(block.text) || `${t("sectionFallback")} ${idx + 1}` });
+  });
   if (item.overall) sections.push({ id: "overall", label: t("keyThemes") });
 
   return (
@@ -57,19 +54,16 @@ export default async function BuddhismPage() {
             )}
 
             {/* Text/Image sections */}
-            {Array.from({ length: 7 }, (_, idx) => idx + 1).map((i, idx) => {
-              const text = item[`text${i}`];
-              const imgSrc = resolveImgSrc(item[`image${i}`]);
-              if (!text) return null;
+            {blocks.map((block, idx) => {
               const isEven = idx % 2 === 1;
               return (
-                <div key={i} style={{ marginBottom: "60px" }}>
-                  <div id={`section-${i}`} style={{ display: "grid", gridTemplateColumns: "1fr auto 40%", gap: "48px", alignItems: "stretch", direction: isEven ? "rtl" : "ltr" }} className="history-section-grid">
-                    <div style={{ direction: "ltr" }}><RichText content={text} /></div>
+                <div key={block.key} style={{ marginBottom: "60px" }}>
+                  <div id={block.key} style={{ display: "grid", gridTemplateColumns: "1fr auto 40%", gap: "48px", alignItems: "stretch", direction: isEven ? "rtl" : "ltr" }} className="history-section-grid">
+                    <div style={{ direction: "ltr" }}><RichText content={block.text} /></div>
                     <div style={{ direction: "ltr" }}><SectionDivider /></div>
-                    {imgSrc ? (
+                    {block.imgSrc ? (
                       <div style={{ position: "relative", overflow: "hidden", background: "#F5F3EF", direction: "ltr", minHeight: "300px" }}>
-                        <Image src={imgSrc} alt="" fill style={{ objectFit: "cover" }} sizes="(max-width: 900px) 100vw, 50vw" />
+                        <Image src={block.imgSrc} alt="" fill style={{ objectFit: "cover" }} sizes="(max-width: 900px) 100vw, 50vw" />
                       </div>
                     ) : (
                       <div style={{ background: "#ECDFD0", direction: "ltr", height: "100%" }} />

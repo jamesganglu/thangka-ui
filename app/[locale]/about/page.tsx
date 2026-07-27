@@ -8,6 +8,22 @@ interface Props {
   params: Promise<{ locale: string }>;
 }
 
+interface DetailBlock {
+  id: number;
+  text: unknown;
+  image?: { url: string; formats?: { medium?: { url: string }; large?: { url: string } } };
+}
+
+function SectionDivider() {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", height: "100%", padding: "10px 0" }}>
+      <div style={{ flex: 1, width: "1px", background: "var(--color-light)" }} />
+      <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: "var(--color-text)", margin: "3px 0", flexShrink: 0, outline: "1px solid var(--color-light)", outlineOffset: "3px" }} />
+      <div style={{ flex: 1, width: "1px", background: "var(--color-light)" }} />
+    </div>
+  );
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
 
@@ -15,8 +31,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   try { item = await getAbout(); } catch { /* ignore */ }
 
   const title = (item.title as string) || "Our Story";
-  const img = item.image as { url?: string; formats?: { large?: { url?: string }; medium?: { url?: string } } } | null;
-  const ogImage = imgUrl(img?.formats?.large?.url ?? img?.formats?.medium?.url ?? img?.url ?? "");
+  const detail = (item.detail as DetailBlock[] | undefined) ?? [];
+  const firstImg = detail.find((b) => b.image)?.image;
+  const ogImage = imgUrl(firstImg?.formats?.large?.url ?? firstImg?.formats?.medium?.url ?? firstImg?.url ?? "");
 
   return {
     title,
@@ -40,39 +57,51 @@ export default async function AboutPage({ params }: Props) {
   try { item = await getAbout(); } catch { /* CMS not connected */ }
 
   const title = (item.title as string) || "Our Story";
-  const content = item.content;
-  const img = item.image as { url?: string; formats?: { large?: { url?: string }; medium?: { url?: string } } } | null;
-  const imgSrc = imgUrl(img?.formats?.large?.url ?? img?.formats?.medium?.url ?? img?.url ?? "");
+  const detail = (item.detail as DetailBlock[] | undefined) ?? [];
+  const blocks = detail.map((b, idx) => ({
+    key: `detail-${idx + 1}`,
+    text: b.text,
+    imgSrc: imgUrl(b.image?.formats?.medium?.url ?? b.image?.formats?.large?.url ?? b.image?.url ?? ""),
+  }));
 
   return (
-    <main style={{ background: "#ffffff", minHeight: "60vh" }}>
-      {/* Content */}
-      <div className="container section">
-        <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(28px, 4vw, 44px)", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.04em", color: "#2B2520", margin: "8px 0 12px" }}>{title}</h1>
-        <div style={{ display: "grid", gridTemplateColumns: "3fr 2fr", gap: "80px", alignItems: "flex-start" }} className="about-grid">
-          {/* Text */}
-          <div>
-            {content ? (
-              <RichText content={content} />
-            ) : (
-              <p style={{ color: "#6F6A63", fontSize: "15px", lineHeight: 1.75 }}>
-                This page will be implemented soon.
-              </p>
-            )}
-          </div>
+    <main style={{ background: "#ffffff" }}>
+      <div className="container" style={{ paddingTop: "60px", paddingBottom: "80px" }}>
+        <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(28px, 4vw, 44px)", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.04em", color: "#2B2520", margin: "8px 0 12px" }}>
+          {title}
+        </h1>
+        <div style={{ width: "70px", height: "2px", background: "var(--color-accent)", marginBottom: "60px" }} />
 
-          {/* Image */}
-          {imgSrc && (
-            <div style={{ position: "relative", width: "100%", aspectRatio: "3/4", overflow: "hidden", background: "#F5F3EF" }}>
-              <Image src={imgSrc} alt={title} fill style={{ objectFit: "cover" }} sizes="(max-width: 900px) 100vw, 40vw" />
-            </div>
-          )}
-        </div>
+        {blocks.length > 0 ? (
+          blocks.map((block, idx) => {
+            const isEven = idx % 2 === 1;
+            return (
+              <div key={block.key} style={{ marginBottom: "60px" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr auto 40%", gap: "48px", alignItems: "stretch", direction: isEven ? "rtl" : "ltr" }} className="history-section-grid">
+                  <div style={{ direction: "ltr" }}><RichText content={block.text} /></div>
+                  <div style={{ direction: "ltr" }}><SectionDivider /></div>
+                  {block.imgSrc ? (
+                    <div style={{ position: "relative", overflow: "hidden", background: "#F5F3EF", direction: "ltr", minHeight: "300px" }}>
+                      <Image src={block.imgSrc} alt="" fill style={{ objectFit: "cover" }} sizes="(max-width: 900px) 100vw, 50vw" />
+                    </div>
+                  ) : (
+                    <div style={{ background: "#ECDFD0", direction: "ltr", height: "100%" }} />
+                  )}
+                </div>
+              </div>
+            );
+          })
+        ) : (
+          <p style={{ color: "#6F6A63", fontSize: "15px", lineHeight: 1.75 }}>
+            This page will be implemented soon.
+          </p>
+        )}
       </div>
 
       <style>{`
         @media (max-width: 900px) {
-          .about-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+          .history-section-grid { grid-template-columns: 1fr !important; direction: ltr !important; }
+          .history-section-grid > div:nth-child(2) { display: none; }
         }
       `}</style>
     </main>

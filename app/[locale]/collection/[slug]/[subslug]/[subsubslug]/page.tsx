@@ -7,14 +7,13 @@ import { siteUrl } from "@/lib/site";
 import { notFound } from "next/navigation";
 
 interface Props {
-  params: Promise<{ locale: string; slug: string; subslug: string }>;
+  params: Promise<{ locale: string; slug: string; subslug: string; subsubslug: string }>;
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { locale, slug, subslug } = await params;
-
+async function resolveChain(locale: string, slug: string, subslug: string, subsubslug: string) {
   let level1: CategoryItem | null = null;
   let level2: CategoryItem | null = null;
+  let level3: CategoryItem | null = null;
 
   try {
     const all = await getLevel1Categories();
@@ -28,54 +27,56 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     } catch { /* ignore */ }
   }
 
-  const name = level2 ? (locale === "zh" ? level2.name_zh || level2.name_en : level2.name_en) || subslug : subslug;
-  const description = level2 ? toPlainText(locale === "zh" ? level2.description_zh || level2.description_en : level2.description_en).slice(0, 160) : "";
-  const img = level2?.image?.[0];
+  if (level2) {
+    try {
+      const level3cats = await getCategoriesByParentId(String(level2.id));
+      level3 = level3cats.find((c) => slugify(c.name_en) === subsubslug) ?? null;
+    } catch { /* ignore */ }
+  }
+
+  return { level1, level2, level3 };
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale, slug, subslug, subsubslug } = await params;
+  const { level3 } = await resolveChain(locale, slug, subslug, subsubslug);
+
+  const name = level3 ? (locale === "zh" ? level3.name_zh || level3.name_en : level3.name_en) || subsubslug : subsubslug;
+  const description = level3 ? toPlainText(locale === "zh" ? level3.description_zh || level3.description_en : level3.description_en).slice(0, 160) : "";
+  const img = level3?.image?.[0];
   const ogImage = img ? imgUrl(img.formats?.medium?.url ?? img.url) : undefined;
 
   return {
     title: name,
     description: description || `Explore ${name} thangka paintings.`,
     alternates: {
-      canonical: `${siteUrl}/${locale}/collection/${slug}/${subslug}`,
-      languages: { en: `${siteUrl}/en/collection/${slug}/${subslug}`, zh: `${siteUrl}/zh/collection/${slug}/${subslug}`, "x-default": `${siteUrl}/en/collection/${slug}/${subslug}` },
+      canonical: `${siteUrl}/${locale}/collection/${slug}/${subslug}/${subsubslug}`,
+      languages: { en: `${siteUrl}/en/collection/${slug}/${subslug}/${subsubslug}`, zh: `${siteUrl}/zh/collection/${slug}/${subslug}/${subsubslug}`, "x-default": `${siteUrl}/en/collection/${slug}/${subslug}/${subsubslug}` },
     },
     openGraph: {
       title: name,
       description: description || `Explore ${name} thangka paintings.`,
-      url: `${siteUrl}/${locale}/collection/${slug}/${subslug}`,
+      url: `${siteUrl}/${locale}/collection/${slug}/${subslug}/${subsubslug}`,
       locale: locale === "zh" ? "zh_CN" : "en_US",
       ...(ogImage ? { images: [{ url: ogImage, alt: name }] } : {}),
     },
   };
 }
 
-export default async function CollectionLevel3Page({ params }: Props) {
-  const { locale, slug, subslug } = await params;
+export default async function CollectionLevel4Page({ params }: Props) {
+  const { locale, slug, subslug, subsubslug } = await params;
   const t = await getTranslations("collection");
 
-  let level1: CategoryItem | null = null;
-  let level2: CategoryItem | null = null;
+  const { level1, level2, level3 } = await resolveChain(locale, slug, subslug, subsubslug);
+
+  if (!level1 || !level2 || !level3) notFound();
+
   let subcategories: CategoryItem[] = [];
   let thangkas: ThangkaItem[] = [];
 
-  try {
-    const all = await getLevel1Categories();
-    level1 = all.find((c) => slugify(c.name_en) === slug) ?? null;
-  } catch { /* CMS not connected */ }
-
-  if (!level1) notFound();
-
-  try {
-    const level2cats = await getCategoriesByParentId(String(level1.id));
-    level2 = level2cats.find((c) => slugify(c.name_en) === subslug) ?? null;
-  } catch { /* CMS not connected */ }
-
-  if (!level2) notFound();
-
-  try { subcategories = await getCategoriesByParentId(String(level2.id)); } catch { /* no subcategories */ }
+  try { subcategories = await getCategoriesByParentId(String(level3.id)); } catch { /* no subcategories */ }
   if (subcategories.length === 0) {
-    try { thangkas = await getTangkasByCategory(level2.documentId); } catch { /* CMS not connected */ }
+    try { thangkas = await getTangkasByCategory(level3.documentId); } catch { /* CMS not connected */ }
   }
 
   function catName(cat: CategoryItem) {
@@ -88,8 +89,8 @@ export default async function CollectionLevel3Page({ params }: Props) {
     return (locale === "zh" ? t.name_zh || t.name_en : t.name_en) || "";
   }
 
-  const desc = catDesc(level2);
-  const parentImg = level2.image?.[0];
+  const desc = catDesc(level3);
+  const parentImg = level3.image?.[0];
   const parentImgSrc = imgUrl(parentImg?.formats?.medium?.url ?? parentImg?.url ?? "");
 
   return (
@@ -101,7 +102,9 @@ export default async function CollectionLevel3Page({ params }: Props) {
             {" / "}
             <Link href={`/collection/${slug}`} style={{ color: "#6F6A63", textDecoration: "none" }}>{catName(level1)}</Link>
             {" / "}
-            <span style={{ color: "#2B2520" }}>{catName(level2)}</span>
+            <Link href={`/collection/${slug}/${subslug}`} style={{ color: "#6F6A63", textDecoration: "none" }}>{catName(level2)}</Link>
+            {" / "}
+            <span style={{ color: "#2B2520" }}>{catName(level3)}</span>
           </nav>
         </div>
       </div>
@@ -112,13 +115,13 @@ export default async function CollectionLevel3Page({ params }: Props) {
             <div style={{ flex: "1 1 0", paddingTop: "8px" }}>
               <span className="eyebrow">{t("category")}</span>
               <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(28px, 4vw, 44px)", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.04em", color: "#2B2520", margin: "8px 0 12px" }}>
-                {catName(level2)}
+                {catName(level3)}
               </h1>
               <div style={{ width: "70px", height: "2px", background: "var(--color-accent)", marginBottom: "16px" }} />
               {desc && <p style={{ color: "#6F6A63", fontSize: "15px", lineHeight: 1.75, margin: 0 }}>{desc}</p>}
             </div>
             <div style={{ position: "relative", flex: "1 1 0", aspectRatio: "3/4", background: "#F5F3EF", overflow: "hidden" }}>
-              {parentImgSrc ? <Image src={parentImgSrc} alt={catName(level2)} fill style={{ objectFit: "cover" }} sizes="50vw" /> : <div style={{ width: "100%", height: "100%", background: "#ECDFD0" }} />}
+              {parentImgSrc ? <Image src={parentImgSrc} alt={catName(level3)} fill style={{ objectFit: "cover" }} sizes="50vw" /> : <div style={{ width: "100%", height: "100%", background: "#ECDFD0" }} />}
             </div>
           </div>
         </div>
@@ -131,18 +134,16 @@ export default async function CollectionLevel3Page({ params }: Props) {
               const img = cat.image?.[0];
               const imgSrc = imgUrl(img?.formats?.medium?.url ?? img?.url ?? "");
               const catDescText = catDesc(cat);
-              const hasChildren = cat.categories && cat.categories.length > 0;
               return (
-                <Link key={cat.id} href={`/collection/${slug}/${subslug}/${slugify(cat.name_en)}`} className="cat-card" style={{ border: "1px solid var(--color-accent)", background: "var(--color-surface)", display: "flex", flexDirection: "column", textDecoration: "none" }}>
+                <div key={cat.id} className="cat-card" style={{ border: "1px solid var(--color-accent)", background: "var(--color-surface)", display: "flex", flexDirection: "column" }}>
                   <div style={{ position: "relative", width: "100%", paddingBottom: "133%", overflow: "hidden", background: "#F5F3EF", flexShrink: 0 }}>
                     {imgSrc ? <Image src={imgSrc} alt={catName(cat)} fill style={{ objectFit: "cover" }} sizes="(max-width: 900px) 50vw, 25vw" /> : <div style={{ width: "100%", height: "100%", background: "#ECDFD0" }} />}
                   </div>
                   <div style={{ padding: "12px 16px 16px", textAlign: "center", flex: 1, display: "flex", flexDirection: "column" }}>
                     <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "16px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em", color: "#2B2520", margin: "0 0 6px", lineHeight: 1.2 }}>{catName(cat)}</h3>
                     {catDescText && <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "12px", color: "#6F6A63", margin: "0 0 10px", lineHeight: 1.5 }}>{catDescText.length > 50 ? catDescText.slice(0, 50).trimEnd() + "…" : catDescText}</p>}
-                    {hasChildren && <span style={{ fontFamily: "'Cinzel', serif", fontSize: "11px", letterSpacing: "0.08em", textTransform: "uppercase", color: "#A87533" }}>{t("explore")}</span>}
                   </div>
-                </Link>
+                </div>
               );
             })}
           </div>
