@@ -93,8 +93,8 @@ export default async function AboutPage({ params }: Props) {
                   <div style={{ direction: "ltr" }}><RichText content={block.text} /></div>
                   <div style={{ direction: "ltr" }}><SectionDivider /></div>
                   {block.imgSrc ? (
-                    <div style={{ position: "relative", overflow: "hidden", background: "#F5F3EF", direction: "ltr", minHeight: "300px" }}>
-                      <Image src={block.imgSrc} alt="" fill style={{ objectFit: "cover" }} sizes="(max-width: 900px) 100vw, 50vw" />
+                    <div style={{ position: "relative", overflow: "hidden", direction: "ltr", minHeight: "300px" }}>
+                      <Image src={block.imgSrc} alt="" fill style={{ objectFit: "contain" }} sizes="(max-width: 900px) 100vw, 50vw" />
                     </div>
                   ) : (
                     <div style={{ background: "#ECDFD0", direction: "ltr", height: "100%" }} />
