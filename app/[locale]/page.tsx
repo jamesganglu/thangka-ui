@@ -23,8 +23,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = heroBlocks.find((b) => b.type === "heading")?.children.map((c) => c.text).join("") || (locale === "zh" ? "藏传唐卡艺术" : "Tibetan Thangka Art");
   const description = (heroBlocks.filter((b) => b.type === "paragraph").map((b) => b.children.map((c) => c.text).join("")).join(" ") || "Sacred Art. Timeless Heritage. Connecting Wisdom with the World.").slice(0, 160);
 
-  const imgs = item.carouselImages as { formats?: { large?: { url?: string } }; url?: string }[] | undefined;
-  const ogImage = imgs?.length ? imgUrl(imgs[0]?.formats?.large?.url ?? imgs[0]?.url ?? "") : undefined;
 
   return {
     title,
@@ -39,7 +37,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       url: `${siteUrl}/${locale}`,
       locale: locale === "zh" ? "zh_CN" : "en_US",
       alternateLocale: locale === "zh" ? "en_US" : "zh_CN",
-      ...(ogImage ? { images: [{ url: ogImage, width: 1200, height: 630, alt: title }] } : {}),
     },
   };
 }
@@ -54,10 +51,10 @@ export default async function HomePage({ params }: Props) {
   try { item = await getHomepage(); } catch { /* Strapi not running */ }
   try { categories = await getLevel1Categories(); } catch { /* ignore */ }
 
-  const heroImageUrl = (() => {
-    const imgs = item.carouselImages as { formats?: { large?: { url?: string } }; url?: string }[] | undefined;
+  const heroVideoUrl = (() => {
+    const imgs = item.carouselImages as { url?: string }[] | undefined;
     if (!imgs || imgs.length === 0) return "";
-    return imgUrl(imgs[0]?.formats?.large?.url ?? imgs[0]?.url ?? "");
+    return imgUrl(imgs[0]?.url ?? "");
   })();
 
   type Block = { type: string; level?: number; children: { text: string }[] };
@@ -82,20 +79,32 @@ export default async function HomePage({ params }: Props) {
   return (
     <main>
       {/* Hero */}
-      <section id="hero" style={{ position: "relative", width: "100vw", overflow: "hidden" }}>
-        {heroImageUrl && (
-          <Image id="hero-image" src={heroImageUrl} alt="Tibetan Thangka" fill priority style={{ objectFit: "cover" }} sizes="100vw" />
+      <section id="hero" style={{ position: "relative", width: "100vw", height: "calc(100vh - 80px)", overflow: "hidden" }}>
+        {heroVideoUrl && (
+          <video
+            id="hero-video"
+            autoPlay
+            muted
+            loop
+            playsInline
+            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
+          >
+            <source src={heroVideoUrl} />
+          </video>
         )}
-        <div id="hero-text" style={{ position: "relative", zIndex: 2, textAlign: "center", width: "100%", padding: "72px 20%", margin: "0 auto", background: "linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.8), rgba(255,255,255,0))", textShadow: "0 0 2vw #fff, 0 0 4vw #fff, 0 0 8vw #fff, 0 0 8vw #fff, 0 0 16vw #fff, 0 0 25vw #fff, 0 0 35vw #fff, 0 0 50vw #fff" }}>
-          <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(52px, 9vw, 96px)", fontWeight: 400, letterSpacing: "0.07em", textTransform: "uppercase", color: "#2B2520", lineHeight: 0.95, marginBottom: "24px" }}>
-            {heroTitle}
-          </h1>
-          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(17px, 2.2vw, 24px)", fontWeight: 400, color: "#2B2520", letterSpacing: "0.01em", lineHeight: 1.5, marginBottom: "40px" }}>
-            {heroSubtext}
-          </p>
-          <Link href="/collection" className="btn-primary" style={{ background: "#ffffff", color: "#2B2520", border: "none" }}>
-            {t("exploreCollection")}
-          </Link>
+        <div style={{ position: "absolute", inset: 0, zIndex: 1, background: "linear-gradient(0deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 100%)" }} />
+        <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, zIndex: 2, padding: "2rem 0" }} className="container">
+          <div id="hero-text" style={{ textAlign: "left", maxWidth: "50%" }}>
+            <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "40px", fontWeight: 400, letterSpacing: "0.07em", textTransform: "uppercase", color: "#ffffff", lineHeight: 0.95, marginBottom: "24px" }}>
+              {heroTitle}
+            </h1>
+            <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(17px, 2.2vw, 24px)", fontWeight: 400, color: "#ffffff", letterSpacing: "0.01em", lineHeight: 1.5, marginBottom: "40px" }}>
+              {heroSubtext}
+            </p>
+            <Link href="/collection" className="btn-primary" style={{ background: "#ffffff", color: "#2B2520", border: "none" }}>
+              {t("exploreCollection")}
+            </Link>
+          </div>
         </div>
       </section>
 

@@ -64,8 +64,20 @@ export default async function AboutPage({ params }: Props) {
     imgSrc: imgUrl(b.image?.formats?.medium?.url ?? b.image?.formats?.large?.url ?? b.image?.url ?? ""),
   }));
 
+  const heroVideoUrl = (() => {
+    const video = item.video as { url?: string } | undefined;
+    return imgUrl(video?.url ?? "");
+  })();
+
   return (
     <main style={{ background: "#ffffff" }}>
+      {heroVideoUrl && (
+        <div style={{ position: "relative", width: "100%", height: "50vh", overflow: "hidden" }}>
+          <video autoPlay muted loop playsInline style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}>
+            <source src={heroVideoUrl} />
+          </video>
+        </div>
+      )}
       <div className="container" style={{ paddingTop: "60px", paddingBottom: "80px" }}>
         <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(28px, 4vw, 44px)", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.04em", color: "#2B2520", margin: "8px 0 12px" }}>
           {title}

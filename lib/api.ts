@@ -37,7 +37,7 @@ export async function getBuddhism() {
 }
 
 export async function getAbout() {
-  const { data } = await apiFetch("api/about?populate[detail][populate]=*");
+  const { data } = await apiFetch("api/about?populate=*");
   return data;
 }
 
