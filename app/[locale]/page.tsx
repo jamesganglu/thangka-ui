@@ -93,7 +93,7 @@ export default async function HomePage({ params }: Props) {
           </video>
         )}
         <div style={{ position: "absolute", inset: 0, zIndex: 1, background: "linear-gradient(0deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 100%)" }} />
-        <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, zIndex: 2, padding: "2rem 0" }} className="container">
+        <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, zIndex: 2, paddingTop: "2rem", paddingBottom: "2rem" }} className="container">
           <div id="hero-text" style={{ textAlign: "left", maxWidth: "50%" }}>
             <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "40px", fontWeight: 400, letterSpacing: "0.07em", textTransform: "uppercase", color: "#ffffff", lineHeight: 0.95, marginBottom: "24px" }}>
               {heroTitle}
@@ -197,6 +197,7 @@ export default async function HomePage({ params }: Props) {
           .two-col-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
           .two-col-reversed > *:first-child { order: 2; }
           .two-col-reversed > *:last-child  { order: 1; }
+          #hero-text { max-width: 100% !important; }
         }
       `}</style>
     </main>
