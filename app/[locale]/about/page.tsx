@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
 
   let item: Record<string, unknown> = {};
-  try { item = await getAbout(); } catch { /* ignore */ }
+  try { item = await getAbout(locale); } catch { /* ignore */ }
 
   const title = (item.title as string) || "Our Story";
   const detail = (item.detail as DetailBlock[] | undefined) ?? [];
@@ -52,9 +52,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function AboutPage({ params }: Props) {
-  await params;
+  const { locale } = await params;
   let item: Record<string, unknown> = {};
-  try { item = await getAbout(); } catch { /* CMS not connected */ }
+  try { item = await getAbout(locale); } catch { /* CMS not connected */ }
 
   const title = (item.title as string) || "Our Story";
   const detail = (item.detail as DetailBlock[] | undefined) ?? [];
@@ -88,16 +88,16 @@ export default async function AboutPage({ params }: Props) {
           blocks.map((block, idx) => {
             const isEven = idx % 2 === 1;
             return (
-              <div key={block.key} style={{ marginBottom: "60px" }}>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr auto 40%", gap: "48px", alignItems: "stretch", direction: isEven ? "rtl" : "ltr" }} className="history-section-grid">
-                  <div style={{ direction: "ltr" }}><RichText content={block.text} /></div>
-                  <div style={{ direction: "ltr" }}><SectionDivider /></div>
+              <div key={block.key} className="image-text-block-section">
+                <div className={`history-section-grid${isEven ? " reverse" : ""}`}>
+                  <div><RichText content={block.text} /></div>
+                  <div><SectionDivider /></div>
                   {block.imgSrc ? (
-                    <div style={{ position: "relative", overflow: "hidden", direction: "ltr", minHeight: "300px" }}>
-                      <Image src={block.imgSrc} alt="" fill style={{ objectFit: "contain" }} sizes="(max-width: 900px) 100vw, 50vw" />
+                    <div className="image-text-image">
+                      <Image src={block.imgSrc} alt="" fill sizes="(max-width: 900px) 100vw, 50vw" />
                     </div>
                   ) : (
-                    <div style={{ background: "#ECDFD0", direction: "ltr", height: "100%" }} />
+                    <div className="image-text-placeholder" />
                   )}
                 </div>
               </div>
@@ -109,13 +109,6 @@ export default async function AboutPage({ params }: Props) {
           </p>
         )}
       </div>
-
-      <style>{`
-        @media (max-width: 900px) {
-          .history-section-grid { grid-template-columns: 1fr !important; direction: ltr !important; }
-          .history-section-grid > div:nth-child(2) { display: none; }
-        }
-      `}</style>
     </main>
   );
 }

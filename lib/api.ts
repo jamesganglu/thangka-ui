@@ -21,8 +21,9 @@ export async function getHomepage() {
   return data;
 }
 
-export async function getHistory() {
-  const { data } = await apiFetch("api/history?populate[event][populate]=*&populate[history][populate]=*");
+export async function getHistory(locale?: string) {
+  const localeParam = locale === "zh" ? "&locale=zh" : "";
+  const { data } = await apiFetch(`api/history?populate[event][populate]=*&populate[history][populate]=*${localeParam}`);
   return data;
 }
 
@@ -31,13 +32,15 @@ export async function getContact() {
   return data;
 }
 
-export async function getBuddhism() {
-  const { data } = await apiFetch("api/buddhism?populate[detail][populate]=*");
+export async function getBuddhism(locale?: string) {
+  const localeParam = locale === "zh" ? "&locale=zh" : "";
+  const { data } = await apiFetch(`api/buddhism?populate[detail][populate]=*&populate[themes][populate]=*${localeParam}`);
   return data;
 }
 
-export async function getAbout() {
-  const { data } = await apiFetch("api/about?populate[detail][populate]=*&populate[video][populate]=*");
+export async function getAbout(locale?: string) {
+  const localeParam = locale === "zh" ? "&locale=zh" : "";
+  const { data } = await apiFetch(`api/about?populate[detail][populate]=*&populate[video][populate]=*${localeParam}`);
   return data;
 }
 

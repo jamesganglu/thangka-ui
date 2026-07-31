@@ -20,20 +20,42 @@ interface DetailBlock {
   image?: { url: string; formats?: { medium?: { url: string }; large?: { url: string } } };
 }
 
-export default async function BuddhismPage() {
+interface Props {
+  params: Promise<{ locale: string }>;
+}
+
+export default async function BuddhismPage({ params }: Props) {
+  const { locale } = await params;
   const t = await getTranslations("history");
   let item: Record<string, unknown> = {};
-  try { item = await getBuddhism(); } catch { /* CMS not connected */ }
+  try { item = await getBuddhism(locale); } catch { /* CMS not connected */ }
 
   const detailBlocks = (item.detail as DetailBlock[] | undefined) ?? [];
   const blocks = detailBlocks.map((b, idx) => ({ key: `section-${idx + 1}`, text: b.text, imgSrc: imgUrl(b.image?.formats?.medium?.url ?? b.image?.formats?.large?.url ?? b.image?.url ?? "") }));
 
-  const sections: { id: string; label: string }[] = [];
-  if (item.content || item.title) sections.push({ id: "intro", label: t("intro") });
-  blocks.forEach((block, idx) => {
-    sections.push({ id: block.key, label: extractH2(block.text) || `${t("sectionFallback")} ${idx + 1}` });
-  });
-  if (item.overall) sections.push({ id: "overall", label: t("keyThemes") });
+  const themeItems = (item.themes as DetailBlock[] | undefined) ?? [];
+  const themeBlocks = themeItems.map((b, idx) => ({ key: `theme-${idx + 1}`, text: b.text, imgSrc: imgUrl(b.image?.formats?.medium?.url ?? b.image?.formats?.large?.url ?? b.image?.url ?? "") }));
+
+  interface SidebarSection { id?: string; label: string; children?: SidebarSection[] }
+  const sections: SidebarSection[] = [];
+  if (blocks.length > 0) {
+    sections.push({
+      label: t("detailGroup"),
+      children: blocks.map((b, idx) => ({
+        id: b.key,
+        label: extractH2(b.text) || `${t("sectionFallback")} ${idx + 1}`,
+      })),
+    });
+  }
+  if (themeBlocks.length > 0) {
+    sections.push({
+      label: t("keyThemes"),
+      children: themeBlocks.map((b, idx) => ({
+        id: b.key,
+        label: extractH2(b.text) || `${t("sectionFallback")} ${idx + 1}`,
+      })),
+    });
+  }
 
   return (
     <main style={{ background: "#ffffff" }}>
@@ -57,16 +79,16 @@ export default async function BuddhismPage() {
             {blocks.map((block, idx) => {
               const isEven = idx % 2 === 1;
               return (
-                <div key={block.key} style={{ marginBottom: "60px" }}>
-                  <div id={block.key} style={{ display: "grid", gridTemplateColumns: "1fr auto 40%", gap: "48px", alignItems: "stretch", direction: isEven ? "rtl" : "ltr" }} className="history-section-grid">
-                    <div style={{ direction: "ltr" }}><RichText content={block.text} /></div>
-                    <div style={{ direction: "ltr" }}><SectionDivider /></div>
+                <div key={block.key} className="image-text-block-section">
+                  <div id={block.key} className={`history-section-grid${isEven ? " reverse" : ""}`}>
+                    <div><RichText content={block.text} /></div>
+                    <div><SectionDivider /></div>
                     {block.imgSrc ? (
-                      <div style={{ position: "relative", overflow: "hidden", direction: "ltr", minHeight: "300px" }}>
-                        <Image src={block.imgSrc} alt="" fill style={{ objectFit: "contain" }} sizes="(max-width: 900px) 100vw, 50vw" />
+                      <div className="image-text-image">
+                        <Image src={block.imgSrc} alt="" fill sizes="(max-width: 900px) 100vw, 50vw" />
                       </div>
                     ) : (
-                      <div style={{ background: "#ECDFD0", direction: "ltr", height: "100%" }} />
+                      <div className="image-text-placeholder" />
                     )}
                   </div>
                 </div>
@@ -75,9 +97,45 @@ export default async function BuddhismPage() {
 
             {/* Overall */}
             {!!item.overall && (
-              <div id="overall" style={{ marginTop: "48px", padding: "40px", background: "var(--color-surface)", border: "1px solid var(--color-accent)", textAlign: "left" }}>
-                <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(18px, 2.5vw, 26px)", fontWeight: 400, color: "#2B2520", lineHeight: 1.5 }}>
+              <div className="overall">
+                <div>
                   <RichText content={item.overall} />
+                </div>
+              </div>
+            )}
+
+            {/* Themes intro */}
+            {!!item.themes_intro && (
+              <div style={{ marginTop: "48px" }}>
+                <RichText content={item.themes_intro} />
+              </div>
+            )}
+
+            {/* Themes */}
+            {themeBlocks.map((block, idx) => {
+              const isEven = idx % 2 === 1;
+              return (
+                <div key={block.key} className="image-text-block-theme">
+                  <div id={block.key} className={`history-section-grid${isEven ? " reverse" : ""}`}>
+                    <div><RichText content={block.text} /></div>
+                    <div><SectionDivider /></div>
+                    {block.imgSrc ? (
+                      <div className="image-text-image">
+                        <Image src={block.imgSrc} alt="" fill sizes="(max-width: 900px) 100vw, 50vw" />
+                      </div>
+                    ) : (
+                      <div className="image-text-placeholder" />
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+
+            {/* Themes outro */}
+            {!!item.themes_outro && (
+              <div className="overall">
+                <div>
+                  <RichText content={item.themes_outro} />
                 </div>
               </div>
             )}
@@ -91,8 +149,6 @@ export default async function BuddhismPage() {
           .history-layout aside { position: static !important; width: 100% !important; display: flex; flex-wrap: wrap; gap: 8px; }
           .history-layout aside nav { display: flex; flex-wrap: wrap; gap: 8px; }
           .history-layout aside nav a { border-left: none !important; border-bottom: 2px solid transparent; padding-left: 0 !important; padding-bottom: 4px !important; white-space: nowrap; }
-          .history-section-grid { grid-template-columns: 1fr !important; direction: ltr !important; }
-          .history-section-grid > div:nth-child(2) { display: none; }
         }
       `}</style>
     </main>

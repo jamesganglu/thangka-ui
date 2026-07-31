@@ -20,10 +20,15 @@ interface HistoryBlock {
   image?: { url: string; formats?: { medium?: { url: string }; large?: { url: string } } };
 }
 
-export default async function TibetanHistoryPage() {
+interface Props {
+  params: Promise<{ locale: string }>;
+}
+
+export default async function TibetanHistoryPage({ params }: Props) {
+  const { locale } = await params;
   const t = await getTranslations("history");
   let item: Record<string, unknown> = {};
-  try { item = await getHistory(); } catch { /* CMS not connected */ }
+  try { item = await getHistory(locale); } catch { /* CMS not connected */ }
 
   const historyBlocks = (item.history as HistoryBlock[] | undefined) ?? [];
   const eventBlocks = (item.event as HistoryBlock[] | undefined) ?? [];
@@ -72,16 +77,16 @@ export default async function TibetanHistoryPage() {
             {historyMapped.map((block, idx) => {
               const isEven = idx % 2 === 1;
               return (
-                <div key={block.key} style={{ marginBottom: "60px" }}>
-                  <div id={block.key} style={{ display: "grid", gridTemplateColumns: "1fr auto 40%", gap: "48px", alignItems: "stretch", direction: isEven ? "rtl" : "ltr" }} className="history-section-grid">
-                    <div style={{ direction: "ltr" }}><RichText content={block.text} /></div>
-                    <div style={{ direction: "ltr" }}><SectionDivider /></div>
+                <div key={block.key} className="image-text-block-section">
+                  <div id={block.key} className={`history-section-grid${isEven ? " reverse" : ""}`}>
+                    <div><RichText content={block.text} /></div>
+                    <div><SectionDivider /></div>
                     {block.imgSrc ? (
-                      <div style={{ position: "relative", overflow: "hidden", direction: "ltr", minHeight: "300px" }}>
-                        <Image src={block.imgSrc} alt="" fill style={{ objectFit: "contain" }} sizes="(max-width: 900px) 100vw, 50vw" />
+                      <div className="image-text-image">
+                        <Image src={block.imgSrc} alt="" fill sizes="(max-width: 900px) 100vw, 50vw" />
                       </div>
                     ) : (
-                      <div style={{ background: "#ECDFD0", direction: "ltr", height: "100%" }} />
+                      <div className="image-text-placeholder" />
                     )}
                   </div>
                 </div>
@@ -101,16 +106,16 @@ export default async function TibetanHistoryPage() {
             {eventMapped.map((block, idx) => {
               const isEven = (historyMapped.length + idx) % 2 === 1;
               return (
-                <div key={block.key} style={{ marginBottom: "60px" }}>
-                  <div id={block.key} style={{ display: "grid", gridTemplateColumns: "1fr auto 40%", gap: "48px", alignItems: "stretch", direction: isEven ? "rtl" : "ltr" }} className="history-section-grid">
-                    <div style={{ direction: "ltr" }}><RichText content={block.text} /></div>
-                    <div style={{ direction: "ltr" }}><SectionDivider /></div>
+                <div key={block.key} className="image-text-block-section">
+                  <div id={block.key} className={`history-section-grid${isEven ? " reverse" : ""}`}>
+                    <div><RichText content={block.text} /></div>
+                    <div><SectionDivider /></div>
                     {block.imgSrc ? (
-                      <div style={{ position: "relative", overflow: "hidden", direction: "ltr", minHeight: "300px" }}>
-                        <Image src={block.imgSrc} alt="" fill style={{ objectFit: "contain" }} sizes="(max-width: 900px) 100vw, 50vw" />
+                      <div className="image-text-image">
+                        <Image src={block.imgSrc} alt="" fill sizes="(max-width: 900px) 100vw, 50vw" />
                       </div>
                     ) : (
-                      <div style={{ background: "#ECDFD0", direction: "ltr", height: "100%" }} />
+                      <div className="image-text-placeholder" />
                     )}
                   </div>
                 </div>
@@ -118,8 +123,8 @@ export default async function TibetanHistoryPage() {
             })}
 
             {!!item.Overall && (
-              <div id="overall" style={{ marginTop: "48px", padding: "40px", background: "var(--color-surface)", border: "1px solid var(--color-accent)", textAlign: "left" }}>
-                <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(18px, 2.5vw, 26px)", fontWeight: 400, color: "#2B2520", lineHeight: 1.5 }}>
+              <div id="overall" className="overall">
+                <div>
                   <RichText content={item.Overall} />
                 </div>
               </div>
@@ -134,8 +139,6 @@ export default async function TibetanHistoryPage() {
           .history-layout aside { position: static !important; width: 100% !important; display: flex; flex-wrap: wrap; gap: 8px; }
           .history-layout aside nav { display: flex; flex-wrap: wrap; gap: 8px; }
           .history-layout aside nav a { border-left: none !important; border-bottom: 2px solid transparent; padding-left: 0 !important; padding-bottom: 4px !important; white-space: nowrap; }
-          .history-section-grid { grid-template-columns: 1fr !important; direction: ltr !important; }
-          .history-section-grid > div:nth-child(2) { display: none; }
         }
       `}</style>
     </main>
