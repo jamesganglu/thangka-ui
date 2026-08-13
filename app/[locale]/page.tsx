@@ -132,7 +132,7 @@ export default async function HomePage({ params }: Props) {
       </section>
 
       {/* Main Deities */}
-      <section className="section" style={{ background: "#ffffff" }}>
+      <section id="buddhism" className="section" style={{ background: "#ffffff" }}>
         <div className="container">
           <div style={{ display: "grid", gridTemplateColumns: "2fr 3fr", gap: "80px", alignItems: "center" }} className="two-col-grid two-col-reversed">
             <div style={{ position: "relative", aspectRatio: "3/4", overflow: "hidden", background: "#F5F3EF" }}>
@@ -146,7 +146,7 @@ export default async function HomePage({ params }: Props) {
                   <p style={{ color: "#6F6A63", fontSize: "15px", lineHeight: 1.75 }}>{t("deitiesFallback")}</p>
                 )}
               </div>
-              <Link href="/collection" className="text-link" style={{ marginTop: "24px", display: "inline-flex" }}>
+              <Link href="/buddhism" className="text-link" style={{ marginTop: "24px", display: "inline-flex" }}>
                 {t("learnMore")}
               </Link>
             </div>
