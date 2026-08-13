@@ -58,63 +58,46 @@ export default function CategoryCarousel({
     track.scrollBy({ left: dir === "right" ? cardWidth : -cardWidth, behavior: "smooth" });
   }
 
-  const btnStyle: React.CSSProperties = {
-    position: "absolute", top: "35%", transform: "translateY(-50%)", zIndex: 2,
-    background: "#ffffff", border: "1px solid #E8E3DC", width: "40px", height: "40px",
-    display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0,
-  };
-
   return (
-    <>
-      <div style={{ position: "relative" }}>
-        <button style={{ ...btnStyle, left: "-20px" }} onClick={() => scroll("left")} aria-label={t("previous")}>←</button>
+    <div className="carousel-wrapper">
+      <button className="carousel-nav-btn carousel-nav-btn--prev" onClick={() => scroll("left")} aria-label={t("previous")}>←</button>
 
-        <div ref={trackRef} style={{ display: "flex", gap: "24px", overflowX: "auto", scrollSnapType: "x mandatory", scrollbarWidth: "none" }} className="carousel-track">
-          {items.map((cat, idx) => {
-            const img = cat.image?.[0];
-            const imgSrc = img?.formats?.small?.url || img?.url || "";
-            const name = (locale === "zh" ? cat.name_zh || cat.name_en : cat.name_en) || "";
-            const fullDesc = locale === "zh" ? cat.short_desc_zh || cat.short_desc_en || "" : cat.short_desc_en || "";
-            const descText = fullDesc.length > 50 ? fullDesc.slice(0, 50).trimEnd() + "…" : fullDesc;
+      <div ref={trackRef} className="carousel-track">
+        {items.map((cat, idx) => {
+          const img = cat.image?.[0];
+          const imgSrc = img?.formats?.small?.url || img?.url || "";
+          const name = (locale === "zh" ? cat.name_zh || cat.name_en : cat.name_en) || "";
+          const fullDesc = locale === "zh" ? cat.short_desc_zh || cat.short_desc_en || "" : cat.short_desc_en || "";
+          const descText = fullDesc.length > 50 ? fullDesc.slice(0, 50).trimEnd() + "…" : fullDesc;
 
-            return (
-              <Link
-                key={`${cat.documentId ?? cat.id}-${idx}`}
-                href={`/collection?category=${cat.documentId ?? cat.id}`}
-                className="cat-card-link"
-                style={{ display: "flex", flexDirection: "column", textDecoration: "none", cursor: "pointer", border: "none", flex: "0 0 calc(20% - 20px)", scrollSnapAlign: "start", minWidth: "180px" }}
-              >
-                <div className="cat-card" style={{ border: "1px solid var(--color-accent)", background: "var(--color-surface)", display: "flex", flexDirection: "column", height: "100%" }}>
-                  <div style={{ position: "relative", width: "100%", paddingBottom: "100%", overflow: "hidden", background: "#F5F3EF", flexShrink: 0 }}>
-                    {imgSrc ? (
-                      <Image src={imgUrl(imgSrc)} alt={name} fill style={{ objectFit: "cover" }} sizes="(max-width: 640px) 50vw, (max-width: 900px) 33vw, 20vw" />
-                    ) : (
-                      <div style={{ width: "100%", height: "100%", background: "#ECDFD0" }} />
-                    )}
-                  </div>
-                  <div style={{ padding: "12px 16px 16px", textAlign: "center", flex: 1, display: "flex", flexDirection: "column" }}>
-                    <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "16px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em", color: "#2B2520", margin: "0 0 6px", lineHeight: 1.2 }}>
-                      {name}
-                    </h3>
-                    {descText && <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "12px", color: "#6F6A63", margin: "0 0 10px", lineHeight: 1.5 }}>{descText}</p>}
-                    <span style={{ fontFamily: "'Cinzel', serif", fontSize: "11px", letterSpacing: "0.08em", textTransform: "uppercase", color: "#A87533" }}>{t("explore")}</span>
-                  </div>
+          return (
+            <Link
+              key={`${cat.documentId ?? cat.id}-${idx}`}
+              href={`/collection?category=${cat.documentId ?? cat.id}`}
+              className="cat-card-link"
+            >
+              <div className="cat-card">
+                <div className="cat-card-image">
+                  {imgSrc ? (
+                    <Image src={imgUrl(imgSrc)} alt={name} fill sizes="(max-width: 640px) 50vw, (max-width: 900px) 33vw, 20vw" />
+                  ) : (
+                    <div className="cat-card-image-placeholder" />
+                  )}
                 </div>
-              </Link>
-            );
-          })}
-        </div>
-
-        <button style={{ ...btnStyle, right: "-20px" }} onClick={() => scroll("right")} aria-label={t("next")}>→</button>
+                <div className="cat-card-body">
+                  <h3 className="cat-card-title">
+                    {name}
+                  </h3>
+                  {descText && <p className="cat-card-desc">{descText}</p>}
+                  <span className="cat-card-explore">{t("explore")}</span>
+                </div>
+              </div>
+            </Link>
+          );
+        })}
       </div>
 
-      <style>{`
-        .carousel-track::-webkit-scrollbar { display: none; }
-        .cat-card { transition: opacity 0.2s; }
-        .cat-card:hover { opacity: 0.85; }
-        @media (max-width: 900px) { .cat-card-link { flex: 0 0 calc(33.33% - 16px) !important; } }
-        @media (max-width: 640px) { .cat-card-link { flex: 0 0 calc(50% - 12px) !important; } }
-      `}</style>
-    </>
+      <button className="carousel-nav-btn carousel-nav-btn--next" onClick={() => scroll("right")} aria-label={t("next")}>→</button>
+    </div>
   );
 }

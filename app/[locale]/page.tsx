@@ -49,7 +49,7 @@ export default async function HomePage({ params }: Props) {
   let categories: CategoryItem[] = [];
 
   try { item = await getHomepage(); } catch { /* Strapi not running */ }
-  try { categories = await getLevel1Categories(); } catch { /* ignore */ }
+  try { categories = (await getLevel1Categories()).sort((a, b) => (a.order ?? 0) - (b.order ?? 0)); } catch { /* ignore */ }
 
   const heroVideoUrl = (() => {
     const imgs = item.carouselImages as { url?: string }[] | undefined;
@@ -155,16 +155,16 @@ export default async function HomePage({ params }: Props) {
       </section>
 
       {/* Thangka Categories */}
-      <section id="thangka-categories" className="section" style={{ background: "#ffffff" }}>
+      <section id="thangka-categories" className="section">
         <div className="container">
-          <div style={{ textAlign: "center", marginBottom: "48px" }}>
+          <div className="categories-intro">
             <h2>{t("categoriesTitle")}</h2>
-            <p style={{ color: "#6F6A63", fontSize: "15px", maxWidth: "540px", margin: "12px auto 0", lineHeight: 1.7 }}>{t("categoriesDesc")}</p>
+            <p className="categories-desc">{t("categoriesDesc")}</p>
           </div>
           {categories.length > 0 ? (
             <CategoryCarousel categories={categories} locale={locale} />
           ) : (
-            <p style={{ textAlign: "center", color: "#A9A39C", fontSize: "14px", padding: "40px 0" }}>{t("noCms")}</p>
+            <p className="categories-empty">{t("noCms")}</p>
           )}
         </div>
       </section>
