@@ -66,10 +66,10 @@ export default async function TibetanHistoryPage({ params }: Props) {
           <div style={{ flex: 1, minWidth: 0 }}>
             {(!!item.brief || !item.title) && (
               <div id="intro" style={{ marginBottom: "60px" }}>
-                <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(28px, 4vw, 44px)", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.04em", color: "#2B2520", margin: "8px 0 12px" }}>
+                <h1 className="page-title">
                   {(item.title as string) || t("titleFallback")}
                 </h1>
-                <div style={{ width: "70px", height: "2px", background: "var(--color-accent)", marginBottom: "24px" }} />
+                <div className="page-title-underline page-title-underline--mb-24" />
                 {!!item.brief && (typeof item.brief === "string" ? <p style={{ color: "#6F6A63", fontSize: "15px", lineHeight: 1.75 }}>{item.brief}</p> : <RichText content={item.brief} />)}
               </div>
             )}

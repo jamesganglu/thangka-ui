@@ -22,7 +22,7 @@ export default async function ThangkaImagePage({ params }: Props) {
 
   return (
     <main style={{ background: "#ffffff", minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "40px 24px", gap: "24px" }}>
-      <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(20px, 3vw, 32px)", fontWeight: 400, textTransform: "uppercase", letterSpacing: "0.06em", color: "#2B2520", margin: 0, textAlign: "center" }}>
+      <h1 className="image-page-title">
         {displayName}
       </h1>
       <Link href={`/thangka/${name}`} style={{ fontFamily: "'Cinzel', serif", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.08em", color: "#6F6A63", textDecoration: "none" }}>

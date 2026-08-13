@@ -170,7 +170,7 @@ export default async function HomePage({ params }: Props) {
       </section>
 
       {/* Our Story */}
-      <section className="section" style={{ background: "#ffffff" }}>
+      <section id="our-story" className="section" style={{ background: "#ffffff" }}>
         <div className="container">
           <div style={{ display: "grid", gridTemplateColumns: "2fr 3fr", gap: "80px", alignItems: "center" }} className="two-col-grid">
             <div>

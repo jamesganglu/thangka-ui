@@ -79,10 +79,10 @@ export default async function AboutPage({ params }: Props) {
         </div>
       )}
       <div className="container" style={{ paddingTop: "60px", paddingBottom: "80px" }}>
-        <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(28px, 4vw, 44px)", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.04em", color: "#2B2520", margin: "8px 0 12px" }}>
+        <h1 className="page-title">
           {title}
         </h1>
-        <div style={{ width: "70px", height: "2px", background: "var(--color-accent)", marginBottom: "60px" }} />
+        <div className="page-title-underline page-title-underline--mb-60" />
 
         {blocks.length > 0 ? (
           blocks.map((block, idx) => {

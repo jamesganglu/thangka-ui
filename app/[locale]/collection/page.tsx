@@ -60,10 +60,10 @@ export default async function CollectionPage({ params }: Props) {
       <div style={{ padding: "48px 0 36px" }}>
         <div className="container">
           <span className="eyebrow">{t("eyebrow")}</span>
-          <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(28px, 4vw, 44px)", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.04em", color: "#2B2520", margin: "8px 0 12px" }}>
+          <h1 className="page-title">
             {title}
           </h1>
-          <div style={{ width: "70px", height: "2px", background: "var(--color-accent)", marginBottom: "16px" }} />
+          <div className="page-title-underline page-title-underline--mb-16" />
           {!!content && (
             <div style={{ marginTop: "16px", maxWidth: "600px", color: "#6F6A63", fontSize: "15px", lineHeight: 1.75 }}>
               <RichText content={content} />
@@ -73,22 +73,22 @@ export default async function CollectionPage({ params }: Props) {
       </div>
 
       <div className="container section" style={{ paddingTop: 0 }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px" }} className="cat-grid">
+        <div className="cat-grid">
           {[...categories].sort((a, b) => (a.order ?? 0) - (b.order ?? 0)).map((cat) => {
             const img = cat.image?.[0];
             const imgSrc = imgUrl(img?.formats?.medium?.url ?? img?.url ?? "");
             const desc = catDesc(cat);
 
             return (
-              <Link key={cat.documentId ?? cat.id} href={`/collection/${slugify(cat.name_en)}`} style={{ display: "flex", textDecoration: "none", border: "1px solid var(--color-accent)", gap: "24px", alignItems: "stretch", padding: "10px" }}>
-                <div style={{ position: "relative", width: "40%", aspectRatio: "1/1", flexShrink: 0, overflow: "hidden", background: "#F5F3EF" }}>
-                  {imgSrc ? <Image src={imgSrc} alt={catName(cat)} fill style={{ objectFit: "cover" }} sizes="160px" /> : <div style={{ width: "100%", height: "100%", background: "#ECDFD0" }} />}
+              <Link key={cat.documentId ?? cat.id} href={`/collection/${slugify(cat.name_en)}`} className="cat-grid-item">
+                <div className="cat-grid-image">
+                  {imgSrc ? <Image src={imgSrc} alt={catName(cat)} fill style={{ objectFit: "cover" }} sizes="160px" /> : <div className="cat-grid-image-placeholder" />}
                 </div>
-                <div style={{ flex: 1 }}>
-                  <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(18px, 2vw, 24px)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em", color: "#2B2520", margin: "0 0 10px" }}>
+                <div className="cat-grid-body">
+                  <h3 className="cat-grid-title">
                     {catName(cat)}
                   </h3>
-                  {desc && <p style={{ fontSize: "13px", color: "#6F6A63", lineHeight: 1.6, margin: "0 0 14px" }}>{desc.length > 120 ? desc.slice(0, 120).trimEnd() + "…" : desc}</p>}
+                  {desc && <p className="cat-grid-desc">{desc.length > 120 ? desc.slice(0, 120).trimEnd() + "…" : desc}</p>}
                   <span className="text-link">{t("explore")}</span>
                 </div>
               </Link>
@@ -96,8 +96,6 @@ export default async function CollectionPage({ params }: Props) {
           })}
         </div>
       </div>
-
-      <style>{`@media (max-width: 640px) { .cat-grid { grid-template-columns: 1fr !important; } }`}</style>
     </main>
   );
 }
