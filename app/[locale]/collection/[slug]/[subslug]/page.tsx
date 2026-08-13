@@ -84,6 +84,9 @@ export default async function CollectionLevel3Page({ params }: Props) {
   function catDesc(cat: CategoryItem) {
     return toPlainText(locale === "zh" ? cat.description_zh || cat.description_en : cat.description_en);
   }
+  function cardDesc(cat: CategoryItem) {
+    return (locale === "zh" ? cat.short_desc_zh || cat.short_desc_en : cat.short_desc_en) || "";
+  }
   function thangkaName(t: ThangkaItem) {
     return (locale === "zh" ? t.name_zh || t.name_en : t.name_en) || "";
   }
@@ -130,7 +133,7 @@ export default async function CollectionLevel3Page({ params }: Props) {
             {[...subcategories].sort((a, b) => (a.order ?? 0) - (b.order ?? 0)).map((cat) => {
               const img = cat.image?.[0];
               const imgSrc = imgUrl(img?.formats?.medium?.url ?? img?.url ?? "");
-              const catDescText = catDesc(cat);
+              const catDescText = cardDesc(cat);
               const hasChildren = cat.categories && cat.categories.length > 0;
               return (
                 <Link key={cat.id} href={`/collection/${slug}/${subslug}/${slugify(cat.name_en)}`} className="cat-card" style={{ border: "1px solid var(--color-accent)", background: "var(--color-surface)", display: "flex", flexDirection: "column", textDecoration: "none" }}>
@@ -139,7 +142,7 @@ export default async function CollectionLevel3Page({ params }: Props) {
                   </div>
                   <div style={{ padding: "12px 16px 16px", textAlign: "center", flex: 1, display: "flex", flexDirection: "column" }}>
                     <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "16px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em", color: "#2B2520", margin: "0 0 6px", lineHeight: 1.2 }}>{catName(cat)}</h3>
-                    {catDescText && <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "12px", color: "#6F6A63", margin: "0 0 10px", lineHeight: 1.5 }}>{catDescText.length > 50 ? catDescText.slice(0, 50).trimEnd() + "…" : catDescText}</p>}
+                    {catDescText && <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "12px", color: "#6F6A63", margin: "0 0 10px", lineHeight: 1.5 }}>{catDescText}</p>}
                     {hasChildren && <span style={{ fontFamily: "'Cinzel', serif", fontSize: "11px", letterSpacing: "0.08em", textTransform: "uppercase", color: "#A87533" }}>{t("explore")}</span>}
                   </div>
                 </Link>
