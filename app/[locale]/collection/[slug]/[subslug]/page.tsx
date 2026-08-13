@@ -94,6 +94,8 @@ export default async function CollectionLevel3Page({ params }: Props) {
   const desc = catDesc(level2);
   const parentImg = level2.image?.[0];
   const parentImgSrc = imgUrl(parentImg?.formats?.medium?.url ?? parentImg?.url ?? "");
+  const parentImgWidth = parentImg?.width || 800;
+  const parentImgHeight = parentImg?.height || 600;
 
   return (
     <main style={{ background: "#ffffff", minHeight: "60vh" }}>
@@ -121,7 +123,11 @@ export default async function CollectionLevel3Page({ params }: Props) {
               {desc && <p style={{ color: "#6F6A63", fontSize: "15px", lineHeight: 1.75, margin: 0 }}>{desc}</p>}
             </div>
             <div className="cat-hero-image">
-              {parentImgSrc ? <Image src={parentImgSrc} alt={catName(level2)} fill style={{ objectFit: "contain" }} sizes="50vw" /> : <div style={{ width: "100%", height: "100%", background: "#ECDFD0" }} />}
+              {parentImgSrc ? (
+                <Image src={parentImgSrc} alt={catName(level2)} width={parentImgWidth} height={parentImgHeight} style={{ width: "100%", height: "auto" }} sizes="50vw" />
+              ) : (
+                <div style={{ width: "100%", height: "100%", background: "#ECDFD0" }} />
+              )}
             </div>
           </div>
         </div>
