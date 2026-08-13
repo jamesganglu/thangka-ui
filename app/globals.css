@@ -302,6 +302,21 @@ img { display: block; max-width: 100%; height: auto; }
 .carousel-wrapper {
   position: relative;
 }
+.cat-hero {
+  display: flex;
+  gap: 48px;
+  align-items: stretch;
+}
+.cat-hero-text {
+  flex: 1 1 0;
+  padding-top: 8px;
+}
+.cat-hero-image {
+  position: relative;
+  flex: 1 1 0;
+  min-height: 300px;
+  overflow: hidden;
+}
 .carousel-nav-btn {
   position: absolute;
   top: 35%;
@@ -407,4 +422,6 @@ img { display: block; max-width: 100%; height: auto; }
   .section { padding-top: 48px; padding-bottom: 48px; }
   .cat-grid { grid-template-columns: 1fr; }
   .cat-card-link { flex: 0 0 calc(50% - 12px); }
+  .cat-hero { flex-direction: column; }
+  .cat-hero > div:last-child { width: 100%; aspect-ratio: 4/3; }
 }

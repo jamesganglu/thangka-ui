@@ -111,8 +111,8 @@ export default async function CollectionLevel3Page({ params }: Props) {
 
       <div style={{ padding: "32px 0 36px" }}>
         <div className="container">
-          <div style={{ display: "flex", gap: "48px", alignItems: "flex-start" }} className="cat-hero">
-            <div style={{ flex: "1 1 0", paddingTop: "8px" }}>
+          <div className="cat-hero">
+            <div className="cat-hero-text">
               <span className="eyebrow">{t("category")}</span>
               <h1 className="page-title">
                 {catName(level2)}
@@ -120,8 +120,8 @@ export default async function CollectionLevel3Page({ params }: Props) {
               <div className="page-title-underline page-title-underline--mb-16" />
               {desc && <p style={{ color: "#6F6A63", fontSize: "15px", lineHeight: 1.75, margin: 0 }}>{desc}</p>}
             </div>
-            <div style={{ position: "relative", flex: "1 1 0", aspectRatio: "3/4", background: "#F5F3EF", overflow: "hidden" }}>
-              {parentImgSrc ? <Image src={parentImgSrc} alt={catName(level2)} fill style={{ objectFit: "cover" }} sizes="50vw" /> : <div style={{ width: "100%", height: "100%", background: "#ECDFD0" }} />}
+            <div className="cat-hero-image">
+              {parentImgSrc ? <Image src={parentImgSrc} alt={catName(level2)} fill style={{ objectFit: "contain" }} sizes="50vw" /> : <div style={{ width: "100%", height: "100%", background: "#ECDFD0" }} />}
             </div>
           </div>
         </div>
@@ -178,7 +178,6 @@ export default async function CollectionLevel3Page({ params }: Props) {
         .thangka-card:hover { border-color: #2B2520 !important; box-shadow: 0 4px 16px rgba(43,37,32,0.10); }
         @media (max-width: 900px) { .cat-grid { grid-template-columns: repeat(2, 1fr) !important; } .thangka-grid { grid-template-columns: repeat(2, 1fr) !important; } }
         @media (max-width: 480px) { .cat-grid { grid-template-columns: 1fr !important; } .thangka-grid { grid-template-columns: 1fr !important; } }
-        @media (max-width: 640px) { .cat-hero { flex-direction: column !important; } .cat-hero > div:last-child { width: 100% !important; aspect-ratio: 4/3; } }
       `}</style>
     </main>
   );
