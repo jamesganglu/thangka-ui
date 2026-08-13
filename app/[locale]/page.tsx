@@ -76,6 +76,11 @@ export default async function HomePage({ params }: Props) {
   const deitiesTextKey = locale === "zh" ? "deitiesText_zh" : "deitiesText";
   const storyTextKey = locale === "zh" ? "storyText_zh" : "storyText";
 
+  const categoriesKey = locale === "zh" ? "categories_zh" : "categories";
+  const categoriesBlocks = Array.isArray(item[categoriesKey] ?? item.categories) ? (item[categoriesKey] ?? item.categories) as Block[] : [];
+  const categoriesTitle = categoriesBlocks.find((b) => b.type === "heading")?.children.map((c) => c.text).join("") || t("categoriesTitle");
+  const categoriesDesc = categoriesBlocks.filter((b) => b.type === "paragraph").map((b) => b.children.map((c) => c.text).join("")).join("\n") || t("categoriesDesc");
+
   return (
     <main>
       {/* Hero */}
@@ -158,8 +163,8 @@ export default async function HomePage({ params }: Props) {
       <section id="thangka-categories" className="section">
         <div className="container">
           <div className="categories-intro">
-            <h2>{t("categoriesTitle")}</h2>
-            <p className="categories-desc">{t("categoriesDesc")}</p>
+            <h2>{categoriesTitle}</h2>
+            <p className="categories-desc">{categoriesDesc}</p>
           </div>
           {categories.length > 0 ? (
             <CategoryCarousel categories={categories} locale={locale} />
