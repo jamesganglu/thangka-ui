@@ -88,7 +88,7 @@ export default async function CollectionPage({ params }: Props) {
                   <h3 className="cat-grid-title">
                     {catName(cat)}
                   </h3>
-                  {desc && <p className="cat-grid-desc">{desc.length > 120 ? desc.slice(0, 120).trimEnd() + "…" : desc}</p>}
+                  {desc && <p className="cat-grid-desc">{desc}</p>}
                   <span className="text-link">{t("explore")}</span>
                 </div>
               </Link>

@@ -67,8 +67,7 @@ export default function CategoryCarousel({
           const img = cat.image?.[0];
           const imgSrc = img?.formats?.small?.url || img?.url || "";
           const name = (locale === "zh" ? cat.name_zh || cat.name_en : cat.name_en) || "";
-          const fullDesc = locale === "zh" ? cat.short_desc_zh || cat.short_desc_en || "" : cat.short_desc_en || "";
-          const descText = fullDesc.length > 50 ? fullDesc.slice(0, 50).trimEnd() + "…" : fullDesc;
+          const descText = locale === "zh" ? cat.short_desc_zh || cat.short_desc_en || "" : cat.short_desc_en || "";
 
           return (
             <Link
