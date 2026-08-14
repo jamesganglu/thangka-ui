@@ -23,7 +23,7 @@ export async function getHomepage() {
 
 export async function getHistory(locale?: string) {
   const localeParam = locale === "zh" ? "&locale=zh" : "";
-  const { data } = await apiFetch(`api/history?populate[event][populate]=*&populate[history][populate]=*${localeParam}`);
+  const { data } = await apiFetch(`api/history?populate[event][populate]=*&populate[history][populate]=*&populate[video][populate]=*${localeParam}`);
   return data;
 }
 
@@ -34,7 +34,7 @@ export async function getContact() {
 
 export async function getBuddhism(locale?: string) {
   const localeParam = locale === "zh" ? "&locale=zh" : "";
-  const { data } = await apiFetch(`api/buddhism?populate[detail][populate]=*&populate[themes][populate]=*${localeParam}`);
+  const { data } = await apiFetch(`api/buddhism?populate[detail][populate]=*&populate[themes][populate]=*&populate[video][populate]=*${localeParam}`);
   return data;
 }
 

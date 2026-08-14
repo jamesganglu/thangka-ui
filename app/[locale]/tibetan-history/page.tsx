@@ -57,8 +57,20 @@ export default async function TibetanHistoryPage({ params }: Props) {
   }
   if (item.Overall) sections.push({ id: "overall", label: extractH2(item.Overall) || t("keyThemes") });
 
+  const heroVideoUrl = (() => {
+    const video = item.video as { url?: string } | undefined;
+    return imgUrl(video?.url ?? "");
+  })();
+
   return (
     <main style={{ background: "#ffffff" }}>
+      {heroVideoUrl && (
+        <div style={{ position: "relative", width: "100%", height: "50vh", overflow: "hidden" }}>
+          <video autoPlay muted loop playsInline style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}>
+            <source src={heroVideoUrl} />
+          </video>
+        </div>
+      )}
       <div className="container" style={{ paddingTop: "60px", paddingBottom: "80px" }}>
         <div style={{ display: "flex", gap: "60px", alignItems: "flex-start" }} className="history-layout">
           {sections.length > 0 && <ScrollSpySidebar sections={sections} />}

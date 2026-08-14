@@ -36,6 +36,11 @@ export default async function BuddhismPage({ params }: Props) {
   const themeItems = (item.themes as DetailBlock[] | undefined) ?? [];
   const themeBlocks = themeItems.map((b, idx) => ({ key: `theme-${idx + 1}`, text: b.text, imgSrc: imgUrl(b.image?.formats?.medium?.url ?? b.image?.formats?.large?.url ?? b.image?.url ?? "") }));
 
+  const heroVideoUrl = (() => {
+    const video = item.video as { url?: string } | undefined;
+    return imgUrl(video?.url ?? "");
+  })();
+
   interface SidebarSection { id?: string; label: string; children?: SidebarSection[] }
   const sections: SidebarSection[] = [];
   if (blocks.length > 0) {
@@ -59,6 +64,13 @@ export default async function BuddhismPage({ params }: Props) {
 
   return (
     <main style={{ background: "#ffffff" }}>
+      {heroVideoUrl && (
+        <div style={{ position: "relative", width: "100%", height: "50vh", overflow: "hidden" }}>
+          <video autoPlay muted loop playsInline style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}>
+            <source src={heroVideoUrl} />
+          </video>
+        </div>
+      )}
       <div className="container" style={{ paddingTop: "60px", paddingBottom: "80px" }}>
         <div style={{ display: "flex", gap: "60px", alignItems: "flex-start" }} className="history-layout">
           {sections.length > 0 && <ScrollSpySidebar sections={sections} />}
