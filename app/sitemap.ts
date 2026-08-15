@@ -21,7 +21,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const entries: MetadataRoute.Sitemap = [];
 
   // Static pages
-  for (const path of ["", "/collection", "/about", "/contact", "/tibetan-history"]) {
+  for (const path of ["", "/collection", "/about", "/contact", "/tibetan-history", "/buddhism"]) {
     entries.push(entry(path));
   }
 
@@ -39,6 +39,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     for (const sub of level2) {
       const subslug = slugify(sub.name_en);
       entries.push(entry(`/collection/${slug}/${subslug}`));
+
+      let level3: CategoryItem[] = [];
+      try { level3 = await getCategoriesByParentId(String(sub.id)); } catch { /* ignore */ }
+
+      for (const subsub of level3) {
+        const subsubslug = slugify(subsub.name_en);
+        entries.push(entry(`/collection/${slug}/${subslug}/${subsubslug}`));
+      }
     }
   }
 
