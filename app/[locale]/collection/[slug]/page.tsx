@@ -74,40 +74,40 @@ export default async function CollectionCategoryPage({ params }: Props) {
   const parentImgRatio = parentImg?.width && parentImg?.height ? `${parentImg.width}/${parentImg.height}` : "4/3";
 
   return (
-    <main style={{ background: "#ffffff", minHeight: "60vh" }}>
-      <div style={{ padding: "20px 0 0" }}>
+    <main className="page-main">
+      <div className="page-breadcrumb-bar">
         <div className="container">
-          <nav style={{ fontSize: "13px", color: "#6F6A63" }}>
-            <Link href="/collection" style={{ color: "#6F6A63", textDecoration: "none" }}>{t("breadcrumb")}</Link>
+          <nav className="breadcrumb-nav">
+            <Link href="/collection" className="breadcrumb-link">{t("breadcrumb")}</Link>
             {" / "}
-            <span style={{ color: "#2B2520" }}>{catName(parentCategory)}</span>
+            <span className="breadcrumb-current">{catName(parentCategory)}</span>
           </nav>
         </div>
       </div>
 
-      <div style={{ padding: "32px 0 36px" }}>
+      <div className="page-hero-bar">
         <div className="container">
-          <div style={{ display: "flex", gap: "48px", alignItems: "stretch" }} className="cat-hero">
-            <div style={{ flex: "1 1 0", paddingTop: "8px" }}>
+          <div className="cat-hero">
+            <div className="cat-hero-text">
               <span className="eyebrow">{t("category")}</span>
               <h1 className="page-title">
                 {catName(parentCategory)}
               </h1>
               <div className="page-title-underline page-title-underline--mb-16" />
-              {desc && <p style={{ color: "#6F6A63", fontSize: "15px", lineHeight: 1.75, margin: 0 }}>{desc}</p>}
+              {desc && <p className="cat-hero-desc">{desc}</p>}
             </div>
-            <div style={{ position: "relative", flex: "1 1 0", width: "100%", aspectRatio: parentImgRatio, overflow: "hidden" }}>
-              {parentImgSrc ? <Image src={parentImgSrc} alt={catName(parentCategory)} fill style={{ objectFit: "cover" }} sizes="50vw" /> : <div style={{ width: "100%", height: "100%", background: "#ECDFD0" }} />}
+            <div className="cat-hero-image-fill" style={{ aspectRatio: parentImgRatio }}>
+              {parentImgSrc ? <Image src={parentImgSrc} alt={catName(parentCategory)} fill sizes="50vw" /> : <div className="media-placeholder" />}
             </div>
           </div>
         </div>
       </div>
 
-      <div className="container section" style={{ paddingTop: 0 }}>
+      <div className="container section section--flush-top">
         {subcategories.length === 0 ? (
-          <p style={{ color: "#6F6A63", fontSize: "15px" }}>{t("noSubcategories")}</p>
+          <p className="muted-copy">{t("noSubcategories")}</p>
         ) : (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "24px" }} className="cat-grid">
+          <div className="cat-grid-cards">
             {[...subcategories].sort((a, b) => (a.order ?? 0) - (b.order ?? 0)).map((cat) => {
               const img = cat.image?.[0];
               const imgSrc = imgUrl(img?.formats?.medium?.url ?? img?.url ?? "");
@@ -115,16 +115,16 @@ export default async function CollectionCategoryPage({ params }: Props) {
               const hasChildren = cat.categories && cat.categories.length > 0;
 
               return (
-                <Link key={cat.id} href={`/collection/${slug}/${slugify(cat.name_en)}`} className="cat-card" style={{ border: "1px solid var(--color-accent)", background: "var(--color-surface)", display: "flex", flexDirection: "column", textDecoration: "none" }}>
-                  <div style={{ position: "relative", width: "100%", paddingBottom: "100%", overflow: "hidden", background: "#F5F3EF", flexShrink: 0 }}>
-                    {imgSrc ? <Image src={imgSrc} alt={catName(cat)} fill style={{ objectFit: "cover" }} sizes="(max-width: 900px) 50vw, 25vw" /> : <div style={{ width: "100%", height: "100%", background: "#ECDFD0" }} />}
+                <Link key={cat.id} href={`/collection/${slug}/${slugify(cat.name_en)}`} className="cat-card">
+                  <div className="cat-card-thumb cat-card-thumb--square">
+                    {imgSrc ? <Image src={imgSrc} alt={catName(cat)} fill sizes="(max-width: 900px) 50vw, 25vw" /> : <div className="media-placeholder" />}
                   </div>
-                  <div style={{ padding: "12px 16px 16px", textAlign: "center", flex: 1, display: "flex", flexDirection: "column" }}>
-                    <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "16px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em", color: "#2B2520", margin: "0 0 6px", lineHeight: 1.2 }}>
+                  <div className="cat-card-body">
+                    <h3 className="cat-card-title">
                       {catName(cat)}
                     </h3>
-                    {catDescText && <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "12px", color: "#6F6A63", margin: "0 0 10px", lineHeight: 1.5 }}>{catDescText}</p>}
-                    {hasChildren && <span style={{ fontFamily: "'Cinzel', serif", fontSize: "11px", letterSpacing: "0.08em", textTransform: "uppercase", color: "#A87533" }}>{t("explore")}</span>}
+                    {catDescText && <p className="cat-card-desc">{catDescText}</p>}
+                    {hasChildren && <span className="cat-card-explore">{t("explore")}</span>}
                   </div>
                 </Link>
               );
@@ -132,12 +132,6 @@ export default async function CollectionCategoryPage({ params }: Props) {
           </div>
         )}
       </div>
-
-      <style>{`
-        @media (max-width: 900px) { .cat-grid { grid-template-columns: repeat(2, 1fr) !important; } }
-        @media (max-width: 480px) { .cat-grid { grid-template-columns: 1fr !important; } }
-        @media (max-width: 640px) { .cat-hero { flex-direction: column !important; } .cat-hero > div:last-child { width: 100% !important; aspect-ratio: 4/3; } }
-      `}</style>
     </main>
   );
 }

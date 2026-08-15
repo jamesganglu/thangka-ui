@@ -23,24 +23,24 @@ export default async function Footer() {
   } catch { /* CMS not connected */ }
 
   return (
-    <footer style={{ borderTop: "1px solid #E8E3DC" }}>
-      <div className="container" style={{ paddingTop: "64px", paddingBottom: "48px", display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "40px" }}>
+    <footer className="site-footer">
+      <div className="container footer-grid">
         <div>
-          <Link href="/" style={{ textDecoration: "none" }}>
-            <div style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 600, fontSize: "18px", letterSpacing: "0.1em", textTransform: "uppercase", lineHeight: 1.2, color: "#2B2520", marginBottom: "20px" }}>
+          <Link href="/" className="footer-logo-link">
+            <div className="footer-logo-text">
               TIBETAN<br />THANGKAS
             </div>
           </Link>
         </div>
 
         <div>
-          <p style={{ fontFamily: "'Cinzel', serif", fontSize: "11px", letterSpacing: "0.12em", textTransform: "uppercase", color: "#2B2520", marginBottom: "16px", fontWeight: 600 }}>
+          <p className="footer-col-title">
             {tFooter("navigation")}
           </p>
-          <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+          <ul className="footer-nav-list">
             {navItems.map((item) => (
-              <li key={item.path} style={{ marginBottom: "10px" }}>
-                <Link href={item.path} style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "#6F6A63", transition: "color 0.2s" }}>
+              <li key={item.path} className="footer-nav-item">
+                <Link href={item.path} className="footer-nav-link">
                   {tNav(item.key)}
                 </Link>
               </li>
@@ -49,28 +49,20 @@ export default async function Footer() {
         </div>
 
         <div>
-          <p style={{ fontFamily: "'Cinzel', serif", fontSize: "11px", letterSpacing: "0.12em", textTransform: "uppercase", color: "#2B2520", marginBottom: "16px", fontWeight: 600 }}>
+          <p className="footer-col-title">
             {tFooter("followUs")}
           </p>
-          <a href={`mailto:${email}`} style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "#6F6A63", textDecoration: "none" }}>
+          <a href={`mailto:${email}`} className="footer-email-link">
             {email}
           </a>
         </div>
       </div>
 
-      <div style={{ borderTop: "1px solid #E8E3DC", padding: "16px 0", textAlign: "center" }}>
-        <p style={{ fontFamily: "'Cinzel', serif", fontSize: "11px", letterSpacing: "0.08em", textTransform: "uppercase", color: "#A9A39C", margin: 0 }}>
+      <div className="footer-bottom">
+        <p className="footer-copyright">
           &copy; {year} {tFooter("copyright")}
         </p>
       </div>
-
-      <style>{`
-        @media (max-width: 900px) {
-          footer .container > div:first-child ~ div { display: none; }
-          footer .container { grid-template-columns: 1fr 1fr !important; }
-        }
-        @media (max-width: 640px) { footer .container { grid-template-columns: 1fr !important; } }
-      `}</style>
     </footer>
   );
 }

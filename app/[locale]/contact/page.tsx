@@ -37,12 +37,12 @@ export default async function ContactPage({ params }: Props) {
   const intro = toPlainText(item.content);
 
   return (
-    <main style={{ background: "#ffffff", minHeight: "80vh" }}>
+    <main className="contact-main">
       <section className="section">
         <div className="container">
           <div>
             <h1 className="page-title">{t("title")}</h1>
-            {intro && <p style={{ color: "#6F6A63", fontSize: "15px", lineHeight: 1.75, marginBottom: "40px" }}>{intro}</p>}
+            {intro && <p className="contact-intro">{intro}</p>}
 
             <ContactDetail icon={<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="2" y="4" width="20" height="16" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" /></svg>} label={t("email")} value={email} href={`mailto:${email}`} />
             <ContactDetail icon={<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M20 10c0 6-8 13-8 13s-8-7-8-13a8 8 0 0 1 16 0Z" /><circle cx="12" cy="10" r="3" /></svg>} label={t("mailingAddress")} value={address} />
@@ -56,14 +56,14 @@ export default async function ContactPage({ params }: Props) {
 
 function ContactDetail({ icon, label, value, href }: { icon: React.ReactNode; label: string; value: string; href?: string }) {
   return (
-    <div style={{ display: "flex", gap: "16px", marginBottom: "32px" }}>
-      <div style={{ color: "#A87533", flexShrink: 0, marginTop: "2px" }}>{icon}</div>
+    <div className="contact-detail-row">
+      <div className="contact-detail-icon">{icon}</div>
       <div>
-        <p style={{ fontFamily: "'Cinzel', serif", fontSize: "11px", letterSpacing: "0.1em", textTransform: "uppercase", color: "#2B2520", marginBottom: "4px", fontWeight: 600 }}>{label}</p>
+        <p className="contact-detail-label">{label}</p>
         {href ? (
-          <a href={href} style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "#6F6A63", lineHeight: 1.6, whiteSpace: "pre-line" }}>{value}</a>
+          <a href={href} className="contact-detail-value">{value}</a>
         ) : (
-          <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "#6F6A63", lineHeight: 1.6, whiteSpace: "pre-line", margin: 0 }}>{value}</p>
+          <p className="contact-detail-value contact-detail-value--static">{value}</p>
         )}
       </div>
     </div>

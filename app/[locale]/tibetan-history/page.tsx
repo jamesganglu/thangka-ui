@@ -6,10 +6,10 @@ import ScrollSpySidebar from "@/components/ScrollSpySidebar";
 
 function SectionDivider() {
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", height: "100%", padding: "10px 0" }}>
-      <div style={{ flex: 1, width: "1px", background: "var(--color-light)" }} />
-      <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: "var(--color-text)", margin: "3px 0", flexShrink: 0, outline: "1px solid var(--color-light)", outlineOffset: "3px" }} />
-      <div style={{ flex: 1, width: "1px", background: "var(--color-light)" }} />
+    <div className="section-divider-col">
+      <div className="section-divider-line" />
+      <div className="section-divider-dot" />
+      <div className="section-divider-line" />
     </div>
   );
 }
@@ -63,26 +63,26 @@ export default async function TibetanHistoryPage({ params }: Props) {
   })();
 
   return (
-    <main style={{ background: "#ffffff" }}>
+    <main className="editorial-main">
       {heroVideoUrl && (
-        <div style={{ position: "relative", width: "100%", height: "50vh", overflow: "hidden" }}>
-          <video autoPlay muted loop playsInline style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}>
+        <div className="editorial-hero-video-wrap">
+          <video autoPlay muted loop playsInline className="editorial-hero-video">
             <source src={heroVideoUrl} />
           </video>
         </div>
       )}
-      <div className="container" style={{ paddingTop: "60px", paddingBottom: "80px" }}>
-        <div style={{ display: "flex", gap: "60px", alignItems: "flex-start" }} className="history-layout">
+      <div className="container editorial-container">
+        <div className="history-layout">
           {sections.length > 0 && <ScrollSpySidebar sections={sections} />}
 
-          <div style={{ flex: 1, minWidth: 0 }}>
+          <div className="history-content">
             {(!!item.brief || !item.title) && (
-              <div id="intro" style={{ marginBottom: "60px" }}>
+              <div id="intro" className="mb-60">
                 <h1 className="page-title">
                   {(item.title as string) || t("titleFallback")}
                 </h1>
                 <div className="page-title-underline page-title-underline--mb-24" />
-                {!!item.brief && (typeof item.brief === "string" ? <p style={{ color: "#6F6A63", fontSize: "15px", lineHeight: 1.75 }}>{item.brief}</p> : <RichText content={item.brief} />)}
+                {!!item.brief && (typeof item.brief === "string" ? <p className="muted-copy">{item.brief}</p> : <RichText content={item.brief} />)}
               </div>
             )}
 
@@ -106,9 +106,9 @@ export default async function TibetanHistoryPage({ params }: Props) {
             })}
 
             {!!item.eventsBrief && (
-              <div style={{ marginBottom: "60px" }}>
+              <div className="mb-60">
                 {typeof item.eventsBrief === "string" ? (
-                  <p style={{ color: "#6F6A63", fontSize: "15px", lineHeight: 1.75 }}>{item.eventsBrief}</p>
+                  <p className="muted-copy">{item.eventsBrief}</p>
                 ) : (
                   <RichText content={item.eventsBrief} />
                 )}
@@ -144,15 +144,6 @@ export default async function TibetanHistoryPage({ params }: Props) {
           </div>
         </div>
       </div>
-
-      <style>{`
-        @media (max-width: 900px) {
-          .history-layout { flex-direction: column; }
-          .history-layout aside { position: static !important; width: 100% !important; display: flex; flex-wrap: wrap; gap: 8px; }
-          .history-layout aside nav { display: flex; flex-wrap: wrap; gap: 8px; }
-          .history-layout aside nav a { border-left: none !important; border-bottom: 2px solid transparent; padding-left: 0 !important; padding-bottom: 4px !important; white-space: nowrap; }
-        }
-      `}</style>
     </main>
   );
 }

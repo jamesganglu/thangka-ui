@@ -56,8 +56,8 @@ export default async function CollectionPage({ params }: Props) {
   }
 
   return (
-    <main style={{ background: "#ffffff", minHeight: "60vh" }}>
-      <div style={{ padding: "48px 0 36px" }}>
+    <main className="page-main">
+      <div className="collection-header">
         <div className="container">
           <span className="eyebrow">{t("eyebrow")}</span>
           <h1 className="page-title">
@@ -65,14 +65,14 @@ export default async function CollectionPage({ params }: Props) {
           </h1>
           <div className="page-title-underline page-title-underline--mb-16" />
           {!!content && (
-            <div style={{ marginTop: "16px", maxWidth: "600px", color: "#6F6A63", fontSize: "15px", lineHeight: 1.75 }}>
+            <div className="collection-intro-text">
               <RichText content={content} />
             </div>
           )}
         </div>
       </div>
 
-      <div className="container section" style={{ paddingTop: 0 }}>
+      <div className="container section section--flush-top">
         <div className="cat-grid">
           {[...categories].sort((a, b) => (a.order ?? 0) - (b.order ?? 0)).map((cat) => {
             const img = cat.image?.[0];
@@ -82,7 +82,7 @@ export default async function CollectionPage({ params }: Props) {
             return (
               <Link key={cat.documentId ?? cat.id} href={`/collection/${slugify(cat.name_en)}`} className="cat-grid-item">
                 <div className="cat-grid-image">
-                  {imgSrc ? <Image src={imgSrc} alt={catName(cat)} fill style={{ objectFit: "cover" }} sizes="160px" /> : <div className="cat-grid-image-placeholder" />}
+                  {imgSrc ? <Image src={imgSrc} alt={catName(cat)} fill sizes="160px" /> : <div className="cat-grid-image-placeholder" />}
                 </div>
                 <div className="cat-grid-body">
                   <h3 className="cat-grid-title">

@@ -41,32 +41,12 @@ export default function ScrollSpySidebar({
   }, [leaves]);
 
   return (
-    <aside
-      style={{
-        width: "220px",
-        flexShrink: 0,
-        position: "sticky",
-        top: "120px",
-        alignSelf: "flex-start",
-        border: "1px solid var(--color-accent)",
-      }}
-    >
-      <nav style={{ display: "flex", flexDirection: "column", gap: "0", padding: "1em" }}>
+    <aside className="spy-sidebar">
+      <nav className="spy-nav">
         {sections.map((s) =>
           s.children ? (
             <div key={s.label}>
-              <div
-                style={{
-                  fontFamily: "'Cormorant Garamond', serif",
-                  fontSize: "13px",
-                  fontWeight: 600,
-                  letterSpacing: "0.04em",
-                  color: "#2B2520",
-                  paddingLeft: "12px",
-                  paddingTop: "12px",
-                  paddingBottom: "4px",
-                }}
-              >
+              <div className="spy-group-label">
                 {s.label}
               </div>
               {s.children.map((child) => {
@@ -81,28 +61,9 @@ export default function ScrollSpySidebar({
                         .getElementById(child.id!)
                         ?.scrollIntoView({ behavior: "smooth", block: "start" });
                     }}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "8px",
-                      fontFamily: "'Cormorant Garamond', serif",
-                      fontSize: "13px",
-                      lineHeight: 1.4,
-                      color: isActive ? "#A87533" : "#6F6A63",
-                      paddingLeft: "24px",
-                      paddingTop: "8px",
-                      paddingBottom: "8px",
-                      transition: "color 0.2s",
-                      textDecoration: "none",
-                    }}
+                    className={`spy-link spy-link--nested${isActive ? " spy-link--active" : ""}`}
                   >
-                    <span style={{
-                      width: "5px",
-                      height: "5px",
-                      borderRadius: "50%",
-                      background: isActive ? "#A87533" : "transparent",
-                      flexShrink: 0,
-                    }} />
+                    <span className={`spy-link-dot${isActive ? " spy-link-dot--active" : ""}`} />
                     {child.label}
                   </a>
                 );
@@ -118,28 +79,9 @@ export default function ScrollSpySidebar({
                   .getElementById(s.id!)
                   ?.scrollIntoView({ behavior: "smooth", block: "start" });
               }}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "8px",
-                fontFamily: "'Cormorant Garamond', serif",
-                fontSize: "13px",
-                lineHeight: 1.4,
-                color: activeId === s.id ? "#A87533" : "#6F6A63",
-                paddingLeft: "12px",
-                paddingTop: "8px",
-                paddingBottom: "8px",
-                transition: "color 0.2s",
-                textDecoration: "none",
-              }}
+              className={`spy-link spy-link--top${activeId === s.id ? " spy-link--active" : ""}`}
             >
-              <span style={{
-                width: "5px",
-                height: "5px",
-                borderRadius: "50%",
-                background: activeId === s.id ? "#A87533" : "transparent",
-                flexShrink: 0,
-              }} />
+              <span className={`spy-link-dot${activeId === s.id ? " spy-link-dot--active" : ""}`} />
               {s.label}
             </a>
           )

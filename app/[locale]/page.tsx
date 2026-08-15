@@ -84,29 +84,22 @@ export default async function HomePage({ params }: Props) {
   return (
     <main>
       {/* Hero */}
-      <section id="hero" style={{ position: "relative", width: "100vw", height: "calc(100vh - 80px)", overflow: "hidden" }}>
+      <section id="hero">
         {heroVideoUrl && (
-          <video
-            id="hero-video"
-            autoPlay
-            muted
-            loop
-            playsInline
-            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
-          >
+          <video id="hero-video" autoPlay muted loop playsInline>
             <source src={heroVideoUrl} />
           </video>
         )}
-        <div style={{ position: "absolute", inset: 0, zIndex: 1, background: "linear-gradient(0deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 100%)" }} />
-        <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, zIndex: 2, paddingTop: "2rem", paddingBottom: "2rem" }} className="container">
-          <div id="hero-text" style={{ textAlign: "left", maxWidth: "50%" }}>
-            <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "40px", fontWeight: 400, letterSpacing: "0.07em", textTransform: "uppercase", color: "#ffffff", lineHeight: 0.95, marginBottom: "24px" }}>
+        <div className="hero-scrim" />
+        <div className="hero-content container">
+          <div id="hero-text">
+            <h1 className="hero-title">
               {heroTitle}
             </h1>
-            <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(17px, 2.2vw, 24px)", fontWeight: 400, color: "#ffffff", letterSpacing: "0.01em", lineHeight: 1.5, marginBottom: "40px" }}>
+            <p className="hero-subtext">
               {heroSubtext}
             </p>
-            <Link href="/collection" className="btn-primary" style={{ background: "#ffffff", color: "#2B2520", border: "none" }}>
+            <Link href="/collection" className="btn-primary hero-cta">
               {t("exploreCollection")}
             </Link>
           </div>
@@ -114,44 +107,44 @@ export default async function HomePage({ params }: Props) {
       </section>
 
       {/* Tibetan History */}
-      <section id="tibetan-history" className="section" style={{ background: "#ffffff" }}>
+      <section id="tibetan-history" className="section">
         <div className="container">
-          <div style={{ display: "grid", gridTemplateColumns: "2fr 3fr", gap: "80px", alignItems: "center" }} className="two-col-grid">
+          <div className="two-col-grid">
             <div>
-              <div style={{ marginTop: "16px" }}>
+              <div className="home-text-block">
                 {item[historyTextKey] ?? item.historyText ? (
                   <RichText content={(item[historyTextKey] ?? item.historyText)!} />
                 ) : (
-                  <p style={{ color: "#6F6A63", fontSize: "15px", lineHeight: 1.75 }}>{t("historyFallback")}</p>
+                  <p className="muted-copy">{t("historyFallback")}</p>
                 )}
               </div>
-              <Link href="/tibetan-history" className="text-link" style={{ marginTop: "24px", display: "inline-flex" }}>
+              <Link href="/tibetan-history" className="text-link home-learn-more">
                 {t("learnMore")}
               </Link>
             </div>
-            <div style={{ position: "relative", width: "100%", height: "100%", aspectRatio: "4/3", overflow: "hidden" }}>
-              {historyImageUrl ? <Image src={historyImageUrl} alt="Tibetan History" fill style={{ objectFit: "contain" }} sizes="(max-width: 640px) 100vw, 60vw" /> : <div style={{ width: "100%", height: "100%", background: "#ECDFD0" }} />}
+            <div className="home-media">
+              {historyImageUrl ? <Image src={historyImageUrl} alt="Tibetan History" fill sizes="(max-width: 640px) 100vw, 60vw" /> : <div className="media-placeholder" />}
             </div>
           </div>
         </div>
       </section>
 
       {/* Main Deities */}
-      <section id="buddhism" className="section" style={{ background: "#ffffff" }}>
+      <section id="buddhism" className="section">
         <div className="container">
-          <div style={{ display: "grid", gridTemplateColumns: "2fr 3fr", gap: "80px", alignItems: "center" }} className="two-col-grid two-col-reversed">
-            <div style={{ position: "relative", aspectRatio: "3/4", overflow: "hidden", background: "#F5F3EF" }}>
-              {deitiesImageUrl ? <Image src={deitiesImageUrl} alt="Main Deities" fill style={{ objectFit: "cover" }} sizes="(max-width: 640px) 100vw, 40vw" /> : <div style={{ width: "100%", height: "100%", background: "#ECDFD0" }} />}
+          <div className="two-col-grid two-col-reversed">
+            <div className="home-media">
+              {deitiesImageUrl ? <Image src={deitiesImageUrl} alt="Main Deities" fill sizes="(max-width: 640px) 100vw, 40vw" /> : <div className="media-placeholder" />}
             </div>
             <div>
-              <div style={{ marginTop: "16px" }}>
+              <div className="home-text-block">
                 {item[deitiesTextKey] ?? item.deitiesText ? (
                   <RichText content={(item[deitiesTextKey] ?? item.deitiesText)!} />
                 ) : (
-                  <p style={{ color: "#6F6A63", fontSize: "15px", lineHeight: 1.75 }}>{t("deitiesFallback")}</p>
+                  <p className="muted-copy">{t("deitiesFallback")}</p>
                 )}
               </div>
-              <Link href="/buddhism" className="text-link" style={{ marginTop: "24px", display: "inline-flex" }}>
+              <Link href="/buddhism" className="text-link home-learn-more">
                 {t("learnMore")}
               </Link>
             </div>
@@ -175,36 +168,27 @@ export default async function HomePage({ params }: Props) {
       </section>
 
       {/* Our Story */}
-      <section id="our-story" className="section" style={{ background: "#ffffff" }}>
+      <section id="our-story" className="section">
         <div className="container">
-          <div style={{ display: "grid", gridTemplateColumns: "2fr 3fr", gap: "80px", alignItems: "center" }} className="two-col-grid">
+          <div className="two-col-grid">
             <div>
-              <div style={{ marginTop: "16px" }}>
+              <div className="home-text-block">
                 {item[storyTextKey] ?? item.storyText ? (
                   <RichText content={(item[storyTextKey] ?? item.storyText)!} />
                 ) : (
-                  <p style={{ color: "#6F6A63", fontSize: "15px", lineHeight: 1.75 }}>{t("storyFallback")}</p>
+                  <p className="muted-copy">{t("storyFallback")}</p>
                 )}
               </div>
-              <Link href="/about" className="text-link" style={{ marginTop: "24px", display: "inline-flex" }}>
+              <Link href="/about" className="text-link home-learn-more">
                 {t("learnMore")}
               </Link>
             </div>
-            <div style={{ position: "relative", aspectRatio: "4/3", overflow: "hidden", background: "#F5F3EF" }}>
-              {storyImageUrl ? <Image src={storyImageUrl} alt="Our Story" fill style={{ objectFit: "cover" }} sizes="(max-width: 640px) 100vw, 60vw" /> : <div style={{ width: "100%", height: "100%", background: "#ECDFD0" }} />}
+            <div className="home-media">
+              {storyImageUrl ? <Image src={storyImageUrl} alt="Our Story" fill sizes="(max-width: 640px) 100vw, 60vw" /> : <div className="media-placeholder" />}
             </div>
           </div>
         </div>
       </section>
-
-      <style>{`
-        @media (max-width: 900px) {
-          .two-col-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
-          .two-col-reversed > *:first-child { order: 2; }
-          .two-col-reversed > *:last-child  { order: 1; }
-          #hero-text { max-width: 100% !important; }
-        }
-      `}</style>
     </main>
   );
 }

@@ -21,19 +21,18 @@ export default async function ThangkaImagePage({ params }: Props) {
   const displayName = (locale === "zh" ? thangka.name_zh || thangka.name_en : thangka.name_en) || "";
 
   return (
-    <main style={{ background: "#ffffff", minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "40px 24px", gap: "24px" }}>
+    <main className="image-lightbox-main">
       <h1 className="image-page-title">
         {displayName}
       </h1>
-      <Link href={`/thangka/${name}`} style={{ fontFamily: "'Cinzel', serif", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.08em", color: "#6F6A63", textDecoration: "none" }}>
+      <Link href={`/thangka/${name}`} className="image-lightbox-back">
         ← Back to Detail
       </Link>
-      <div style={{ position: "relative", width: "100%", maxWidth: "800px", aspectRatio: "3/4" }}>
+      <div className="image-lightbox-frame">
         <Image
           src={src}
           alt={img.alternativeText || displayName}
           fill
-          style={{ objectFit: "contain" }}
           sizes="(max-width: 800px) 100vw, 800px"
           priority
         />

@@ -98,20 +98,20 @@ export default async function CollectionLevel3Page({ params }: Props) {
   const parentImgHeight = parentImg?.height || 600;
 
   return (
-    <main style={{ background: "#ffffff", minHeight: "60vh" }}>
-      <div style={{ padding: "20px 0 0" }}>
+    <main className="page-main">
+      <div className="page-breadcrumb-bar">
         <div className="container">
-          <nav style={{ fontSize: "13px", color: "#6F6A63" }}>
-            <Link href="/collection" style={{ color: "#6F6A63", textDecoration: "none" }}>{t("breadcrumb")}</Link>
+          <nav className="breadcrumb-nav">
+            <Link href="/collection" className="breadcrumb-link">{t("breadcrumb")}</Link>
             {" / "}
-            <Link href={`/collection/${slug}`} style={{ color: "#6F6A63", textDecoration: "none" }}>{catName(level1)}</Link>
+            <Link href={`/collection/${slug}`} className="breadcrumb-mid">{catName(level1)}</Link>
             {" / "}
-            <span style={{ color: "#2B2520" }}>{catName(level2)}</span>
+            <span className="breadcrumb-current">{catName(level2)}</span>
           </nav>
         </div>
       </div>
 
-      <div style={{ padding: "32px 0 36px" }}>
+      <div className="page-hero-bar">
         <div className="container">
           <div className="cat-hero">
             <div className="cat-hero-text">
@@ -120,54 +120,54 @@ export default async function CollectionLevel3Page({ params }: Props) {
                 {catName(level2)}
               </h1>
               <div className="page-title-underline page-title-underline--mb-16" />
-              {desc && <p style={{ color: "#6F6A63", fontSize: "15px", lineHeight: 1.75, margin: 0 }}>{desc}</p>}
+              {desc && <p className="cat-hero-desc">{desc}</p>}
             </div>
             <div className="cat-hero-image">
               {parentImgSrc ? (
-                <Image src={parentImgSrc} alt={catName(level2)} width={parentImgWidth} height={parentImgHeight} style={{ width: "100%", height: "auto" }} sizes="50vw" />
+                <Image src={parentImgSrc} alt={catName(level2)} width={parentImgWidth} height={parentImgHeight} sizes="50vw" />
               ) : (
-                <div style={{ width: "100%", height: "100%", background: "#ECDFD0" }} />
+                <div className="media-placeholder" />
               )}
             </div>
           </div>
         </div>
       </div>
 
-      <div className="container section" style={{ paddingTop: 0 }}>
+      <div className="container section section--flush-top">
         {subcategories.length > 0 ? (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "24px" }} className="cat-grid">
+          <div className="cat-grid-cards">
             {[...subcategories].sort((a, b) => (a.order ?? 0) - (b.order ?? 0)).map((cat) => {
               const img = cat.image?.[0];
               const imgSrc = imgUrl(img?.formats?.medium?.url ?? img?.url ?? "");
               const catDescText = cardDesc(cat);
               const hasChildren = cat.categories && cat.categories.length > 0;
               return (
-                <Link key={cat.id} href={`/collection/${slug}/${subslug}/${slugify(cat.name_en)}`} className="cat-card" style={{ border: "1px solid var(--color-accent)", background: "var(--color-surface)", display: "flex", flexDirection: "column", textDecoration: "none" }}>
-                  <div style={{ position: "relative", width: "100%", paddingBottom: "133%", overflow: "hidden", background: "#F5F3EF", flexShrink: 0 }}>
-                    {imgSrc ? <Image src={imgSrc} alt={catName(cat)} fill style={{ objectFit: "cover" }} sizes="(max-width: 900px) 50vw, 25vw" /> : <div style={{ width: "100%", height: "100%", background: "#ECDFD0" }} />}
+                <Link key={cat.id} href={`/collection/${slug}/${subslug}/${slugify(cat.name_en)}`} className="cat-card">
+                  <div className="cat-card-thumb cat-card-thumb--tall">
+                    {imgSrc ? <Image src={imgSrc} alt={catName(cat)} fill sizes="(max-width: 900px) 50vw, 25vw" /> : <div className="media-placeholder" />}
                   </div>
-                  <div style={{ padding: "12px 16px 16px", textAlign: "center", flex: 1, display: "flex", flexDirection: "column" }}>
-                    <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "16px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em", color: "#2B2520", margin: "0 0 6px", lineHeight: 1.2 }}>{catName(cat)}</h3>
-                    {catDescText && <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "12px", color: "#6F6A63", margin: "0 0 10px", lineHeight: 1.5 }}>{catDescText}</p>}
-                    {hasChildren && <span style={{ fontFamily: "'Cinzel', serif", fontSize: "11px", letterSpacing: "0.08em", textTransform: "uppercase", color: "#A87533" }}>{t("explore")}</span>}
+                  <div className="cat-card-body">
+                    <h3 className="cat-card-title">{catName(cat)}</h3>
+                    {catDescText && <p className="cat-card-desc">{catDescText}</p>}
+                    {hasChildren && <span className="cat-card-explore">{t("explore")}</span>}
                   </div>
                 </Link>
               );
             })}
           </div>
         ) : thangkas.length > 0 ? (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "24px" }} className="thangka-grid">
+          <div className="thangka-grid">
             {thangkas.map((thangka) => {
               const imgSrc = imgUrl(thangka.image?.formats?.medium?.url ?? thangka.image?.url ?? "");
               return (
-                <Link key={thangka.documentId ?? thangka.id} href={`/thangka/${slugify(thangka.name_en)}`} style={{ textDecoration: "none", color: "inherit" }}>
-                  <div className="cat-card thangka-card" style={{ border: "1px solid var(--color-accent)", background: "var(--color-surface)", display: "flex", flexDirection: "column", cursor: "pointer" }}>
-                    <div style={{ position: "relative", width: "100%", paddingBottom: "133%", overflow: "hidden", background: "#F5F3EF", flexShrink: 0 }}>
-                      {imgSrc ? <Image src={imgSrc} alt={thangkaName(thangka)} fill style={{ objectFit: "cover" }} sizes="(max-width: 640px) 100vw, 33vw" /> : <div style={{ width: "100%", height: "100%", background: "#ECDFD0" }} />}
+                <Link key={thangka.documentId ?? thangka.id} href={`/thangka/${slugify(thangka.name_en)}`} className="link-reset">
+                  <div className="cat-card thangka-card">
+                    <div className="cat-card-thumb cat-card-thumb--tall">
+                      {imgSrc ? <Image src={imgSrc} alt={thangkaName(thangka)} fill sizes="(max-width: 640px) 100vw, 33vw" /> : <div className="media-placeholder" />}
                     </div>
-                    <div style={{ padding: "12px 16px 16px", textAlign: "left" }}>
-                      <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "16px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em", color: "#2B2520", margin: "0 0 6px", lineHeight: 1.2 }}>{thangkaName(thangka)}</h3>
-                      {(thangka.size || thangka.era) && <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "12px", color: "#6F6A63", margin: 0, lineHeight: 1.5 }}>{[thangka.size, thangka.era].filter(Boolean).join(" · ")}</p>}
+                    <div className="thangka-card-body">
+                      <h3 className="cat-card-title">{thangkaName(thangka)}</h3>
+                      {(thangka.size || thangka.era) && <p className="thangka-card-meta">{[thangka.size, thangka.era].filter(Boolean).join(" · ")}</p>}
                     </div>
                   </div>
                 </Link>
@@ -175,16 +175,9 @@ export default async function CollectionLevel3Page({ params }: Props) {
             })}
           </div>
         ) : (
-          <p style={{ color: "#6F6A63", fontSize: "15px" }}>{t("noItems")}</p>
+          <p className="muted-copy">{t("noItems")}</p>
         )}
       </div>
-
-      <style>{`
-        .thangka-card { transition: border-color 0.2s, box-shadow 0.2s; }
-        .thangka-card:hover { border-color: #2B2520 !important; box-shadow: 0 4px 16px rgba(43,37,32,0.10); }
-        @media (max-width: 900px) { .cat-grid { grid-template-columns: repeat(2, 1fr) !important; } .thangka-grid { grid-template-columns: repeat(2, 1fr) !important; } }
-        @media (max-width: 480px) { .cat-grid { grid-template-columns: 1fr !important; } .thangka-grid { grid-template-columns: 1fr !important; } }
-      `}</style>
     </main>
   );
 }

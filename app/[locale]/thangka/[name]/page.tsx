@@ -12,11 +12,11 @@ interface Props {
 
 function MetaRow({ label, value }: { label: string; value: string }) {
   return (
-    <div style={{ display: "flex", gap: "16px", alignItems: "baseline" }}>
-      <span style={{ fontFamily: "'Cinzel', serif", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.08em", color: "#2B2520", fontWeight: 700, minWidth: "90px", flexShrink: 0 }}>
+    <div className="meta-row">
+      <span className="meta-row-label">
         {label}
       </span>
-      <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "#2B2520", lineHeight: 1.5 }}>
+      <span className="meta-row-value">
         {value}
       </span>
     </div>
@@ -112,52 +112,52 @@ export default async function ThangkaDetailPage({ params }: Props) {
   }
 
   return (
-    <main style={{ background: "#ffffff", minHeight: "60vh" }}>
+    <main className="page-main">
       {/* Breadcrumb */}
-      <div style={{ padding: "20px 0 0" }}>
+      <div className="page-breadcrumb-bar">
         <div className="container">
-          <nav style={{ fontSize: "13px", color: "#6F6A63", display: "flex", flexWrap: "wrap", alignItems: "center", gap: "4px" }}>
-            <Link href="/collection" style={{ color: "#6F6A63", textDecoration: "none" }}>
+          <nav className="thangka-breadcrumb">
+            <Link href="/collection" className="breadcrumb-mid">
               {tCollection("breadcrumb")}
             </Link>
 
             {ancestorChain.map((cat, i) => (
-              <span key={cat.documentId} style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-                <span style={{ color: "#A9A39C" }}>/</span>
-                <Link href={categoryUrl(ancestorChain, i)} style={{ color: "#6F6A63", textDecoration: "none" }}>
+              <span key={cat.documentId} className="breadcrumb-crumb">
+                <span className="breadcrumb-sep">/</span>
+                <Link href={categoryUrl(ancestorChain, i)} className="breadcrumb-mid">
                   {catDisplayName(cat)}
                 </Link>
               </span>
             ))}
 
-            <span style={{ color: "#A9A39C" }}>/</span>
-            <span style={{ color: "#2B2520" }}>{displayName}</span>
+            <span className="breadcrumb-sep">/</span>
+            <span className="breadcrumb-current">{displayName}</span>
           </nav>
         </div>
       </div>
 
       {/* Detail layout */}
-      <div style={{ padding: "40px 0 72px" }}>
+      <div className="thangka-detail-bar">
         <div className="container">
-          <div className="thangka-detail-layout" style={{ display: "flex", gap: "64px", alignItems: "flex-start" }}>
-            <div className="thangka-detail-image" style={{ flex: "0 0 48%", position: "sticky", top: "24px" }}>
-              <div style={{ position: "relative", width: "100%", paddingBottom: "133%", background: "#F5F3EF", overflow: "hidden" }}>
+          <div className="thangka-detail-layout">
+            <div className="thangka-detail-image">
+              <div className="thangka-hero-image">
                 {imgSrc ? (
-                  <Image src={imgSrc} alt={displayName || "Thangka"} fill style={{ objectFit: "contain" }} sizes="(max-width: 768px) 100vw, 48vw" priority />
+                  <Image src={imgSrc} alt={displayName || "Thangka"} fill sizes="(max-width: 768px) 100vw, 48vw" priority />
                 ) : (
-                  <div style={{ width: "100%", height: "100%", background: "#ECDFD0" }} />
+                  <div className="media-placeholder" />
                 )}
               </div>
             </div>
 
-            <div className="thangka-detail-info" style={{ flex: 1, paddingTop: "8px" }}>
-              {thangka.identify && <span className="eyebrow" style={{ fontSize: "clamp(28px, 3vw, 38px)", marginBottom: "16px" }}>{thangka.identify}</span>}
+            <div className="thangka-detail-info">
+              {thangka.identify && <span className="eyebrow thangka-identify">{thangka.identify}</span>}
               <h1 className="page-title">
                 {displayName}
               </h1>
 
               {/* Metadata rows */}
-              <div style={{ marginBottom: "28px", display: "flex", flexDirection: "column", gap: "16px" }}>
+              <div className="thangka-meta-rows">
                 {ancestorChain[0] && (
                   <MetaRow label={t("category")} value={catDisplayName(ancestorChain[0])} />
                 )}
@@ -174,8 +174,8 @@ export default async function ThangkaDetailPage({ params }: Props) {
 
 
               {desc && (
-                <div style={{ marginBottom: "28px" }}>
-                  <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "15px", color: "#6F6A63", lineHeight: 1.75, margin: 0 }}>{desc}</p>
+                <div className="thangka-desc-wrap">
+                  <p className="thangka-desc-text">{desc}</p>
                 </div>
               )}
 
@@ -184,19 +184,18 @@ export default async function ThangkaDetailPage({ params }: Props) {
 
           {/* Related images grid */}
           {!!thangka.relatedImages?.length && (
-            <div id="related-images" style={{ marginTop: "64px", border: "1px solid var(--color-light)", padding: "24px" }}>
-              <span className="eyebrow" style={{ marginBottom: "20px" }}>Details</span>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "16px" }} className="related-grid">
+            <div id="related-images" className="related-images-block">
+              <span className="eyebrow thangka-block-eyebrow">Details</span>
+              <div className="related-grid">
                 {thangka.relatedImages.map((img) => {
                   const src = imgUrl(img.formats?.medium?.url ?? img.formats?.large?.url ?? img.url);
                   return (
-                    <Link key={img.documentId} href={`/thangka/${name}/image/${img.documentId}`} style={{ display: "block", textDecoration: "none" }}>
-                      <div style={{ position: "relative", width: "100%", paddingBottom: "133%", background: "#F5F3EF", overflow: "hidden" }} className="related-img">
+                    <Link key={img.documentId} href={`/thangka/${name}/image/${img.documentId}`} className="related-img-link">
+                      <div className="related-img">
                         <Image
                           src={src}
                           alt={img.alternativeText || ""}
                           fill
-                          style={{ objectFit: "cover" }}
                           sizes="(max-width: 640px) 100vw, 25vw"
                         />
                       </div>
@@ -208,41 +207,41 @@ export default async function ThangkaDetailPage({ params }: Props) {
           )}
         {/* Related thangkas from same sub category */}
         {relatedThangkas.length > 0 && (
-          <div id="related-thangkas" style={{ marginTop: "48px" }}>
-            <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: "24px" }}>
-              <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(24px, 3vw, 36px)", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.04em", color: "#2B2520", margin: 0 }}>
+          <div id="related-thangkas" className="related-thangkas-block">
+            <div className="related-thangkas-header">
+              <h2 className="related-thangkas-title">
                 Related Thangkas
               </h2>
               {ancestorChain.length > 0 && (
-                <Link href={categoryUrl(ancestorChain, ancestorChain.length - 1)} style={{ fontFamily: "'Cinzel', serif", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.1em", color: "#A87533", textDecoration: "none" }}>
+                <Link href={categoryUrl(ancestorChain, ancestorChain.length - 1)} className="view-all-link">
                   View All
                 </Link>
               )}
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "16px" }} className="related-thangkas-grid">
+            <div className="related-thangkas-grid">
               {relatedThangkas.map((rt) => {
                 const rtImg = imgUrl(rt.image?.formats?.medium?.url ?? rt.image?.url ?? "");
                 const rtName = (locale === "zh" ? rt.name_zh || rt.name_en : rt.name_en) || "";
                 return (
-                  <Link key={rt.documentId} href={`/thangka/${slugify(rt.name_en)}`} style={{ textDecoration: "none", color: "inherit" }}>
-                    <div className="related-img" style={{ position: "relative", width: "100%", paddingBottom: "133%", background: "#F5F3EF", overflow: "hidden" }}>
+                  <Link key={rt.documentId} href={`/thangka/${slugify(rt.name_en)}`} className="link-reset">
+                    <div className="related-img">
                       {rtImg ? (
-                        <Image src={rtImg} alt={rtName} fill style={{ objectFit: "cover" }} sizes="25vw" />
+                        <Image src={rtImg} alt={rtName} fill sizes="25vw" />
                       ) : (
-                        <div style={{ width: "100%", height: "100%", background: "#ECDFD0" }} />
+                        <div className="media-placeholder" />
                       )}
                     </div>
-                    <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "14px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em", color: "#2B2520", margin: "10px 0 4px" }}>
+                    <p className="related-thangka-name">
                       {[rt.identify, rtName].filter(Boolean).join(" · ")}
                     </p>
                     {rt.size && (
-                      <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "12px", color: "#6F6A63", margin: "0 0 2px", lineHeight: 1.5 }}>
-                        <span style={{ fontWeight: 600, color: "#2B2520" }}>Size</span> {rt.size}
+                      <p className="related-thangka-spec">
+                        <span className="related-thangka-spec-label">Size</span> {rt.size}
                       </p>
                     )}
                     {rt.material && (
-                      <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "12px", color: "#6F6A63", margin: 0, lineHeight: 1.5 }}>
-                        <span style={{ fontWeight: 600, color: "#2B2520" }}>Material</span> {rt.material}
+                      <p className="related-thangka-spec">
+                        <span className="related-thangka-spec-label">Material</span> {rt.material}
                       </p>
                     )}
                   </Link>
@@ -253,22 +252,6 @@ export default async function ThangkaDetailPage({ params }: Props) {
         )}
         </div>
       </div>
-
-      <style>{`
-        .related-img { transition: opacity 0.2s; }
-        .related-img:hover { opacity: 0.85; }
-        @media (max-width: 768px) {
-          .thangka-detail-layout { flex-direction: column !important; gap: 32px !important; }
-          .thangka-detail-image { position: static !important; flex: none !important; width: 100%; }
-          .thangka-detail-info { flex: none !important; width: 100%; }
-          .related-grid { grid-template-columns: repeat(2, 1fr) !important; }
-          .related-thangkas-grid { grid-template-columns: repeat(2, 1fr) !important; }
-        }
-        @media (max-width: 480px) {
-          .related-grid { grid-template-columns: 1fr !important; }
-          .related-thangkas-grid { grid-template-columns: repeat(2, 1fr) !important; }
-        }
-      `}</style>
     </main>
   );
 }

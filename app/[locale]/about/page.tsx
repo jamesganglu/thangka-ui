@@ -16,10 +16,10 @@ interface DetailBlock {
 
 function SectionDivider() {
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", height: "100%", padding: "10px 0" }}>
-      <div style={{ flex: 1, width: "1px", background: "var(--color-light)" }} />
-      <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: "var(--color-text)", margin: "3px 0", flexShrink: 0, outline: "1px solid var(--color-light)", outlineOffset: "3px" }} />
-      <div style={{ flex: 1, width: "1px", background: "var(--color-light)" }} />
+    <div className="section-divider-col">
+      <div className="section-divider-line" />
+      <div className="section-divider-dot" />
+      <div className="section-divider-line" />
     </div>
   );
 }
@@ -70,15 +70,15 @@ export default async function AboutPage({ params }: Props) {
   })();
 
   return (
-    <main style={{ background: "#ffffff" }}>
+    <main className="editorial-main">
       {heroVideoUrl && (
-        <div style={{ position: "relative", width: "100%", height: "50vh", overflow: "hidden" }}>
-          <video autoPlay muted loop playsInline style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}>
+        <div className="editorial-hero-video-wrap">
+          <video autoPlay muted loop playsInline className="editorial-hero-video">
             <source src={heroVideoUrl} />
           </video>
         </div>
       )}
-      <div className="container" style={{ paddingTop: "60px", paddingBottom: "80px" }}>
+      <div className="container editorial-container">
         <h1 className="page-title">
           {title}
         </h1>
@@ -104,7 +104,7 @@ export default async function AboutPage({ params }: Props) {
             );
           })
         ) : (
-          <p style={{ color: "#6F6A63", fontSize: "15px", lineHeight: 1.75 }}>
+          <p className="muted-copy">
             This page will be implemented soon.
           </p>
         )}
