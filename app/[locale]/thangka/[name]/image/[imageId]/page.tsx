@@ -1,7 +1,7 @@
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { getThangkaBySlug, imgUrl } from "@/lib/api";
+import ThangkaZoom from "@/components/ThangkaZoom";
 
 interface Props {
   params: Promise<{ locale: string; name: string; imageId: string }>;
@@ -17,7 +17,9 @@ export default async function ThangkaImagePage({ params }: Props) {
   const img = thangka.relatedImages?.find((i) => i.documentId === imageId);
   if (!img) notFound();
 
-  const src = imgUrl(img.formats?.large?.url ?? img.url);
+  // Use the original upload (not a downsized format) so there is enough
+  // real resolution left to zoom into.
+  const src = imgUrl(img.url);
   const displayName = (locale === "zh" ? thangka.name_zh || thangka.name_en : thangka.name_en) || "";
 
   return (
@@ -29,13 +31,7 @@ export default async function ThangkaImagePage({ params }: Props) {
         ← Back to Detail
       </Link>
       <div className="image-lightbox-frame">
-        <Image
-          src={src}
-          alt={img.alternativeText || displayName}
-          fill
-          sizes="(max-width: 800px) 100vw, 800px"
-          priority
-        />
+        <ThangkaZoom src={src} alt={img.alternativeText || displayName} />
       </div>
     </main>
   );
