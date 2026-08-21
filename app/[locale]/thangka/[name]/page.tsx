@@ -179,6 +179,11 @@ export default async function ThangkaDetailPage({ params }: Props) {
                 </div>
               )}
 
+              {ancestorChain.length > 0 && (
+                <Link href={categoryUrl(ancestorChain, ancestorChain.length - 1)} className="back-link">
+                  {tCollection("back")} {catDisplayName(ancestorChain[ancestorChain.length - 1])}
+                </Link>
+              )}
             </div>
           </div>
 

@@ -32,7 +32,8 @@
     "category": "类别",
     "noSubcategories": "未找到子类别。",
     "noItems": "未找到相关作品。",
-    "explore": "探索 →"
+    "explore": "探索 →",
+    "back": "← 返回"
   },
   "thangka": {
     "era": "年代",

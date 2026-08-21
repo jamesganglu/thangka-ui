@@ -135,8 +135,17 @@ img { display: block; max-width: 100%; height: auto; }
   position: relative;
   width: 100%;
   padding-bottom: 133%;
-  background: #F5F3EF;
   overflow: hidden;
+}
+.back-link {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #A87533;
+  text-decoration: none;
+  display: inline-flex;
+  margin-top: 16px;
 }
 .thangka-hero-image img {
   object-fit: contain;
@@ -877,7 +886,7 @@ img { display: block; max-width: 100%; height: auto; }
   color: #6F6A63;
   font-size: 15px;
   line-height: 1.75;
-  margin: 0;
+  margin: 0 0 2rem;
 }
 
 /* Rich text content */

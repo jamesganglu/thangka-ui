@@ -95,6 +95,9 @@ export default async function CollectionCategoryPage({ params }: Props) {
               </h1>
               <div className="page-title-underline page-title-underline--mb-16" />
               {desc && <p className="cat-hero-desc">{desc}</p>}
+              <Link href="/collection" className="back-link">
+                {t("back")} {t("breadcrumb")}
+              </Link>
             </div>
             <div className="cat-hero-image-fill" style={{ aspectRatio: parentImgRatio }}>
               {parentImgSrc ? <Image src={parentImgSrc} alt={catName(parentCategory)} fill sizes="50vw" /> : <div className="media-placeholder" />}

@@ -32,7 +32,8 @@
     "category": "Category",
     "noSubcategories": "No subcategories found.",
     "noItems": "No items found.",
-    "explore": "Explore →"
+    "explore": "Explore →",
+    "back": "← Back"
   },
   "thangka": {
     "era": "Era",

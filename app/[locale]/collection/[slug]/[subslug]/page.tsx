@@ -121,6 +121,9 @@ export default async function CollectionLevel3Page({ params }: Props) {
               </h1>
               <div className="page-title-underline page-title-underline--mb-16" />
               {desc && <p className="cat-hero-desc">{desc}</p>}
+              <Link href={`/collection/${slug}`} className="back-link">
+                {t("back")} {catName(level1)}
+              </Link>
             </div>
             <div className="cat-hero-image">
               {parentImgSrc ? (

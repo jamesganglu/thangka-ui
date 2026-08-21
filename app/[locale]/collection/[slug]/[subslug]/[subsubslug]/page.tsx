@@ -122,6 +122,9 @@ export default async function CollectionLevel4Page({ params }: Props) {
               </h1>
               <div className="page-title-underline page-title-underline--mb-16" />
               {desc && <p className="cat-hero-desc">{desc}</p>}
+              <Link href={`/collection/${slug}/${subslug}`} className="back-link">
+                {t("back")} {catName(level2)}
+              </Link>
             </div>
             <div className="cat-hero-image-crop">
               {parentImgSrc ? <Image src={parentImgSrc} alt={catName(level3)} fill sizes="50vw" /> : <div className="media-placeholder" />}
