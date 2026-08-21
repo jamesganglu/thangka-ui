@@ -4,6 +4,11 @@ import { useTranslations, useLocale } from "next-intl";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { useState } from "react";
 import Image from "next/image";
+// Side-effect only: starts tracking cursor position as soon as the app
+// shell mounts, so it's already available by the time a user navigates
+// to a page that needs the last known position (e.g. the thangka zoom
+// lightbox, reached via a client-side link click).
+import "@/lib/mousePosition";
 
 const navItems = [
   { path: "/collection", key: "collection" },

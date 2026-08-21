@@ -314,6 +314,13 @@ img { display: block; max-width: 100%; height: auto; }
 }
 .js-image-zoom__zoomed-area {
   border: 2px solid var(--color-accent);
+  /* The library tries to set this via a plain JS property assignment
+     (element.pointerEvents = 'none'), which is a no-op — it never
+     actually reaches the style. Without this, the lens is a real
+     interactive element tracking the cursor with a one-frame lag, so
+     moving the mouse repeatedly crosses its own boundary and fires its
+     own mouseenter/mouseleave, flickering the zoomed overlay on and off. */
+  pointer-events: none;
 }
 .editorial-main {
   background: #ffffff;
