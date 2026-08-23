@@ -1035,6 +1035,10 @@ img { display: block; max-width: 100%; height: auto; }
   background: var(--color-surface);
   border: 1px solid var(--color-accent);
   text-align: left;
+  scroll-margin-top: 100px;
+}
+#intro {
+  scroll-margin-top: 100px;
 }
 .overall > div {
   font-family: 'Cormorant Garamond', serif;
@@ -1057,6 +1061,7 @@ img { display: block; max-width: 100%; height: auto; }
   gap: 48px;
   align-items: stretch;
   direction: ltr;
+  scroll-margin-top: 100px;
 }
 .history-section-grid.reverse {
   direction: rtl;
