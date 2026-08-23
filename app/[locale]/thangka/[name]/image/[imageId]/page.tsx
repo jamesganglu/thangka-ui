@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { getThangkaBySlug, imgUrl } from "@/lib/api";
@@ -5,6 +6,24 @@ import ThangkaZoom from "@/components/ThangkaZoom";
 
 interface Props {
   params: Promise<{ locale: string; name: string; imageId: string }>;
+}
+
+// A zoomable close-up of one image already shown on the parent detail
+// page — no unique content of its own, so keep it out of the index but
+// still let crawlers follow its links (e.g. back to the detail page).
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale, name } = await params;
+
+  let thangka;
+  try { thangka = await getThangkaBySlug(name); } catch { return {}; }
+  if (!thangka) return {};
+
+  const displayName = (locale === "zh" ? thangka.name_zh || thangka.name_en : thangka.name_en) || "";
+
+  return {
+    title: displayName,
+    robots: { index: false, follow: true },
+  };
 }
 
 export default async function ThangkaImagePage({ params }: Props) {

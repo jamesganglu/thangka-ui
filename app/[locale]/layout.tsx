@@ -7,6 +7,7 @@ import { siteUrl } from "@/lib/site";
 import "../globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import JsonLd from "@/components/JsonLd";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -49,6 +50,15 @@ export default async function LocaleLayout({
   return (
     <html lang={locale}>
       <body>
+        <JsonLd
+          data={{
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            name: "Tibetan Thangkas",
+            url: siteUrl,
+            logo: `${siteUrl}/assets/thangkas_logo.png`,
+          }}
+        />
         <NextIntlClientProvider messages={messages}>
           <Header />
           {children}

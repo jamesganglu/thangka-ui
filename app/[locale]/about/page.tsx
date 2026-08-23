@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { getAbout, imgUrl } from "@/lib/api";
+import { getAbout, imgUrl, extractH2 } from "@/lib/api";
 import { siteUrl } from "@/lib/site";
 import RichText from "@/components/RichText";
 
@@ -11,7 +11,7 @@ interface Props {
 interface DetailBlock {
   id: number;
   text: unknown;
-  image?: { url: string; formats?: { medium?: { url: string }; large?: { url: string } } };
+  image?: { url: string; alternativeText?: string | null; formats?: { medium?: { url: string }; large?: { url: string } } };
 }
 
 function SectionDivider() {
@@ -48,6 +48,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       locale: locale === "zh" ? "zh_CN" : "en_US",
       ...(ogImage ? { images: [{ url: ogImage, alt: title }] } : {}),
     },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      ...(ogImage ? { images: [ogImage] } : {}),
+    },
   };
 }
 
@@ -62,6 +67,7 @@ export default async function AboutPage({ params }: Props) {
     key: `detail-${idx + 1}`,
     text: b.text,
     imgSrc: imgUrl(b.image?.formats?.medium?.url ?? b.image?.formats?.large?.url ?? b.image?.url ?? ""),
+    imgAlt: b.image?.alternativeText || extractH2(b.text) || title,
   }));
 
   const heroVideoUrl = (() => {
@@ -94,7 +100,7 @@ export default async function AboutPage({ params }: Props) {
                   <div><SectionDivider /></div>
                   {block.imgSrc ? (
                     <div className="image-text-image">
-                      <Image src={block.imgSrc} alt="" fill sizes="(max-width: 900px) 100vw, 50vw" />
+                      <Image src={block.imgSrc} alt={block.imgAlt} fill sizes="(max-width: 900px) 100vw, 50vw" />
                     </div>
                   ) : (
                     <div className="image-text-placeholder" />

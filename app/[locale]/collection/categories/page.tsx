@@ -1,9 +1,33 @@
+import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { getLevel1Categories, getCategoriesByParentId, CategoryItem } from "@/lib/api";
+import { siteUrl } from "@/lib/site";
+import JsonLd from "@/components/JsonLd";
 
 interface Props {
   params: Promise<{ locale: string }>;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  const title = "All Categories";
+  const description = "Browse the full category tree of Tibetan thangka subjects, from deities and lineage masters to protectors and mandalas.";
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: `${siteUrl}/${locale}/collection/categories`,
+      languages: { en: `${siteUrl}/en/collection/categories`, zh: `${siteUrl}/zh/collection/categories`, "x-default": `${siteUrl}/en/collection/categories` },
+    },
+    openGraph: {
+      title,
+      description,
+      url: `${siteUrl}/${locale}/collection/categories`,
+      locale: locale === "zh" ? "zh_CN" : "en_US",
+    },
+  };
 }
 
 export default async function CategoriesPage({ params }: Props) {
@@ -29,6 +53,16 @@ export default async function CategoriesPage({ params }: Props) {
 
   return (
     <main className="page-main">
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: t("breadcrumb"), item: `${siteUrl}/${locale}/collection` },
+            { "@type": "ListItem", position: 2, name: "Categories", item: `${siteUrl}/${locale}/collection/categories` },
+          ],
+        }}
+      />
       {/* Breadcrumb */}
       <div className="page-breadcrumb-bar">
         <div className="container">

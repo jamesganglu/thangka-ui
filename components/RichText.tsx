@@ -85,8 +85,11 @@ function renderBlock(block: Block, i: number): React.ReactNode {
         </p>
       );
     case "heading": {
-      const level = block.level ?? 2;
-      const Tag = `h${level}` as "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+      // Clamp to h2-h6: RichText only ever renders body content — the
+      // page's own <h1> is set separately — so an editor picking
+      // "Heading 1" in the CMS shouldn't be able to inject a second <h1>.
+      const level = Math.min(6, Math.max(2, block.level ?? 2));
+      const Tag = `h${level}` as "h2" | "h3" | "h4" | "h5" | "h6";
       return (
         <Tag key={i}>
           {block.children?.map((c, j) => renderInline(c as InlineNode, j))}

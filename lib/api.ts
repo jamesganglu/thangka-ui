@@ -108,6 +108,7 @@ export interface CategoryItem {
   name_zh: string;
   order?: number;
   level?: number;
+  updatedAt?: string;
   description_en: unknown;
   description_zh: unknown;
   short_desc_en?: string | null;
@@ -132,6 +133,7 @@ export interface ThangkaItem {
   identify?: string | null;
   name_en: string;
   name_zh: string;
+  updatedAt?: string;
   description_en: unknown;
   description_zh: unknown;
   size?: string | null;

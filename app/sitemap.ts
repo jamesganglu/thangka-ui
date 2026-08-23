@@ -4,10 +4,13 @@ import { siteUrl } from "@/lib/site";
 
 const locales = ["en", "zh"] as const;
 
-function entry(path: string): MetadataRoute.Sitemap[number] {
+function entry(path: string, lastModified?: string): MetadataRoute.Sitemap[number] {
   return {
     url: `${siteUrl}/en${path}`,
-    lastModified: new Date(),
+    // Only claim a real modification date when we actually have one from
+    // the CMS — stamping every static page with `new Date()` on every
+    // build falsely implies they all change constantly.
+    ...(lastModified ? { lastModified: new Date(lastModified) } : {}),
     alternates: {
       languages: {
         en: `${siteUrl}/en${path}`,
@@ -21,7 +24,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const entries: MetadataRoute.Sitemap = [];
 
   // Static pages
-  for (const path of ["", "/collection", "/about", "/contact", "/tibetan-history", "/buddhism"]) {
+  for (const path of ["", "/collection", "/about", "/contact", "/tibetan-history", "/buddhism", "/collection/categories"]) {
     entries.push(entry(path));
   }
 
@@ -31,21 +34,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   for (const cat of level1) {
     const slug = slugify(cat.name_en);
-    entries.push(entry(`/collection/${slug}`));
+    entries.push(entry(`/collection/${slug}`, cat.updatedAt));
 
     let level2: CategoryItem[] = [];
     try { level2 = await getCategoriesByParentId(String(cat.id)); } catch { /* ignore */ }
 
     for (const sub of level2) {
       const subslug = slugify(sub.name_en);
-      entries.push(entry(`/collection/${slug}/${subslug}`));
+      entries.push(entry(`/collection/${slug}/${subslug}`, sub.updatedAt));
 
       let level3: CategoryItem[] = [];
       try { level3 = await getCategoriesByParentId(String(sub.id)); } catch { /* ignore */ }
 
       for (const subsub of level3) {
         const subsubslug = slugify(subsub.name_en);
-        entries.push(entry(`/collection/${slug}/${subslug}/${subsubslug}`));
+        entries.push(entry(`/collection/${slug}/${subslug}/${subsubslug}`, subsub.updatedAt));
       }
     }
   }
@@ -55,7 +58,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try { thangkas = await getTangkas(); } catch { /* CMS unavailable */ }
 
   for (const t of thangkas) {
-    entries.push(entry(`/thangka/${thangkaSlug(t)}`));
+    entries.push(entry(`/thangka/${thangkaSlug(t)}`, t.updatedAt));
   }
 
   return entries;

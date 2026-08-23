@@ -5,6 +5,7 @@ import { Link } from "@/i18n/navigation";
 import { getCategoriesByParentId, getLevel1Categories, imgUrl, toPlainText, slugify, CategoryItem } from "@/lib/api";
 import { siteUrl } from "@/lib/site";
 import { notFound } from "next/navigation";
+import JsonLd from "@/components/JsonLd";
 
 interface Props {
   params: Promise<{ locale: string; slug: string }>;
@@ -39,6 +40,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       url: `${siteUrl}/${locale}/collection/${slug}`,
       locale: locale === "zh" ? "zh_CN" : "en_US",
       ...(ogImage ? { images: [{ url: ogImage, alt: name }] } : {}),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: name,
+      description,
+      ...(ogImage ? { images: [ogImage] } : {}),
     },
   };
 }
@@ -75,6 +82,16 @@ export default async function CollectionCategoryPage({ params }: Props) {
 
   return (
     <main className="page-main">
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: t("breadcrumb"), item: `${siteUrl}/${locale}/collection` },
+            { "@type": "ListItem", position: 2, name: catName(parentCategory), item: `${siteUrl}/${locale}/collection/${slug}` },
+          ],
+        }}
+      />
       <div className="page-breadcrumb-bar">
         <div className="container">
           <nav className="breadcrumb-nav">

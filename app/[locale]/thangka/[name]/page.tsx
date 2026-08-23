@@ -5,6 +5,7 @@ import { Link } from "@/i18n/navigation";
 import { notFound } from "next/navigation";
 import { getThangkaBySlug, getCategoryWithAncestors, getTangkasByCategory, imgUrl, toPlainText, slugify, thangkaSlug, CategoryItem, ThangkaItem } from "@/lib/api";
 import { siteUrl } from "@/lib/site";
+import JsonLd from "@/components/JsonLd";
 
 interface Props {
   params: Promise<{ locale: string; name: string }>;
@@ -66,6 +67,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       alternateLocale: locale === "zh" ? "en_US" : "zh_CN",
       ...(ogImage ? { images: [{ url: ogImage, alt: displayName }] } : {}),
     },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      ...(ogImage ? { images: [ogImage] } : {}),
+    },
   };
 }
 
@@ -111,8 +118,42 @@ export default async function ThangkaDetailPage({ params }: Props) {
     return (locale === "zh" ? cat.name_zh || cat.name_en : cat.name_en) || "";
   }
 
+  const pageUrl = `${siteUrl}/${locale}/thangka/${name}`;
+
   return (
     <main className="page-main">
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: tCollection("breadcrumb"), item: `${siteUrl}/${locale}/collection` },
+            ...ancestorChain.map((cat, i) => ({
+              "@type": "ListItem",
+              position: i + 2,
+              name: catDisplayName(cat),
+              item: `${siteUrl}/${locale}${categoryUrl(ancestorChain, i)}`,
+            })),
+            { "@type": "ListItem", position: ancestorChain.length + 2, name: displayName, item: pageUrl },
+          ],
+        }}
+      />
+      {imgSrc && (
+        <JsonLd
+          data={{
+            "@context": "https://schema.org",
+            "@type": "VisualArtwork",
+            name: displayName,
+            image: imgSrc,
+            description: desc || undefined,
+            url: pageUrl,
+            artform: "Thangka painting",
+            artMedium: thangka.material || undefined,
+            dateCreated: thangka.era || undefined,
+            identifier: thangka.identify || undefined,
+          }}
+        />
+      )}
       {/* Breadcrumb */}
       <div className="page-breadcrumb-bar">
         <div className="container">
@@ -199,7 +240,7 @@ export default async function ThangkaDetailPage({ params }: Props) {
                       <div className="related-img">
                         <Image
                           src={src}
-                          alt={img.alternativeText || ""}
+                          alt={img.alternativeText || `${displayName} — detail view`}
                           fill
                           sizes="(max-width: 640px) 100vw, 25vw"
                         />

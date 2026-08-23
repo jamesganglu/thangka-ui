@@ -5,6 +5,7 @@ import { Link } from "@/i18n/navigation";
 import { getCategoriesByParentId, getTangkasByCategory, getLevel1Categories, imgUrl, toPlainText, slugify, thangkaSlug, CategoryItem, ThangkaItem } from "@/lib/api";
 import { siteUrl } from "@/lib/site";
 import { notFound } from "next/navigation";
+import JsonLd from "@/components/JsonLd";
 
 interface Props {
   params: Promise<{ locale: string; slug: string; subslug: string; subsubslug: string }>;
@@ -60,6 +61,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       locale: locale === "zh" ? "zh_CN" : "en_US",
       ...(ogImage ? { images: [{ url: ogImage, alt: name }] } : {}),
     },
+    twitter: {
+      card: "summary_large_image",
+      title: name,
+      description: description || `Explore ${name} thangka paintings.`,
+      ...(ogImage ? { images: [ogImage] } : {}),
+    },
   };
 }
 
@@ -98,6 +105,18 @@ export default async function CollectionLevel4Page({ params }: Props) {
 
   return (
     <main className="page-main">
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: t("breadcrumb"), item: `${siteUrl}/${locale}/collection` },
+            { "@type": "ListItem", position: 2, name: catName(level1), item: `${siteUrl}/${locale}/collection/${slug}` },
+            { "@type": "ListItem", position: 3, name: catName(level2), item: `${siteUrl}/${locale}/collection/${slug}/${subslug}` },
+            { "@type": "ListItem", position: 4, name: catName(level3), item: `${siteUrl}/${locale}/collection/${slug}/${subslug}/${subsubslug}` },
+          ],
+        }}
+      />
       <div className="page-breadcrumb-bar">
         <div className="container">
           <nav className="breadcrumb-nav">

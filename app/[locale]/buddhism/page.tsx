@@ -1,6 +1,8 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
-import { getBuddhism, imgUrl, extractH2 } from "@/lib/api";
+import { getBuddhism, imgUrl, toPlainText, extractH2 } from "@/lib/api";
+import { siteUrl } from "@/lib/site";
 import RichText from "@/components/RichText";
 import ScrollSpySidebar from "@/components/ScrollSpySidebar";
 
@@ -17,11 +19,46 @@ function SectionDivider() {
 interface DetailBlock {
   id: number;
   text: unknown;
-  image?: { url: string; formats?: { medium?: { url: string }; large?: { url: string } } };
+  image?: { url: string; alternativeText?: string | null; formats?: { medium?: { url: string }; large?: { url: string } } };
 }
 
 interface Props {
   params: Promise<{ locale: string }>;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+
+  let item: Record<string, unknown> = {};
+  try { item = await getBuddhism(locale); } catch { /* ignore */ }
+
+  const title = (item.title as string) || "Buddhism";
+  const description = toPlainText(item.content).slice(0, 160) || "Explore the deities, symbolism, and key themes of Tibetan Buddhism as depicted in thangka art.";
+  const detail = (item.detail as DetailBlock[] | undefined) ?? [];
+  const firstImg = detail.find((b) => b.image)?.image;
+  const ogImage = imgUrl(firstImg?.formats?.large?.url ?? firstImg?.formats?.medium?.url ?? firstImg?.url ?? "");
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: `${siteUrl}/${locale}/buddhism`,
+      languages: { en: `${siteUrl}/en/buddhism`, zh: `${siteUrl}/zh/buddhism`, "x-default": `${siteUrl}/en/buddhism` },
+    },
+    openGraph: {
+      title,
+      description,
+      url: `${siteUrl}/${locale}/buddhism`,
+      locale: locale === "zh" ? "zh_CN" : "en_US",
+      ...(ogImage ? { images: [{ url: ogImage, alt: title }] } : {}),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      ...(ogImage ? { images: [ogImage] } : {}),
+    },
+  };
 }
 
 export default async function BuddhismPage({ params }: Props) {
@@ -30,11 +67,13 @@ export default async function BuddhismPage({ params }: Props) {
   let item: Record<string, unknown> = {};
   try { item = await getBuddhism(locale); } catch { /* CMS not connected */ }
 
+  const pageTitle = (item.title as string) || "Buddhism";
+
   const detailBlocks = (item.detail as DetailBlock[] | undefined) ?? [];
-  const blocks = detailBlocks.map((b, idx) => ({ key: `section-${idx + 1}`, text: b.text, imgSrc: imgUrl(b.image?.formats?.medium?.url ?? b.image?.formats?.large?.url ?? b.image?.url ?? "") }));
+  const blocks = detailBlocks.map((b, idx) => ({ key: `section-${idx + 1}`, text: b.text, imgSrc: imgUrl(b.image?.formats?.medium?.url ?? b.image?.formats?.large?.url ?? b.image?.url ?? ""), imgAlt: b.image?.alternativeText || extractH2(b.text) || pageTitle }));
 
   const themeItems = (item.themes as DetailBlock[] | undefined) ?? [];
-  const themeBlocks = themeItems.map((b, idx) => ({ key: `theme-${idx + 1}`, text: b.text, imgSrc: imgUrl(b.image?.formats?.medium?.url ?? b.image?.formats?.large?.url ?? b.image?.url ?? "") }));
+  const themeBlocks = themeItems.map((b, idx) => ({ key: `theme-${idx + 1}`, text: b.text, imgSrc: imgUrl(b.image?.formats?.medium?.url ?? b.image?.formats?.large?.url ?? b.image?.url ?? ""), imgAlt: b.image?.alternativeText || extractH2(b.text) || pageTitle }));
 
   const heroVideoUrl = (() => {
     const video = item.video as { url?: string } | undefined;
@@ -97,7 +136,7 @@ export default async function BuddhismPage({ params }: Props) {
                     <div><SectionDivider /></div>
                     {block.imgSrc ? (
                       <div className="image-text-image">
-                        <Image src={block.imgSrc} alt="" fill sizes="(max-width: 900px) 100vw, 50vw" />
+                        <Image src={block.imgSrc} alt={block.imgAlt} fill sizes="(max-width: 900px) 100vw, 50vw" />
                       </div>
                     ) : (
                       <div className="image-text-placeholder" />
@@ -133,7 +172,7 @@ export default async function BuddhismPage({ params }: Props) {
                     <div><SectionDivider /></div>
                     {block.imgSrc ? (
                       <div className="image-text-image">
-                        <Image src={block.imgSrc} alt="" fill sizes="(max-width: 900px) 100vw, 50vw" />
+                        <Image src={block.imgSrc} alt={block.imgAlt} fill sizes="(max-width: 900px) 100vw, 50vw" />
                       </div>
                     ) : (
                       <div className="image-text-placeholder" />
