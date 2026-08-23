@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getLevel1Categories, getCategoriesByParentId, getTangkas, slugify, CategoryItem } from "@/lib/api";
+import { getLevel1Categories, getCategoriesByParentId, getTangkas, slugify, thangkaSlug, CategoryItem, ThangkaItem } from "@/lib/api";
 import { siteUrl } from "@/lib/site";
 
 const locales = ["en", "zh"] as const;
@@ -51,11 +51,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   // Individual thangka pages
-  let thangkas: { name_en: string }[] = [];
+  let thangkas: ThangkaItem[] = [];
   try { thangkas = await getTangkas(); } catch { /* CMS unavailable */ }
 
   for (const t of thangkas) {
-    entries.push(entry(`/thangka/${slugify(t.name_en)}`));
+    entries.push(entry(`/thangka/${thangkaSlug(t)}`));
   }
 
   return entries;

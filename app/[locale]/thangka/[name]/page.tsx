@@ -3,7 +3,7 @@ import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { notFound } from "next/navigation";
-import { getThangkaBySlug, getCategoryWithAncestors, getTangkasByCategory, imgUrl, toPlainText, slugify, CategoryItem, ThangkaItem } from "@/lib/api";
+import { getThangkaBySlug, getCategoryWithAncestors, getTangkasByCategory, imgUrl, toPlainText, slugify, thangkaSlug, CategoryItem, ThangkaItem } from "@/lib/api";
 import { siteUrl } from "@/lib/site";
 
 interface Props {
@@ -228,7 +228,7 @@ export default async function ThangkaDetailPage({ params }: Props) {
                 const rtImg = imgUrl(rt.image?.formats?.medium?.url ?? rt.image?.url ?? "");
                 const rtName = (locale === "zh" ? rt.name_zh || rt.name_en : rt.name_en) || "";
                 return (
-                  <Link key={rt.documentId} href={`/thangka/${slugify(rt.name_en)}`} className="link-reset">
+                  <Link key={rt.documentId} href={`/thangka/${thangkaSlug(rt)}`} className="link-reset">
                     <div className="related-img">
                       {rtImg ? (
                         <Image src={rtImg} alt={rtName} fill sizes="25vw" />

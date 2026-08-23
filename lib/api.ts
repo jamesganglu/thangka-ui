@@ -72,9 +72,9 @@ export async function getTangkasByCategory(categoryDocumentId: string) {
 
 export async function getTangkas() {
   const { data } = await apiFetch(
-    "api/thangkas?fields[0]=name_en&fields[1]=description_en&fields[2]=name_zh&fields[3]=description_zh&populate=image&populate=categories"
+    "api/thangkas?fields[0]=name_en&fields[1]=description_en&fields[2]=name_zh&fields[3]=description_zh&fields[4]=identify&populate=image&populate=categories"
   );
-  return data;
+  return data as ThangkaItem[];
 }
 
 export async function getThangkaByDocumentId(documentId: string) {
@@ -93,10 +93,10 @@ export async function getCategoryWithAncestors(documentId: string): Promise<Cate
 
 export async function getThangkaBySlug(slug: string) {
   const { data } = await apiFetch(
-    "api/thangkas?fields[0]=name_en&fields[1]=documentId&pagination[pageSize]=1000"
+    "api/thangkas?fields[0]=name_en&fields[1]=documentId&fields[2]=identify&pagination[pageSize]=1000"
   );
-  const items = data as Pick<ThangkaItem, "id" | "documentId" | "name_en">[];
-  const match = items.find((t) => slugify(t.name_en) === slug);
+  const items = data as Pick<ThangkaItem, "id" | "documentId" | "name_en" | "identify">[];
+  const match = items.find((t) => thangkaSlug(t) === slug);
   if (!match) return null;
   return getThangkaByDocumentId(match.documentId);
 }
@@ -161,6 +161,20 @@ export interface ThangkaItem {
 
 export function slugify(name: string): string {
   return name.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
+}
+
+/**
+ * Thangka names aren't guaranteed unique (e.g. multiple placeholder
+ * entries named "test"), which would make a plain name-based slug
+ * collide and route every colliding link to whichever record happens
+ * to come first. Disambiguate with the record's own catalog `identify`
+ * code (falling back to part of its documentId if that's missing/empty),
+ * so every thangka gets a distinct, stable URL.
+ */
+export function thangkaSlug(t: { name_en: string; identify?: string | null; documentId: string }): string {
+  const base = slugify(t.name_en);
+  const suffix = slugify(t.identify ?? "") || t.documentId.slice(0, 8);
+  return `${base}-${suffix}`;
 }
 
 /** Extract plain text from a field that may be a string or Strapi blocks array. */

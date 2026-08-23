@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import { getCategoriesByParentId, getTangkasByCategory, getLevel1Categories, imgUrl, toPlainText, slugify, CategoryItem, ThangkaItem } from "@/lib/api";
+import { getCategoriesByParentId, getTangkasByCategory, getLevel1Categories, imgUrl, toPlainText, slugify, thangkaSlug, CategoryItem, ThangkaItem } from "@/lib/api";
 import { siteUrl } from "@/lib/site";
 import { notFound } from "next/navigation";
 
@@ -163,7 +163,7 @@ export default async function CollectionLevel3Page({ params }: Props) {
             {thangkas.map((thangka) => {
               const imgSrc = imgUrl(thangka.image?.formats?.medium?.url ?? thangka.image?.url ?? "");
               return (
-                <Link key={thangka.documentId ?? thangka.id} href={`/thangka/${slugify(thangka.name_en)}`} className="link-reset">
+                <Link key={thangka.documentId ?? thangka.id} href={`/thangka/${thangkaSlug(thangka)}`} className="link-reset">
                   <div className="cat-card thangka-card">
                     <div className="cat-card-thumb cat-card-thumb--tall">
                       {imgSrc ? <Image src={imgSrc} alt={thangkaName(thangka)} fill sizes="(max-width: 640px) 100vw, 33vw" /> : <div className="media-placeholder" />}
