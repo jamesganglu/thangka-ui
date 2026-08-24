@@ -38,6 +38,7 @@
   "thangka": {
     "era": "Era",
     "size": "Size",
+    "material": "Material",
     "category": "Category",
     "subject": "Sub Category",
     "identify": "Identify",

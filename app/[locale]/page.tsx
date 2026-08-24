@@ -69,7 +69,7 @@ export default async function HomePage({ params }: Props) {
   const deitiesImage = item.deitiesImage as { formats?: { medium?: { url?: string } }; url?: string } | undefined;
   const deitiesImageUrl = imgUrl(deitiesImage?.formats?.medium?.url ?? deitiesImage?.url ?? "");
 
-  const storyImage = item.storyImage as { formats?: { medium?: { url?: string } }; url?: string } | undefined;
+  const storyImage = item.storyImage as { formats?: { medium?: { url?: string } }; url?: string; width?: number; height?: number } | undefined;
   const storyImageUrl = imgUrl(storyImage?.formats?.medium?.url ?? storyImage?.url ?? "");
 
   const historyTextKey = locale === "zh" ? "historyText_zh" : "historyText";
@@ -184,7 +184,18 @@ export default async function HomePage({ params }: Props) {
               </Link>
             </div>
             <div className="home-media">
-              {storyImageUrl ? <Image src={storyImageUrl} alt="Our Story" fill sizes="(max-width: 640px) 100vw, 60vw" /> : <div className="media-placeholder" />}
+              {storyImageUrl ? (
+                <Image
+                  src={storyImageUrl}
+                  alt="Our Story"
+                  width={storyImage?.width || 800}
+                  height={storyImage?.height || 600}
+                  sizes="(max-width: 640px) 100vw, 60vw"
+                  className="home-media-img"
+                />
+              ) : (
+                <div className="media-placeholder" />
+              )}
             </div>
           </div>
         </div>

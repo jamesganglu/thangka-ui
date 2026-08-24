@@ -38,6 +38,7 @@
   "thangka": {
     "era": "年代",
     "size": "尺寸",
+    "material": "材质",
     "category": "类别",
     "subject": "子类别",
     "identify": "编号",

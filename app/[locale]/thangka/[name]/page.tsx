@@ -158,7 +158,7 @@ export default async function ThangkaDetailPage({ params }: Props) {
       <div className="page-breadcrumb-bar">
         <div className="container">
           <nav className="thangka-breadcrumb">
-            <Link href="/collection" className="breadcrumb-mid">
+            <Link href="/collection" className="breadcrumb-link">
               {tCollection("breadcrumb")}
             </Link>
 
@@ -210,6 +210,12 @@ export default async function ThangkaDetailPage({ params }: Props) {
                 )}
                 {thangka.size && (
                   <MetaRow label={t("size")} value={thangka.size} />
+                )}
+                {thangka.material && (
+                  <MetaRow label={t("material")} value={thangka.material} />
+                )}
+                {thangka.era && (
+                  <MetaRow label={t("era")} value={thangka.era} />
                 )}
               </div>
 
