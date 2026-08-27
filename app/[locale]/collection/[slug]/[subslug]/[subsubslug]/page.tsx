@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import { getCategoriesByParentId, getTangkasByCategory, getLevel1Categories, imgUrl, toPlainText, slugify, thangkaSlug, CategoryItem, ThangkaItem } from "@/lib/api";
+import { getCategoriesByParentId, getTangkasByCategory, getLevel1Categories, imgUrl, toPlainText, slugify, CategoryItem, ThangkaItem } from "@/lib/api";
 import { siteUrl } from "@/lib/site";
 import { notFound } from "next/navigation";
 import JsonLd from "@/components/JsonLd";
+import ThangkaCarousel from "@/components/ThangkaCarousel";
 
 interface Props {
   params: Promise<{ locale: string; slug: string; subslug: string; subsubslug: string }>;
@@ -95,9 +96,6 @@ export default async function CollectionLevel4Page({ params }: Props) {
   function cardDesc(cat: CategoryItem) {
     return (locale === "zh" ? cat.short_desc_zh || cat.short_desc_en : cat.short_desc_en) || "";
   }
-  function thangkaName(t: ThangkaItem) {
-    return (locale === "zh" ? t.name_zh || t.name_en : t.name_en) || "";
-  }
 
   const desc = catDesc(level3);
   const parentImg = level3.image?.[0];
@@ -173,24 +171,7 @@ export default async function CollectionLevel4Page({ params }: Props) {
             })}
           </div>
         ) : thangkas.length > 0 ? (
-          <div className="thangka-grid">
-            {thangkas.map((thangka) => {
-              const imgSrc = imgUrl(thangka.image?.formats?.medium?.url ?? thangka.image?.url ?? "");
-              return (
-                <Link key={thangka.documentId ?? thangka.id} href={`/thangka/${thangkaSlug(thangka)}`} className="link-reset">
-                  <div className="cat-card thangka-card">
-                    <div className="cat-card-thumb cat-card-thumb--tall">
-                      {imgSrc ? <Image src={imgSrc} alt={thangkaName(thangka)} fill sizes="(max-width: 640px) 100vw, 33vw" /> : <div className="media-placeholder" />}
-                    </div>
-                    <div className="thangka-card-body">
-                      <h3 className="cat-card-title">{thangkaName(thangka)}</h3>
-                      {(thangka.size || thangka.era) && <p className="thangka-card-meta">{[thangka.size, thangka.era].filter(Boolean).join(" · ")}</p>}
-                    </div>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
+          <ThangkaCarousel thangkas={thangkas} locale={locale} />
         ) : (
           <p className="muted-copy">{t("noItems")}</p>
         )}

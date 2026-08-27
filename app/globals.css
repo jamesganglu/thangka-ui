@@ -155,8 +155,10 @@ img { display: block; max-width: 100%; height: auto; }
   padding-top: 8px;
 }
 .thangka-identify {
-  font-size: clamp(28px, 3vw, 38px);
   margin-bottom: 16px;
+}
+.eyebrow.thangka-identify {
+  font-size: 1em;
 }
 .thangka-meta-rows {
   margin-bottom: 28px;
@@ -1267,6 +1269,13 @@ img { display: block; max-width: 100%; height: auto; }
   flex: 0 0 calc(20% - 20px);
   scroll-snap-align: start;
   min-width: 180px;
+}
+.thangka-carousel .cat-card-link {
+  flex: 0 0 calc(25% - 18px);
+}
+.thangka-card-identify {
+  font-size: 12px;
+  margin-bottom: 4px;
 }
 .cat-card {
   border: 1px solid var(--color-accent);
