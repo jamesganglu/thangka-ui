@@ -21,13 +21,30 @@ export default function ScrollSpySidebar({
   const [activeId, setActiveId] = useState(leaves[0]?.id ?? "");
 
   useEffect(() => {
+    const intersecting = new Set<string>();
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            setActiveId(entry.target.id);
+            intersecting.add(entry.target.id);
+          } else {
+            intersecting.delete(entry.target.id);
           }
         });
+
+        // A single scroll can flip multiple adjacent sections' intersection
+        // state in the same batch; entry order within that batch isn't
+        // guaranteed to match document order. Deterministically pick the
+        // last (bottom-most) leaf that's currently intersecting so we don't
+        // end up highlighting whichever entry happened to be processed last.
+        for (let i = leaves.length - 1; i >= 0; i--) {
+          const id = leaves[i].id;
+          if (id && intersecting.has(id)) {
+            setActiveId(id);
+            break;
+          }
+        }
       },
       { rootMargin: "-10% 0px -80% 0px", threshold: 0 }
     );
