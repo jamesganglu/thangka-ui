@@ -656,6 +656,7 @@ main {
   flex-shrink: 0;
   position: sticky;
   top: 120px;
+  bottom: 20px;
   align-self: flex-start;
   border: 1px solid var(--color-accent);
 }
