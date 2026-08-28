@@ -1086,6 +1086,16 @@ main {
 .image-text-image img {
   object-fit: contain;
 }
+.image-text-image--natural {
+  position: static;
+  overflow: visible;
+  min-height: 0;
+  align-self: start;
+}
+.image-text-image-el {
+  width: 100% !important;
+  height: auto !important;
+}
 .image-text-placeholder {
   background: #ECDFD0;
   height: 100%;

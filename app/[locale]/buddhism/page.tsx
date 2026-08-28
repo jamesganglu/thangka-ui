@@ -19,7 +19,7 @@ function SectionDivider() {
 interface DetailBlock {
   id: number;
   text: unknown;
-  image?: { url: string; alternativeText?: string | null; formats?: { medium?: { url: string }; large?: { url: string } } };
+  image?: { url: string; alternativeText?: string | null; width?: number; height?: number; formats?: { medium?: { url: string }; large?: { url: string } } };
 }
 
 interface Props {
@@ -70,10 +70,10 @@ export default async function BuddhismPage({ params }: Props) {
   const pageTitle = (item.title as string) || "Buddhism";
 
   const detailBlocks = (item.detail as DetailBlock[] | undefined) ?? [];
-  const blocks = detailBlocks.map((b, idx) => ({ key: `section-${idx + 1}`, text: b.text, imgSrc: imgUrl(b.image?.formats?.medium?.url ?? b.image?.formats?.large?.url ?? b.image?.url ?? ""), imgAlt: b.image?.alternativeText || extractH2(b.text) || pageTitle }));
+  const blocks = detailBlocks.map((b, idx) => ({ key: `section-${idx + 1}`, text: b.text, imgSrc: imgUrl(b.image?.formats?.medium?.url ?? b.image?.formats?.large?.url ?? b.image?.url ?? ""), imgAlt: b.image?.alternativeText || extractH2(b.text) || pageTitle, imgWidth: b.image?.width || 800, imgHeight: b.image?.height || 600 }));
 
   const themeItems = (item.themes as DetailBlock[] | undefined) ?? [];
-  const themeBlocks = themeItems.map((b, idx) => ({ key: `theme-${idx + 1}`, text: b.text, imgSrc: imgUrl(b.image?.formats?.medium?.url ?? b.image?.formats?.large?.url ?? b.image?.url ?? ""), imgAlt: b.image?.alternativeText || extractH2(b.text) || pageTitle }));
+  const themeBlocks = themeItems.map((b, idx) => ({ key: `theme-${idx + 1}`, text: b.text, imgSrc: imgUrl(b.image?.formats?.medium?.url ?? b.image?.formats?.large?.url ?? b.image?.url ?? ""), imgAlt: b.image?.alternativeText || extractH2(b.text) || pageTitle, imgWidth: b.image?.width || 800, imgHeight: b.image?.height || 600 }));
 
   const heroVideoUrl = (() => {
     const video = item.video as { url?: string } | undefined;
@@ -135,8 +135,15 @@ export default async function BuddhismPage({ params }: Props) {
                     <div><RichText content={block.text} /></div>
                     <div><SectionDivider /></div>
                     {block.imgSrc ? (
-                      <div className="image-text-image">
-                        <Image src={block.imgSrc} alt={block.imgAlt} fill sizes="(max-width: 900px) 100vw, 50vw" />
+                      <div className="image-text-image image-text-image--natural">
+                        <Image
+                          src={block.imgSrc}
+                          alt={block.imgAlt}
+                          width={block.imgWidth}
+                          height={block.imgHeight}
+                          sizes="(max-width: 900px) 100vw, 50vw"
+                          className="image-text-image-el"
+                        />
                       </div>
                     ) : (
                       <div className="image-text-placeholder" />
@@ -171,8 +178,15 @@ export default async function BuddhismPage({ params }: Props) {
                     <div><RichText content={block.text} /></div>
                     <div><SectionDivider /></div>
                     {block.imgSrc ? (
-                      <div className="image-text-image">
-                        <Image src={block.imgSrc} alt={block.imgAlt} fill sizes="(max-width: 900px) 100vw, 50vw" />
+                      <div className="image-text-image image-text-image--natural">
+                        <Image
+                          src={block.imgSrc}
+                          alt={block.imgAlt}
+                          width={block.imgWidth}
+                          height={block.imgHeight}
+                          sizes="(max-width: 900px) 100vw, 50vw"
+                          className="image-text-image-el"
+                        />
                       </div>
                     ) : (
                       <div className="image-text-placeholder" />

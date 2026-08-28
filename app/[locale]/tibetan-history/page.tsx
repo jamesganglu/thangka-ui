@@ -19,7 +19,7 @@ function SectionDivider() {
 interface HistoryBlock {
   id: number;
   text: unknown;
-  image?: { url: string; alternativeText?: string | null; formats?: { medium?: { url: string }; large?: { url: string } } };
+  image?: { url: string; alternativeText?: string | null; width?: number; height?: number; formats?: { medium?: { url: string }; large?: { url: string } } };
 }
 
 interface Props {
@@ -71,8 +71,8 @@ export default async function TibetanHistoryPage({ params }: Props) {
 
   const historyBlocks = (item.history as HistoryBlock[] | undefined) ?? [];
   const eventBlocks = (item.event as HistoryBlock[] | undefined) ?? [];
-  const historyMapped = historyBlocks.map((b, idx) => ({ key: `history-${idx + 1}`, text: b.text, imgSrc: imgUrl(b.image?.formats?.medium?.url ?? b.image?.formats?.large?.url ?? b.image?.url ?? ""), imgAlt: b.image?.alternativeText || extractH2(b.text) || pageTitle }));
-  const eventMapped = eventBlocks.map((b, idx) => ({ key: `event-${idx + 1}`, text: b.text, imgSrc: imgUrl(b.image?.formats?.medium?.url ?? b.image?.formats?.large?.url ?? b.image?.url ?? ""), imgAlt: b.image?.alternativeText || extractH2(b.text) || pageTitle }));
+  const historyMapped = historyBlocks.map((b, idx) => ({ key: `history-${idx + 1}`, text: b.text, imgSrc: imgUrl(b.image?.formats?.medium?.url ?? b.image?.formats?.large?.url ?? b.image?.url ?? ""), imgAlt: b.image?.alternativeText || extractH2(b.text) || pageTitle, imgWidth: b.image?.width || 800, imgHeight: b.image?.height || 600 }));
+  const eventMapped = eventBlocks.map((b, idx) => ({ key: `event-${idx + 1}`, text: b.text, imgSrc: imgUrl(b.image?.formats?.medium?.url ?? b.image?.formats?.large?.url ?? b.image?.url ?? ""), imgAlt: b.image?.alternativeText || extractH2(b.text) || pageTitle, imgWidth: b.image?.width || 800, imgHeight: b.image?.height || 600 }));
 
   interface SidebarSection { id?: string; label: string; children?: SidebarSection[] }
   const sections: SidebarSection[] = [];
@@ -133,8 +133,15 @@ export default async function TibetanHistoryPage({ params }: Props) {
                     <div><RichText content={block.text} /></div>
                     <div><SectionDivider /></div>
                     {block.imgSrc ? (
-                      <div className="image-text-image">
-                        <Image src={block.imgSrc} alt={block.imgAlt} fill sizes="(max-width: 900px) 100vw, 50vw" />
+                      <div className="image-text-image image-text-image--natural">
+                        <Image
+                          src={block.imgSrc}
+                          alt={block.imgAlt}
+                          width={block.imgWidth}
+                          height={block.imgHeight}
+                          sizes="(max-width: 900px) 100vw, 50vw"
+                          className="image-text-image-el"
+                        />
                       </div>
                     ) : (
                       <div className="image-text-placeholder" />
@@ -162,8 +169,15 @@ export default async function TibetanHistoryPage({ params }: Props) {
                     <div><RichText content={block.text} /></div>
                     <div><SectionDivider /></div>
                     {block.imgSrc ? (
-                      <div className="image-text-image">
-                        <Image src={block.imgSrc} alt={block.imgAlt} fill sizes="(max-width: 900px) 100vw, 50vw" />
+                      <div className="image-text-image image-text-image--natural">
+                        <Image
+                          src={block.imgSrc}
+                          alt={block.imgAlt}
+                          width={block.imgWidth}
+                          height={block.imgHeight}
+                          sizes="(max-width: 900px) 100vw, 50vw"
+                          className="image-text-image-el"
+                        />
                       </div>
                     ) : (
                       <div className="image-text-placeholder" />
