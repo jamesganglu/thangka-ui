@@ -1,16 +1,16 @@
 {
   "nav": {
     "home": "首页",
-    "collection": "藏品",
+    "collection": "收藏",
     "categories": "类别",
-    "about": "我们的故事",
-    "tibetanHistory": "西藏历史",
-    "buddhism": "藏传佛教",
-    "contact": "联系我们"
+    "about": "我們的故事",
+    "tibetanHistory": "歷史",
+    "buddhism": "藏傳佛教",
+    "contact": "聯繫"
   },
   "footer": {
     "navigation": "导航",
-    "followUs": "联系我们",
+    "followUs": "聯繫",
     "copyright": "藏地唐卡. 版权所有."
   },
   "home": {

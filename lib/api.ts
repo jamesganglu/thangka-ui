@@ -16,8 +16,9 @@ async function apiFetch(path: string) {
   return res.json();
 }
 
-export async function getHomepage() {
-  const { data } = await apiFetch("api/homepage?populate=*");
+export async function getHomepage(locale?: string) {
+  const localeParam = locale === "zh" ? "&locale=zh" : "";
+  const { data } = await apiFetch(`api/homepage?populate=*${localeParam}`);
   return data;
 }
 
