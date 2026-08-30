@@ -52,8 +52,9 @@ export async function getLevel1Categories() {
   return data as CategoryItem[];
 }
 
-export async function getCollection() {
-  const { data } = await apiFetch("api/collection");
+export async function getCollection(locale?: string) {
+  const localeParam = locale === "zh" ? "?locale=zh" : "";
+  const { data } = await apiFetch(`api/collection${localeParam}`);
   return data;
 }
 

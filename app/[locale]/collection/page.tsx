@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
 
   let collection: Record<string, unknown> = {};
-  try { collection = await getCollection(); } catch { /* ignore */ }
+  try { collection = await getCollection(locale); } catch { /* ignore */ }
 
   const title = (collection.title as string) || "Collection";
   const description = (toPlainText(collection.content).slice(0, 160)) || "Browse our curated collection of authentic Tibetan thangka paintings.";
@@ -42,7 +42,7 @@ export default async function CollectionPage({ params }: Props) {
   let collection: Record<string, unknown> = {};
   let categories: CategoryItem[] = [];
 
-  try { collection = await getCollection(); } catch { /* CMS not connected */ }
+  try { collection = await getCollection(locale); } catch { /* CMS not connected */ }
   try { categories = await getLevel1Categories(); } catch { /* CMS not connected */ }
 
   const title = (collection.title as string) || t("pageTitle");
