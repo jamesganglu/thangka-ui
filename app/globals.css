@@ -445,7 +445,7 @@ main {
   object-fit: contain;
 }
 .header-logo-text {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Cormorant Garamond', 'Times New Roman', Georgia, serif;
   font-weight: 600;
   font-size: 18px;
   letter-spacing: 0.1em;
