@@ -902,10 +902,10 @@ main {
   line-height: 1.75;
 }
 .cat-hero-desc {
-  color: #6F6A63;
-  font-size: 15px;
-  line-height: 1.75;
   margin: 0 0 2rem;
+}
+.cat-hero-desc .rich-text p:last-child {
+  margin-bottom: 0;
 }
 
 /* Rich text content */

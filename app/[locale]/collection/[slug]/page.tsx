@@ -6,6 +6,7 @@ import { getCategoriesByParentId, getLevel1Categories, imgUrl, toPlainText, slug
 import { siteUrl } from "@/lib/site";
 import { notFound } from "next/navigation";
 import JsonLd from "@/components/JsonLd";
+import RichText from "@/components/RichText";
 
 interface Props {
   params: Promise<{ locale: string; slug: string }>;
@@ -75,7 +76,8 @@ export default async function CollectionCategoryPage({ params }: Props) {
     return (locale === "zh" ? cat.short_desc_zh || cat.short_desc_en : cat.short_desc_en) || "";
   }
 
-  const desc = toPlainText(locale === "zh" ? parentCategory.description_zh || parentCategory.description_en : parentCategory.description_en);
+  const descContent = locale === "zh" ? parentCategory.description_zh || parentCategory.description_en : parentCategory.description_en;
+  const desc = Array.isArray(descContent) && descContent.length > 0 ? descContent : null;
   const parentImg = parentCategory.image?.[0];
   const parentImgSrc = imgUrl(parentImg?.formats?.medium?.url ?? parentImg?.url ?? "");
   const parentImgRatio = parentImg?.width && parentImg?.height ? `${parentImg.width}/${parentImg.height}` : "4/3";
@@ -111,7 +113,7 @@ export default async function CollectionCategoryPage({ params }: Props) {
                 {catName(parentCategory)}
               </h1>
               <div className="page-title-underline page-title-underline--mb-16" />
-              {desc && <p className="cat-hero-desc">{desc}</p>}
+              {desc && <div className="cat-hero-desc"><RichText content={desc} /></div>}
               <Link href="/collection" className="back-link">
                 {t("back")} {t("breadcrumb")}
               </Link>

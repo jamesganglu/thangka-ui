@@ -6,6 +6,7 @@ import { getCategoriesByParentId, getTangkasByCategory, getLevel1Categories, img
 import { siteUrl } from "@/lib/site";
 import { notFound } from "next/navigation";
 import JsonLd from "@/components/JsonLd";
+import RichText from "@/components/RichText";
 import ThangkaCarousel from "@/components/ThangkaCarousel";
 
 interface Props {
@@ -91,7 +92,8 @@ export default async function CollectionLevel4Page({ params }: Props) {
     return (locale === "zh" ? cat.name_zh || cat.name_en : cat.name_en) || "";
   }
   function catDesc(cat: CategoryItem) {
-    return toPlainText(locale === "zh" ? cat.description_zh || cat.description_en : cat.description_en);
+    const content = locale === "zh" ? cat.description_zh || cat.description_en : cat.description_en;
+    return Array.isArray(content) && content.length > 0 ? content : null;
   }
   function cardDesc(cat: CategoryItem) {
     return (locale === "zh" ? cat.short_desc_zh || cat.short_desc_en : cat.short_desc_en) || "";
@@ -138,7 +140,7 @@ export default async function CollectionLevel4Page({ params }: Props) {
                 {catName(level3)}
               </h1>
               <div className="page-title-underline page-title-underline--mb-16" />
-              {desc && <p className="cat-hero-desc">{desc}</p>}
+              {desc && <div className="cat-hero-desc"><RichText content={desc} /></div>}
               <Link href={`/collection/${slug}/${subslug}`} className="back-link">
                 {t("back")} {catName(level2)}
               </Link>
