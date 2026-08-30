@@ -25,11 +25,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function ContactPage({ params }: Props) {
-  await params;
+  const { locale } = await params;
   const t = await getTranslations("contact");
 
   let item: Record<string, unknown> = {};
-  try { item = await getContact(); } catch { /* CMS not connected */ }
+  try { item = await getContact(locale); } catch { /* CMS not connected */ }
 
   const email = (item.email as string) || "inquiry@tibetanthangkas.com";
   const address = toPlainText(item.mailAddress) || "123 E 7th Avenue, Suite 1206\nNew York, NY 10031\nUnited States";

@@ -28,8 +28,9 @@ export async function getHistory(locale?: string) {
   return data;
 }
 
-export async function getContact() {
-  const { data } = await apiFetch("api/contact");
+export async function getContact(locale?: string) {
+  const localeParam = locale === "zh" ? "?locale=zh" : "";
+  const { data } = await apiFetch(`api/contact${localeParam}`);
   return data;
 }
 
