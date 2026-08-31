@@ -787,10 +787,11 @@ main {
   position: relative;
   flex: 1 1 0;
   width: 100%;
+  align-self: flex-start;
   overflow: hidden;
 }
 .cat-hero-image-fill img {
-  object-fit: cover;
+  object-fit: contain;
 }
 
 /* Home page */
@@ -1410,13 +1411,14 @@ main {
   .cat-card-link { flex: 0 0 calc(50% - 12px); }
   .cat-hero { flex-direction: column; }
   .cat-hero > div:last-child { width: 100%; }
+  .cat-hero-image-fill { flex: none; width: 100%; }
   .cat-hero-image-crop { aspect-ratio: 4 / 3; }
   .footer-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 768px) {
   .thangka-detail-layout { flex-direction: column; gap: 32px; }
-  .thangka-detail-image { position: static; flex: none; width: 100%; }
-  .thangka-detail-info { flex: none; width: 100%; }
+  .thangka-detail-image { position: static; flex: none; width: 100%; order: 2; }
+  .thangka-detail-info { flex: none; width: 100%; order: 1; }
   .related-grid { grid-template-columns: repeat(2, 1fr); }
   .related-thangkas-grid { grid-template-columns: repeat(2, 1fr); }
 }
