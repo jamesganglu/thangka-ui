@@ -865,30 +865,10 @@ main {
   display: inline-flex;
 }
 .home-media {
-  position: relative;
-  overflow: hidden;
-}
-.home-media img {
-  object-fit: cover;
-}
-#tibetan-history .home-media {
-  width: 100%;
-  height: 100%;
-  aspect-ratio: 4 / 3;
-  background: none;
-}
-#tibetan-history .home-media img {
-  object-fit: contain;
-}
-#buddhism .home-media {
-  aspect-ratio: 3 / 4;
-}
-#our-story .home-media {
   position: static;
   overflow: visible;
-  background: none;
 }
-#our-story .home-media-img {
+.home-media-img {
   width: 100% !important;
   height: auto !important;
 }

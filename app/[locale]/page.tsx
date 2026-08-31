@@ -61,10 +61,10 @@ export default async function HomePage({ params }: Props) {
   const heroTitle = heroBlocks.find((b) => b.type === "heading")?.children.map((c) => c.text).join("") || t("heroTitle");
   const heroSubtext = heroBlocks.filter((b) => b.type === "paragraph").map((b) => b.children.map((c) => c.text).join("")).join("\n") || t("heroSubtext");
 
-  const historyImage = item.historyImage as { formats?: { medium?: { url?: string } }; url?: string } | undefined;
+  const historyImage = item.historyImage as { formats?: { medium?: { url?: string } }; url?: string; width?: number; height?: number } | undefined;
   const historyImageUrl = imgUrl(historyImage?.formats?.medium?.url ?? historyImage?.url ?? "");
 
-  const deitiesImage = item.deitiesImage as { formats?: { medium?: { url?: string } }; url?: string } | undefined;
+  const deitiesImage = item.deitiesImage as { formats?: { medium?: { url?: string } }; url?: string; width?: number; height?: number } | undefined;
   const deitiesImageUrl = imgUrl(deitiesImage?.formats?.medium?.url ?? deitiesImage?.url ?? "");
 
   const storyImage = item.storyImage as { formats?: { medium?: { url?: string } }; url?: string; width?: number; height?: number } | undefined;
@@ -116,7 +116,18 @@ export default async function HomePage({ params }: Props) {
               </Link>
             </div>
             <div className="home-media">
-              {historyImageUrl ? <Image src={historyImageUrl} alt="Tibetan History" fill sizes="(max-width: 640px) 100vw, 60vw" /> : <div className="media-placeholder" />}
+              {historyImageUrl ? (
+                <Image
+                  src={historyImageUrl}
+                  alt="Tibetan History"
+                  width={historyImage?.width || 800}
+                  height={historyImage?.height || 600}
+                  sizes="(max-width: 640px) 100vw, 60vw"
+                  className="home-media-img"
+                />
+              ) : (
+                <div className="media-placeholder" />
+              )}
             </div>
           </div>
         </div>
@@ -127,7 +138,18 @@ export default async function HomePage({ params }: Props) {
         <div className="container">
           <div className="two-col-grid two-col-reversed">
             <div className="home-media">
-              {deitiesImageUrl ? <Image src={deitiesImageUrl} alt="Main Deities" fill sizes="(max-width: 640px) 100vw, 40vw" /> : <div className="media-placeholder" />}
+              {deitiesImageUrl ? (
+                <Image
+                  src={deitiesImageUrl}
+                  alt="Main Deities"
+                  width={deitiesImage?.width || 800}
+                  height={deitiesImage?.height || 600}
+                  sizes="(max-width: 640px) 100vw, 40vw"
+                  className="home-media-img"
+                />
+              ) : (
+                <div className="media-placeholder" />
+              )}
             </div>
             <div>
               <div className="home-text-block">
