@@ -31,6 +31,7 @@ export default async function ContactPage({ params }: Props) {
   let item: Record<string, unknown> = {};
   try { item = await getContact(locale); } catch { /* CMS not connected */ }
 
+  const title = (item.title as string) || t("title");
   const email = (item.email as string) || "inquiry@tibetanthangkas.com";
   const address = toPlainText(item.mailAddress) || "123 E 7th Avenue, Suite 1206\nNew York, NY 10031\nUnited States";
   const phone = (item.phone as string) || "+1 (212) 555-0708";
@@ -41,7 +42,7 @@ export default async function ContactPage({ params }: Props) {
       <section className="section">
         <div className="container">
           <div>
-            <h1 className="page-title">{t("title")}</h1>
+            <h1 className="page-title">{title}</h1>
             {intro && <p className="contact-intro">{intro}</p>}
 
             <ContactDetail icon={<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="2" y="4" width="20" height="16" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" /></svg>} label={t("email")} value={email} href={`mailto:${email}`} />
