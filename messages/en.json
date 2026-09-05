@@ -42,7 +42,10 @@
     "category": "Category",
     "subject": "Sub Category",
     "identify": "Identify",
-    "backToCollection": "← Back to Collection"
+    "backToCollection": "← Back to Collection",
+    "relatedThangkas": "Related Thangkas",
+    "viewAll": "View All",
+    "details": "Details"
   },
   "contact": {
     "title": "Get in Touch",

@@ -237,7 +237,7 @@ export default async function ThangkaDetailPage({ params }: Props) {
           {/* Related images grid */}
           {!!thangka.relatedImages?.length && (
             <div id="related-images" className="related-images-block">
-              <span className="eyebrow thangka-block-eyebrow">Details</span>
+              <span className="eyebrow thangka-block-eyebrow">{t("details")}</span>
               <div className="related-grid">
                 {thangka.relatedImages.map((img) => {
                   const src = imgUrl(img.formats?.medium?.url ?? img.formats?.large?.url ?? img.url);
@@ -262,11 +262,11 @@ export default async function ThangkaDetailPage({ params }: Props) {
           <div id="related-thangkas" className="related-thangkas-block">
             <div className="related-thangkas-header">
               <h2 className="related-thangkas-title">
-                Related Thangkas
+                {t("relatedThangkas")}
               </h2>
               {ancestorChain.length > 0 && (
                 <Link href={categoryUrl(ancestorChain, ancestorChain.length - 1)} className="view-all-link">
-                  View All
+                  {t("viewAll")}
                 </Link>
               )}
             </div>

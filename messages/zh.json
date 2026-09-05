@@ -42,7 +42,10 @@
     "category": "类别",
     "subject": "子类别",
     "identify": "编号",
-    "backToCollection": "← 返回藏品"
+    "backToCollection": "← 返回藏品",
+    "relatedThangkas": "相關唐卡",
+    "viewAll": "查看全部",
+    "details": "細節"
   },
   "contact": {
     "title": "联系我们",
