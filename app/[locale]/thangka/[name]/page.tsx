@@ -288,12 +288,12 @@ export default async function ThangkaDetailPage({ params }: Props) {
                     </p>
                     {rt.size && (
                       <p className="related-thangka-spec">
-                        <span className="related-thangka-spec-label">Size</span> {rt.size}
+                        <span className="related-thangka-spec-label">{t("size")}</span> {rt.size}
                       </p>
                     )}
                     {rt.material && (
                       <p className="related-thangka-spec">
-                        <span className="related-thangka-spec-label">Material</span> {rt.material}
+                        <span className="related-thangka-spec-label">{t("material")}</span> {rt.material}
                       </p>
                     )}
                   </Link>
