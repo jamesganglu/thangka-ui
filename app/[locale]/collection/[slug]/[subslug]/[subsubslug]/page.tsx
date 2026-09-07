@@ -86,6 +86,9 @@ export default async function CollectionLevel4Page({ params }: Props) {
   try { subcategories = await getCategoriesByParentId(String(level3.id)); } catch { /* no subcategories */ }
   if (subcategories.length === 0) {
     try { thangkas = await getTangkasByCategory(level3.documentId); } catch { /* CMS not connected */ }
+    thangkas = [...thangkas].sort((a, b) =>
+      (a.identify ?? "").localeCompare(b.identify ?? "", undefined, { numeric: true, sensitivity: "base" })
+    );
   }
 
   function catName(cat: CategoryItem) {
