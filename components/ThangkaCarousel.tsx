@@ -70,7 +70,9 @@ export default function ThangkaCarousel({
         {items.map((thangka, idx) => {
           const imgSrc = imgUrl(thangka.image?.formats?.medium?.url ?? thangka.image?.url ?? "");
           const name = thangkaName(thangka);
-          const meta = [thangka.size, thangka.material, thangka.era].filter(Boolean).join(" · ");
+          const material = (locale === "zh" ? thangka.material_zh || thangka.material : thangka.material) || "";
+          const era = (locale === "zh" ? thangka.era_zh || thangka.era : thangka.era) || "";
+          const meta = [thangka.size, material, era].filter(Boolean).join(" · ");
 
           return (
             <Link
