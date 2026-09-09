@@ -94,13 +94,37 @@ export default async function ThangkaDetailPage({ params }: Props) {
     } catch { /* ignore */ }
   }
 
-  // Fetch top 4 thangkas from the same sub category, excluding current
+  // Fetch the 2 thangkas before and 2 after the current one (by identify) in the same sub category
   let relatedThangkas: ThangkaItem[] = [];
   const leafCat = ancestorChain[ancestorChain.length - 1];
   if (leafCat?.id) {
     try {
       const all = await getTangkasByCategory(leafCat.documentId);
-      relatedThangkas = all.filter((t) => t.documentId !== thangka.documentId).slice(0, 4);
+      const sorted = [...all].sort((a, b) =>
+        (a.identify ?? "").localeCompare(b.identify ?? "", undefined, { numeric: true, sensitivity: "base" })
+      );
+      const currentIndex = sorted.findIndex((t) => t.documentId === thangka.documentId);
+      if (currentIndex === -1) {
+        relatedThangkas = sorted.filter((t) => t.documentId !== thangka.documentId).slice(0, 4);
+      } else {
+        const beforeAvail = currentIndex;
+        const afterAvail = sorted.length - 1 - currentIndex;
+        let beforeCount = Math.min(2, beforeAvail);
+        let afterCount = Math.min(2, afterAvail);
+        let remaining = 4 - beforeCount - afterCount;
+        if (remaining > 0) {
+          const extraAfter = Math.min(remaining, afterAvail - afterCount);
+          afterCount += extraAfter;
+          remaining -= extraAfter;
+        }
+        if (remaining > 0) {
+          const extraBefore = Math.min(remaining, beforeAvail - beforeCount);
+          beforeCount += extraBefore;
+        }
+        relatedThangkas = sorted
+          .slice(currentIndex - beforeCount, currentIndex)
+          .concat(sorted.slice(currentIndex + 1, currentIndex + 1 + afterCount));
+      }
     } catch { /* ignore */ }
   }
 
@@ -113,6 +137,8 @@ export default async function ThangkaDetailPage({ params }: Props) {
 
   const displayName = (locale === "zh" ? thangka.name_zh || thangka.name_en : thangka.name_en) || "";
   const desc = toPlainText(locale === "zh" ? thangka.description_zh || thangka.description_en : thangka.description_en);
+  const displayEra = (locale === "zh" ? thangka.era_zh || thangka.era : thangka.era) || "";
+  const displayMaterial = (locale === "zh" ? thangka.material_zh || thangka.material : thangka.material) || "";
 
   function catDisplayName(cat: CategoryItem) {
     return (locale === "zh" ? cat.name_zh || cat.name_en : cat.name_en) || "";
@@ -211,11 +237,11 @@ export default async function ThangkaDetailPage({ params }: Props) {
                 {thangka.size && (
                   <MetaRow label={t("size")} value={thangka.size} />
                 )}
-                {thangka.material && (
-                  <MetaRow label={t("material")} value={thangka.material} />
+                {displayMaterial && (
+                  <MetaRow label={t("material")} value={displayMaterial} />
                 )}
-                {thangka.era && (
-                  <MetaRow label={t("era")} value={thangka.era} />
+                {displayEra && (
+                  <MetaRow label={t("era")} value={displayEra} />
                 )}
               </div>
 

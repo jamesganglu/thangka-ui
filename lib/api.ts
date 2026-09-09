@@ -141,7 +141,9 @@ export interface ThangkaItem {
   description_zh: unknown;
   size?: string | null;
   era?: string | null;
+  era_zh?: string | null;
   material?: string | null;
+  material_zh?: string | null;
   image?: {
     url: string;
     formats?: {
