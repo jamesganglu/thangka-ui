@@ -68,7 +68,7 @@ export async function getCategoriesByParentId(parentId: string) {
 
 export async function getTangkasByCategory(categoryDocumentId: string) {
   const { data } = await apiFetch(
-    `api/thangkas?populate=image&filters[category][documentId][$eq]=${categoryDocumentId}&fields[0]=name_en&fields[1]=name_zh&fields[2]=size&fields[3]=era&fields[4]=material&fields[5]=identify`
+    `api/thangkas?populate=image&filters[category][documentId][$eq]=${categoryDocumentId}&fields[0]=name_en&fields[1]=name_zh&fields[2]=size&fields[3]=era&fields[4]=material&fields[5]=identify&fields[6]=era_zh&fields[7]=material_zh`
   );
   return data as ThangkaItem[];
 }

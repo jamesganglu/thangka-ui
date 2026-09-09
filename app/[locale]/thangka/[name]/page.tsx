@@ -300,6 +300,7 @@ export default async function ThangkaDetailPage({ params }: Props) {
               {relatedThangkas.map((rt) => {
                 const rtImg = imgUrl(rt.image?.formats?.medium?.url ?? rt.image?.url ?? "");
                 const rtName = (locale === "zh" ? rt.name_zh || rt.name_en : rt.name_en) || "";
+                const rtMaterial = (locale === "zh" ? rt.material_zh || rt.material : rt.material) || "";
                 return (
                   <Link key={rt.documentId} href={`/thangka/${thangkaSlug(rt)}`} className="link-reset">
                     <div className="related-img">
@@ -317,9 +318,9 @@ export default async function ThangkaDetailPage({ params }: Props) {
                         <span className="related-thangka-spec-label">{t("size")}</span> {rt.size}
                       </p>
                     )}
-                    {rt.material && (
+                    {rtMaterial && (
                       <p className="related-thangka-spec">
-                        <span className="related-thangka-spec-label">{t("material")}</span> {rt.material}
+                        <span className="related-thangka-spec-label">{t("material")}</span> {rtMaterial}
                       </p>
                     )}
                   </Link>
