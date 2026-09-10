@@ -43,6 +43,7 @@
     "subject": "Sub Category",
     "identify": "Identify",
     "backToCollection": "← Back to Collection",
+    "backToDetail": "← Back to {label}",
     "relatedThangkas": "Related Thangkas",
     "viewAll": "View All",
     "details": "Details"

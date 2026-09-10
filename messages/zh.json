@@ -43,6 +43,7 @@
     "subject": "子类别",
     "identify": "编号",
     "backToCollection": "← 返回藏品",
+    "backToDetail": "← 返回 {label}",
     "relatedThangkas": "相關唐卡",
     "viewAll": "查看全部",
     "details": "細節"

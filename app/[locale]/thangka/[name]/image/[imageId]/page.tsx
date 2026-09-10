@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { getThangkaBySlug, imgUrl } from "@/lib/api";
 import ThangkaZoom from "@/components/ThangkaZoom";
@@ -28,6 +29,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ThangkaImagePage({ params }: Props) {
   const { locale, name, imageId } = await params;
+  const t = await getTranslations("thangka");
 
   let thangka;
   try { thangka = await getThangkaBySlug(name); } catch { notFound(); }
@@ -40,6 +42,7 @@ export default async function ThangkaImagePage({ params }: Props) {
   // real resolution left to zoom into.
   const src = imgUrl(img.url);
   const displayName = (locale === "zh" ? thangka.name_zh || thangka.name_en : thangka.name_en) || "";
+  const backLabel = [thangka.identify, displayName].filter(Boolean).join(" ");
 
   return (
     <main className="image-lightbox-main">
@@ -47,7 +50,7 @@ export default async function ThangkaImagePage({ params }: Props) {
         {displayName}
       </h1>
       <Link href={`/thangka/${name}`} className="image-lightbox-back">
-        ← Back to Detail
+        {t("backToDetail", { label: backLabel })}
       </Link>
       <div className="image-lightbox-frame">
         <ThangkaZoom src={src} alt={img.alternativeText || displayName} />
