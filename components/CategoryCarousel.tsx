@@ -15,7 +15,10 @@ export default function CategoryCarousel({
 }) {
   const t = useTranslations("carousel");
   const trackRef = useRef<HTMLDivElement>(null);
-  const loop = categories.length > 1;
+  // Looping clones the list to fake infinite scroll. With few items that just
+  // shows duplicates with nothing to scroll into, so only loop once there are
+  // more categories than fit in a single row (5 across at the widest layout).
+  const loop = categories.length > 5;
   const items = loop ? [...categories, ...categories, ...categories] : categories;
 
   // Start scrolled into the middle copy so there's room to scroll both ways.
