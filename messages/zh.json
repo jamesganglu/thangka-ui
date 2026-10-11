@@ -106,6 +106,7 @@
     "eyebrow": "404",
     "title": "页面未找到",
     "description": "未能找到您请求的页面。",
+    "apiCalled": "本次请求调用的 CMS API：",
     "backHome": "← 返回首页",
     "backCollection": "← 返回藏品"
   }

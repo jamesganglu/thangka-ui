@@ -894,6 +894,14 @@ main {
   color: #2B2520;
   word-break: break-all;
 }
+.not-found-api-calls {
+  margin-top: 28px;
+}
+.not-found-api-calls .not-found-path {
+  display: block;
+  margin-top: 6px;
+  text-align: left;
+}
 .not-found-actions {
   display: flex;
   justify-content: center;
