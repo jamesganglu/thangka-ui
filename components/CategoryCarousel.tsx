@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { CategoryItem, imgUrl } from "@/lib/api";
+import { CategoryItem, imgUrl } from "@/lib/apiTypes";
 
 export default function CategoryCarousel({
   categories,

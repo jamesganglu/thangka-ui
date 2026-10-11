@@ -873,6 +873,39 @@ main {
   font-size: 15px;
   line-height: 1.75;
 }
+.not-found-section {
+  text-align: center;
+  padding-top: 80px;
+  padding-bottom: 80px;
+  max-width: 560px;
+  margin: 0 auto;
+}
+.not-found-section .page-title-underline {
+  margin-left: auto;
+  margin-right: auto;
+}
+.not-found-path {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 6px 14px;
+  background: #F5F3EF;
+  border: 1px solid #E8E3DC;
+  font-size: 13px;
+  color: #2B2520;
+  word-break: break-all;
+}
+.not-found-last-record {
+  margin-top: 28px;
+}
+.not-found-actions {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  margin-top: 24px;
+}
+.not-found-actions .back-link {
+  margin-top: 0;
+}
 .cat-hero-desc {
   margin: 0 0 2rem;
 }

@@ -101,5 +101,17 @@
     "keyThemes": "Key Themes",
     "sectionFallback": "Section",
     "titleFallback": "A Brief Overview of Tibetan History"
+  },
+  "notFound": {
+    "eyebrow": "404",
+    "title": "Page Not Found",
+    "description": "We couldn't find the page you requested.",
+    "lastKnownRecord": "Last known {label} before this page was not found:",
+    "entityLabel": {
+      "category": "category",
+      "thangka": "thangka"
+    },
+    "backHome": "← Back to Home",
+    "backCollection": "← Back to Collection"
   }
 }

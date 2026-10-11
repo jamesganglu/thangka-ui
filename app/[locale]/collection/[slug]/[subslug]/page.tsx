@@ -3,6 +3,7 @@ import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { getCategoriesByParentId, getTangkasByCategory, getLevel1Categories, imgUrl, toPlainText, slugify, CategoryItem, ThangkaItem } from "@/lib/api";
+import { recordResolvedEntity } from "@/lib/notFoundContext";
 import { siteUrl } from "@/lib/site";
 import { notFound } from "next/navigation";
 import JsonLd from "@/components/JsonLd";
@@ -74,6 +75,7 @@ export default async function CollectionLevel3Page({ params }: Props) {
   } catch { /* CMS not connected */ }
 
   if (!level1) notFound();
+  await recordResolvedEntity("category", level1.documentId);
 
   try {
     const level2cats = await getCategoriesByParentId(String(level1.id));

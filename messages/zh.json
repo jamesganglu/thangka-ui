@@ -101,5 +101,17 @@
     "keyThemes": "核心主题",
     "sectionFallback": "章节",
     "titleFallback": "西藏历史简述"
+  },
+  "notFound": {
+    "eyebrow": "404",
+    "title": "页面未找到",
+    "description": "未能找到您请求的页面。",
+    "lastKnownRecord": "此页面未找到前，最后已确认的{label}：",
+    "entityLabel": {
+      "category": "类别",
+      "thangka": "唐卡"
+    },
+    "backHome": "← 返回首页",
+    "backCollection": "← 返回藏品"
   }
 }
