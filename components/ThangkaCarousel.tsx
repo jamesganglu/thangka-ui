@@ -15,7 +15,10 @@ export default function ThangkaCarousel({
 }) {
   const t = useTranslations("carousel");
   const trackRef = useRef<HTMLDivElement>(null);
-  const loop = thangkas.length > 1;
+  // Looping clones the list to fake infinite scroll. With few items that just
+  // shows duplicates with nothing to scroll into, so only loop once there are
+  // more thangkas than fit in a single row (4 across at the widest layout).
+  const loop = thangkas.length > 4;
   const items = loop ? [...thangkas, ...thangkas, ...thangkas] : thangkas;
 
   // Start scrolled into the middle copy so there's room to scroll both ways.
