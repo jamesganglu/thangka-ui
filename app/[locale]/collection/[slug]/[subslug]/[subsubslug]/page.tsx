@@ -108,6 +108,8 @@ export default async function CollectionLevel4Page({ params }: Props) {
   const desc = catDesc(level3);
   const parentImg = level3.image?.[0];
   const parentImgSrc = imgUrl(parentImg?.formats?.medium?.url ?? parentImg?.url ?? "");
+  const parentImgWidth = parentImg?.width || 800;
+  const parentImgHeight = parentImg?.height || 600;
 
   return (
     <main className="page-main">
@@ -151,8 +153,12 @@ export default async function CollectionLevel4Page({ params }: Props) {
                 {t("back")} {catName(level2)}
               </Link>
             </div>
-            <div className="cat-hero-image-crop">
-              {parentImgSrc ? <Image src={parentImgSrc} alt={catName(level3)} fill sizes="50vw" /> : <div className="media-placeholder" />}
+            <div className="cat-hero-image">
+              {parentImgSrc ? (
+                <Image src={parentImgSrc} alt={catName(level3)} width={parentImgWidth} height={parentImgHeight} sizes="50vw" />
+              ) : (
+                <div className="media-placeholder" />
+              )}
             </div>
           </div>
         </div>
