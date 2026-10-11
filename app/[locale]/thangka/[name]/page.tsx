@@ -35,8 +35,7 @@ function buildAncestorChain(cat: CategoryItem): CategoryItem[] {
 }
 
 function categoryUrl(chain: CategoryItem[], index: number): string {
-  if (index === 0) return `/collection/${slugify(chain[0].name_en)}`;
-  return `/collection/${slugify(chain[0].name_en)}/${slugify(chain[1].name_en)}`;
+  return `/collection/${chain.slice(0, index + 1).map((c) => slugify(c.name_en)).join("/")}`;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
