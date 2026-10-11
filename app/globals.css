@@ -1228,16 +1228,6 @@ main {
 .cat-hero--top {
   align-items: flex-start;
 }
-.cat-hero-image-crop {
-  position: relative;
-  flex: 1 1 0;
-  aspect-ratio: 3 / 4;
-  background: #F5F3EF;
-  overflow: hidden;
-}
-.cat-hero-image-crop img {
-  object-fit: cover;
-}
 .thangka-card {
   transition: border-color 0.2s, box-shadow 0.2s;
 }
@@ -1416,7 +1406,6 @@ main {
   .cat-hero { flex-direction: column; }
   .cat-hero > div:last-child { width: 100%; }
   .cat-hero-image-fill { flex: none; width: 100%; }
-  .cat-hero-image-crop { aspect-ratio: 4 / 3; }
   .footer-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 768px) {
