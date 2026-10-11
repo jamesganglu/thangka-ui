@@ -167,7 +167,7 @@ export default async function CollectionLevel3Page({ params }: Props) {
               const hasChildren = cat.categories && cat.categories.length > 0;
               return (
                 <Link key={cat.id} href={`/collection/${slug}/${subslug}/${slugify(cat.name_en)}`} className="cat-card">
-                  <div className="cat-card-thumb cat-card-thumb--tall">
+                  <div className="cat-card-thumb cat-card-thumb--square">
                     {imgSrc ? <Image src={imgSrc} alt={catName(cat)} fill sizes="(max-width: 900px) 50vw, 25vw" /> : <div className="media-placeholder" />}
                   </div>
                   <div className="cat-card-body">
