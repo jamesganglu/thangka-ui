@@ -3,6 +3,7 @@ import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { getCategoriesByParentId, getTangkasByCategory, getLevel1Categories, imgUrl, toPlainText, slugify, CategoryItem, ThangkaItem } from "@/lib/api";
+import { recordResolvedEntity } from "@/lib/notFoundContext";
 import { siteUrl } from "@/lib/site";
 import { notFound } from "next/navigation";
 import JsonLd from "@/components/JsonLd";
@@ -24,6 +25,7 @@ async function resolveChain(locale: string, slug: string, subslug: string, subsu
   } catch { /* ignore */ }
 
   if (level1) {
+    await recordResolvedEntity("category", level1.documentId);
     try {
       const level2cats = await getCategoriesByParentId(String(level1.id));
       level2 = level2cats.find((c) => slugify(c.name_en) === subslug) ?? null;
@@ -31,6 +33,7 @@ async function resolveChain(locale: string, slug: string, subslug: string, subsu
   }
 
   if (level2) {
+    await recordResolvedEntity("category", level2.documentId);
     try {
       const level3cats = await getCategoriesByParentId(String(level2.id));
       level3 = level3cats.find((c) => slugify(c.name_en) === subsubslug) ?? null;

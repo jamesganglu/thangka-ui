@@ -1,11 +1,12 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import NotFoundEndpoint from "@/components/NotFoundEndpoint";
-import { getApiCalls } from "@/lib/apiCallLog";
+import { getLastResolvedEntity } from "@/lib/notFoundContext";
 
 export default async function NotFound() {
   const t = await getTranslations("notFound");
-  const apiCalls = await getApiCalls();
+  const tEntity = await getTranslations("notFound.entityLabel");
+  const lastResolved = await getLastResolvedEntity();
 
   return (
     <main className="page-main">
@@ -15,14 +16,10 @@ export default async function NotFound() {
         <div className="page-title-underline page-title-underline--mb-24" />
         <p className="muted-copy">{t("description")}</p>
         <NotFoundEndpoint />
-        {apiCalls.length > 0 && (
-          <div className="not-found-api-calls">
-            <p className="muted-copy">{t("apiCalled")}</p>
-            {apiCalls.map((call, idx) => (
-              <code key={idx} className="not-found-path">
-                {call.path} {typeof call.status === "number" ? `(${call.status})` : "(error)"}
-              </code>
-            ))}
+        {lastResolved && (
+          <div className="not-found-last-record">
+            <p className="muted-copy">{t("lastKnownRecord", { label: tEntity(lastResolved.label) })}</p>
+            <code className="not-found-path">{lastResolved.documentId}</code>
           </div>
         )}
         <div className="not-found-actions">

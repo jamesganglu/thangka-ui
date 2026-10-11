@@ -106,7 +106,11 @@
     "eyebrow": "404",
     "title": "Page Not Found",
     "description": "We couldn't find the page you requested.",
-    "apiCalled": "CMS API calls made for this request:",
+    "lastKnownRecord": "Last known {label} before this page was not found:",
+    "entityLabel": {
+      "category": "category",
+      "thangka": "thangka"
+    },
     "backHome": "← Back to Home",
     "backCollection": "← Back to Collection"
   }

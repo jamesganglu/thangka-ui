@@ -106,7 +106,11 @@
     "eyebrow": "404",
     "title": "页面未找到",
     "description": "未能找到您请求的页面。",
-    "apiCalled": "本次请求调用的 CMS API：",
+    "lastKnownRecord": "此页面未找到前，最后已确认的{label}：",
+    "entityLabel": {
+      "category": "类别",
+      "thangka": "唐卡"
+    },
     "backHome": "← 返回首页",
     "backCollection": "← 返回藏品"
   }

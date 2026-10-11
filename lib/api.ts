@@ -1,28 +1,22 @@
-import { recordApiCall } from "./apiCallLog";
+import { recordResolvedEntity } from "./notFoundContext";
 import { thangkaSlug, type CategoryItem, type ThangkaItem } from "./apiTypes";
 
 // Re-export the client-safe pieces so existing imports from "@/lib/api"
 // keep working. Client components should import these directly from
-// "@/lib/apiTypes" instead, to avoid pulling the next/headers-using CMS
-// call logging (below) into the client bundle.
+// "@/lib/apiTypes" instead, to avoid pulling the next/headers-using
+// not-found context (below) into the client bundle.
 export * from "./apiTypes";
 
 const BASE = process.env.STRAPI_URL ?? "http://localhost:1337";
 const TOKEN = process.env.STRAPI_TOKEN ?? "";
 
 async function apiFetch(path: string) {
-  let status: number | "error" = "error";
-  try {
-    const res = await fetch(`${BASE}/${path}`, {
-      headers: { Authorization: `Bearer ${TOKEN}` },
-      next: { revalidate: 60 },
-    });
-    status = res.status;
-    if (!res.ok) throw new Error(`API ${res.status}: ${path}`);
-    return await res.json();
-  } finally {
-    await recordApiCall({ path, status });
-  }
+  const res = await fetch(`${BASE}/${path}`, {
+    headers: { Authorization: `Bearer ${TOKEN}` },
+    next: { revalidate: 60 },
+  });
+  if (!res.ok) throw new Error(`API ${res.status}: ${path}`);
+  return res.json();
 }
 
 export async function getHomepage(locale?: string) {
@@ -110,5 +104,8 @@ export async function getThangkaBySlug(slug: string) {
   const items = data as Pick<ThangkaItem, "id" | "documentId" | "name_en" | "identify">[];
   const match = items.find((t) => thangkaSlug(t) === slug);
   if (!match) return null;
+  // Record this before fetching the full record, so it's still known if
+  // that next fetch is what actually fails.
+  await recordResolvedEntity("thangka", match.documentId);
   return getThangkaByDocumentId(match.documentId);
 }
