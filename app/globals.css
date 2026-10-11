@@ -152,16 +152,19 @@ main {
 }
 .thangka-hero-image img {
   object-fit: contain;
+  object-position: top;
 }
 .thangka-detail-info {
   flex: 1;
-  padding-top: 8px;
 }
 .thangka-identify {
   margin-bottom: 16px;
 }
 .eyebrow.thangka-identify {
   font-size: 1em;
+  /* Trim the line box so the text's top lines up with the hero image */
+  line-height: 1;
+  margin-top: -2px;
 }
 .thangka-meta-rows {
   margin-bottom: 28px;
