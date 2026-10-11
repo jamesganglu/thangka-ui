@@ -19,6 +19,19 @@ async function apiFetch(path: string) {
   return res.json();
 }
 
+// List endpoints return only 25 records unless asked for more, and Strapi
+// silently clamps pagination[pageSize] to its maxLimit (100 by default), so
+// a single request can't return every record — walk the pages.
+async function apiFetchAll(path: string) {
+  const sep = path.includes("?") ? "&" : "?";
+  const all: unknown[] = [];
+  for (let page = 1; ; page++) {
+    const { data, meta } = await apiFetch(`${path}${sep}pagination[page]=${page}&pagination[pageSize]=100`);
+    all.push(...data);
+    if (page >= (meta?.pagination?.pageCount ?? 1)) return all;
+  }
+}
+
 export async function getHomepage(locale?: string) {
   const localeParam = locale === "zh" ? "&locale=zh" : "";
   const { data } = await apiFetch(`api/homepage?populate=*${localeParam}`);
@@ -63,24 +76,21 @@ export async function getCollection(locale?: string) {
 }
 
 export async function getCategoriesByParentId(parentId: string) {
-  const { data } = await apiFetch(
+  return (await apiFetchAll(
     `api/categories?filters[category][id][$eq]=${parentId}&populate=*`
-  );
-  return data as CategoryItem[];
+  )) as CategoryItem[];
 }
 
 export async function getTangkasByCategory(categoryDocumentId: string) {
-  const { data } = await apiFetch(
+  return (await apiFetchAll(
     `api/thangkas?populate=image&filters[category][documentId][$eq]=${categoryDocumentId}&fields[0]=name_en&fields[1]=name_zh&fields[2]=size&fields[3]=era&fields[4]=material&fields[5]=identify&fields[6]=era_zh&fields[7]=material_zh`
-  );
-  return data as ThangkaItem[];
+  )) as ThangkaItem[];
 }
 
 export async function getTangkas() {
-  const { data } = await apiFetch(
-    "api/thangkas?fields[0]=name_en&fields[1]=description_en&fields[2]=name_zh&fields[3]=description_zh&fields[4]=identify&populate=image&populate=categories"
-  );
-  return data as ThangkaItem[];
+  return (await apiFetchAll(
+    "api/thangkas?fields[0]=name_en&fields[1]=description_en&fields[2]=name_zh&fields[3]=description_zh&fields[4]=identify&populate=image"
+  )) as ThangkaItem[];
 }
 
 export async function getThangkaByDocumentId(documentId: string) {
@@ -98,10 +108,9 @@ export async function getCategoryWithAncestors(documentId: string): Promise<Cate
 }
 
 export async function getThangkaBySlug(slug: string) {
-  const { data } = await apiFetch(
-    "api/thangkas?fields[0]=name_en&fields[1]=documentId&fields[2]=identify&pagination[pageSize]=1000"
-  );
-  const items = data as Pick<ThangkaItem, "id" | "documentId" | "name_en" | "identify">[];
+  const items = (await apiFetchAll(
+    "api/thangkas?fields[0]=name_en&fields[1]=documentId&fields[2]=identify"
+  )) as Pick<ThangkaItem, "id" | "documentId" | "name_en" | "identify">[];
   const match = items.find((t) => thangkaSlug(t) === slug);
   if (!match) return null;
   // Record this before fetching the full record, so it's still known if
