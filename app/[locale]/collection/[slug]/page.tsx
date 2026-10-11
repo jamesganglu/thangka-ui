@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import { getCategoriesByParentId, getLevel1Categories, imgUrl, toPlainText, slugify, CategoryItem } from "@/lib/api";
+import { getCategoriesByParentId, getLevel1Categories, getTangkasByCategory, imgUrl, toPlainText, slugify, CategoryItem, ThangkaItem } from "@/lib/api";
 import { siteUrl } from "@/lib/site";
 import { notFound } from "next/navigation";
 import JsonLd from "@/components/JsonLd";
 import RichText from "@/components/RichText";
+import ThangkaCarousel from "@/components/ThangkaCarousel";
 
 interface Props {
   params: Promise<{ locale: string; slug: string }>;
@@ -57,6 +58,7 @@ export default async function CollectionCategoryPage({ params }: Props) {
 
   let parentCategory: CategoryItem | null = null;
   let subcategories: CategoryItem[] = [];
+  let thangkas: ThangkaItem[] = [];
 
   try {
     const all = await getLevel1Categories();
@@ -68,6 +70,13 @@ export default async function CollectionCategoryPage({ params }: Props) {
   try {
     subcategories = await getCategoriesByParentId(String(parentCategory.id));
   } catch { /* CMS not connected */ }
+
+  if (subcategories.length === 0) {
+    try { thangkas = await getTangkasByCategory(parentCategory.documentId); } catch { /* CMS not connected */ }
+    thangkas = [...thangkas].sort((a, b) =>
+      (a.identify ?? "").localeCompare(b.identify ?? "", undefined, { numeric: true, sensitivity: "base" })
+    );
+  }
 
   function catName(cat: CategoryItem) {
     return (locale === "zh" ? cat.name_zh || cat.name_en : cat.name_en) || "";
@@ -127,7 +136,11 @@ export default async function CollectionCategoryPage({ params }: Props) {
 
       <div className="container section section--flush-top">
         {subcategories.length === 0 ? (
-          <p className="muted-copy">{t("noSubcategories")}</p>
+          thangkas.length > 0 ? (
+            <ThangkaCarousel thangkas={thangkas} locale={locale} />
+          ) : (
+            <p className="muted-copy">{t("noSubcategories")}</p>
+          )
         ) : (
           <div className="cat-grid-cards">
             {[...subcategories].sort((a, b) => (a.order ?? 0) - (b.order ?? 0)).map((cat) => {
