@@ -485,15 +485,6 @@ main {
   cursor: pointer;
   white-space: nowrap;
 }
-.icon-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #2B2520;
-  padding: 4px;
-  display: flex;
-  align-items: center;
-}
 .mobile-menu-btn {
   background: none;
   border: none;
